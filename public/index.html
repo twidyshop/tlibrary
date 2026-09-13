@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Twidy Shop - Top Up Game & Produk Digital</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -26,25 +26,37 @@
         }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #0b101e; color: #ffffff; scroll-behavior: smooth; }
         .nominal-radio:checked + div { border-color: #3b82f6; background-color: rgba(59, 130, 246, 0.15); }
         .nominal-radio:checked + div .radio-dot { background-color: #3b82f6; border-color: #3b82f6; }
         .nominal-radio:checked + div .radio-dot::after { content: ''; width: 6px; height: 6px; background: white; border-radius: 50%; display: block; }
         .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         
-        /* CSS khusus untuk menyembunyikan scrollbar di menu kategori */
+        /* Menyembunyikan scrollbar di menu kategori */
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* FIX: Mencegah auto-zoom yang nyangkut di HP Android/iOS saat input diklik */
+        @media screen and (max-width: 768px) {
+            input[type="text"], input[type="number"], input[type="password"], select, textarea {
+                font-size: 16px !important;
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col relative">
 
     <!-- Sticky Navbar -->
-    <nav class="sticky top-0 z-40 flex justify-between items-center px-4 md:px-10 py-3.5 bg-bgCard/95 backdrop-blur-md border-b border-borderDim shadow-md">
-        <div class="flex items-center gap-3 cursor-pointer" onclick="navigate('home')">
-            <div class="w-8 h-8 bg-blue-600 rounded flex items-center justify-center font-bold text-lg text-white">T</div>
-            <span class="font-bold text-lg md:text-xl tracking-wide">TWIDY SHOP</span>
+    <nav class="sticky top-0 z-40 flex justify-between items-center px-4 md:px-10 py-3 bg-bgCard/95 backdrop-blur-md border-b border-borderDim shadow-md">
+        
+        <!-- LOGO & TITLE KEREN -->
+        <div class="flex items-center gap-2 md:gap-3 cursor-pointer group" onclick="navigate('home')">
+            <div class="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center font-extrabold text-lg md:text-xl text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] group-hover:shadow-[0_0_20px_rgba(59,130,246,0.8)] transition-all duration-300">T</div>
+            <div class="flex flex-col justify-center">
+                <span class="font-black text-[17px] md:text-xl tracking-wider leading-none bg-clip-text text-transparent bg-gradient-to-r from-white via-blue-100 to-blue-300 drop-shadow-sm group-hover:scale-[1.02] transition-transform duration-300 origin-left">TWIDY<span class="text-blue-500">SHOP</span></span>
+                <span class="text-[8px] md:text-[9px] text-blue-400 font-bold tracking-widest uppercase mt-0.5">Topup & Digital Store</span>
+            </div>
         </div>
         
         <div class="hidden lg:flex items-center gap-8 text-sm font-medium text-textMuted">
@@ -52,7 +64,8 @@
             <a href="#topup" onclick="navigate('topup')" id="nav-topup" class="hover:text-white transition flex items-center gap-2"><i class="fas fa-gamepad"></i> Top Up & PPOB</a>
             <a href="#riwayat" onclick="navigate('riwayat')" id="nav-riwayat" class="hover:text-white transition flex items-center gap-2"><i class="fas fa-search"></i> Cek Riwayat</a>
             <a href="#promo" onclick="navigate('promo')" id="nav-promo" class="hover:text-white transition flex items-center gap-2"><i class="fas fa-tag"></i> Promo</a>
-            <a href="#panduan" onclick="navigate('panduan')" id="nav-panduan" class="hover:text-white transition flex items-center gap-2"><i class="fas fa-question-circle"></i> Panduan</a>
+            <!-- MENU PANDUAN & BANTUAN -->
+            <a href="#panduan" onclick="navigate('panduan')" id="nav-panduan" class="hover:text-white transition flex items-center gap-2"><i class="fas fa-headset"></i> Panduan & Bantuan</a>
             <a href="#admin" onclick="navigate('admin')" id="nav-admin" class="hover:text-white transition flex items-center gap-2 text-yellow-400"><i class="fas fa-lock"></i> Admin Panel</a>
         </div>
 
@@ -73,7 +86,8 @@
         <a href="#topup" onclick="navigate('topup'); toggleMobileMenu();" class="block py-2 text-gray-200"><i class="fas fa-gamepad mr-2"></i> Top Up & PPOB</a>
         <a href="#riwayat" onclick="navigate('riwayat'); toggleMobileMenu();" class="block py-2 text-gray-200"><i class="fas fa-search mr-2"></i> Cek Riwayat</a>
         <a href="#promo" onclick="navigate('promo'); toggleMobileMenu();" class="block py-2 text-gray-200"><i class="fas fa-tag mr-2"></i> Promo</a>
-        <a href="#panduan" onclick="navigate('panduan'); toggleMobileMenu();" class="block py-2 text-gray-200"><i class="fas fa-question-circle mr-2"></i> Panduan</a>
+        <!-- MENU PANDUAN & BANTUAN MOBILE -->
+        <a href="#panduan" onclick="navigate('panduan'); toggleMobileMenu();" class="block py-2 text-gray-200"><i class="fas fa-headset mr-2"></i> Panduan & Bantuan</a>
         <a href="#admin" onclick="navigate('admin'); toggleMobileMenu();" class="block py-2 text-yellow-400"><i class="fas fa-lock mr-2"></i> Admin Panel</a>
     </div>
 
@@ -103,7 +117,7 @@
                 </div>
             </div>
 
-            <!-- Tab Kategori Utama (Sticky, Horizontal Scroll & Fade Effect) -->
+            <!-- Tab Kategori Utama -->
             <div class="sticky top-[60px] md:top-[74px] z-30 relative">
                 <div class="flex overflow-x-auto gap-2 bg-bgCard p-3 rounded-xl border border-borderDim hide-scrollbar scroll-smooth whitespace-nowrap shadow-lg">
                     <button onclick="switchCategory('game')" id="btnCatGame" class="flex-shrink-0 px-4 py-2 rounded-lg bg-blue-600 text-white text-xs md:text-sm font-bold transition">Game</button>
@@ -115,11 +129,9 @@
                     <button onclick="switchCategory('ecourse')" id="btnCatEcourse" class="flex-shrink-0 px-4 py-2 rounded-lg bg-bgInput text-textMuted hover:text-white border border-borderDim text-xs md:text-sm font-bold transition">Ecourse</button>
                     <button onclick="switchCategory('template')" id="btnCatTemplate" class="flex-shrink-0 px-4 py-2 rounded-lg bg-bgInput text-textMuted hover:text-white border border-borderDim text-xs md:text-sm font-bold transition">Template</button>
                     <button onclick="switchCategory('aplikasi')" id="btnCatAplikasi" class="flex-shrink-0 px-4 py-2 rounded-lg bg-bgInput text-textMuted hover:text-white border border-borderDim text-xs md:text-sm font-bold transition">Aplikasi</button>
-                    <!-- Spacer agar tombol terakhir tidak tertutup efek fade -->
                     <div class="min-w-[30px] flex-shrink-0"></div>
                 </div>
                 
-                <!-- Indikator Gradasi Bayangan (Fade Effect) -->
                 <div class="absolute right-[1px] top-[1px] bottom-[1px] w-16 bg-gradient-to-l from-bgCard to-transparent pointer-events-none rounded-r-xl flex items-center justify-end pr-3">
                     <i class="fas fa-chevron-right text-textMuted/60 text-xs animate-pulse drop-shadow-md"></i>
                 </div>
@@ -209,6 +221,11 @@
                         <button id="btnPay" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-lg transition text-xs md:text-sm flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(37,99,235,0.4)]">
                             <i class="fas fa-wallet"></i> Bayar Sekarang &rarr;
                         </button>
+
+                        <!-- LINK BANTUAN DI BAWAH PEMBAYARAN -->
+                        <a href="https://wa.me/628970108026?text=Halo%20Admin%20Twidy%20Shop,%20saya%20butuh%20bantuan%20terkait%20transaksi..." target="_blank" class="block text-center text-xs text-textMuted mt-4 hover:text-green-400 transition flex items-center justify-center gap-1.5">
+                            <i class="fab fa-whatsapp"></i> Butuh bantuan? Hubungi CS
+                        </a>
                     </div>
                 </div>
             </div>
@@ -259,12 +276,76 @@
             </div>
         </div>
 
-        <!-- VIEW 4: PANDUAN -->
+        <!-- VIEW 4: PUSAT PANDUAN & BANTUAN -->
         <div id="view-panduan" class="space-y-6 hidden min-h-[60vh]">
-            <div class="bg-bgCard rounded-xl p-8 border border-borderDim max-w-3xl mx-auto space-y-4">
-                <h2 class="text-xl font-bold text-white">Panduan Cara Transaksi</h2>
-                <p class="text-textMuted text-sm">Pilih produk, masukkan ID/Nomor/Email tujuan, lalu selesaikan pembayaran QRIS.</p>
-                <button onclick="navigate('home')" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold text-sm hover:bg-blue-500 transition">Kembali ke Home</button>
+            <div class="max-w-5xl mx-auto space-y-6">
+                <!-- Header -->
+                <div class="bg-gradient-to-r from-blue-900/40 to-bgCard p-6 md:p-8 rounded-2xl border border-borderDim shadow-lg flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-extrabold text-white mb-2">Pusat Panduan & Bantuan</h2>
+                        <p class="text-textMuted text-sm md:text-base">Temukan jawaban untuk pertanyaanmu atau hubungi layanan pelanggan kami.</p>
+                    </div>
+                    <div class="hidden md:block text-6xl text-blue-500/30"><i class="fas fa-headset"></i></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Step by Step Panduan -->
+                    <div class="md:col-span-2 space-y-4">
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="fas fa-book text-blue-400"></i> Cara Transaksi</h3>
+                        <div class="space-y-3">
+                            <!-- Step 1 -->
+                            <div class="bg-bgCard p-4 rounded-xl border border-borderDim flex gap-4 items-start hover:border-blue-500/50 transition">
+                                <div class="w-8 h-8 rounded-full bg-blue-600/20 text-blue-400 flex items-center justify-center font-bold flex-shrink-0">1</div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white mb-1">Pilih Layanan & Produk</h4>
+                                    <p class="text-xs text-textMuted leading-relaxed">Pilih kategori game, pulsa, atau produk digital yang ingin kamu beli dari halaman utama Twidy Shop.</p>
+                                </div>
+                            </div>
+                            <!-- Step 2 -->
+                            <div class="bg-bgCard p-4 rounded-xl border border-borderDim flex gap-4 items-start hover:border-blue-500/50 transition">
+                                <div class="w-8 h-8 rounded-full bg-blue-600/20 text-blue-400 flex items-center justify-center font-bold flex-shrink-0">2</div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white mb-1">Masukkan Data Tujuan</h4>
+                                    <p class="text-xs text-textMuted leading-relaxed">Ketikkan User ID / Nomor HP Tujuan dengan benar. Jangan lupa pilih nominal yang kamu inginkan.</p>
+                                </div>
+                            </div>
+                            <!-- Step 3 -->
+                            <div class="bg-bgCard p-4 rounded-xl border border-borderDim flex gap-4 items-start hover:border-blue-500/50 transition">
+                                <div class="w-8 h-8 rounded-full bg-blue-600/20 text-blue-400 flex items-center justify-center font-bold flex-shrink-0">3</div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white mb-1">Selesaikan Pembayaran</h4>
+                                    <p class="text-xs text-textMuted leading-relaxed">Klik tombol "Bayar Sekarang". Anda akan diarahkan ke halaman QRIS. Scan menggunakan Gopay, OVO, Dana, ShopeePay, atau M-Banking.</p>
+                                </div>
+                            </div>
+                            <!-- Step 4 -->
+                            <div class="bg-bgCard p-4 rounded-xl border border-borderDim flex gap-4 items-start hover:border-blue-500/50 transition">
+                                <div class="w-8 h-8 rounded-full bg-blue-600/20 text-blue-400 flex items-center justify-center font-bold flex-shrink-0">4</div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white mb-1">Pesanan Sukses Otomatis</h4>
+                                    <p class="text-xs text-textMuted leading-relaxed">Setelah pembayaran berhasil, pesanan akan langsung diproses oleh sistem dalam hitungan detik. Cek menu <a href="#riwayat" onclick="navigate('riwayat')" class="text-blue-400 underline">Cek Riwayat</a> untuk melacak pesananmu.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Panel Bantuan Langsung -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="fas fa-life-ring text-green-400"></i> Bantuan CS</h3>
+                        <div class="bg-bgCard p-6 rounded-xl border border-borderDim text-center space-y-4 relative overflow-hidden group hover:border-green-500/50 transition">
+                            <div class="absolute -right-6 -top-6 text-7xl text-green-500/5 group-hover:text-green-500/10 transition-colors transform rotate-12"><i class="fab fa-whatsapp"></i></div>
+                            <div class="w-16 h-16 bg-green-500/20 text-green-400 rounded-full flex items-center justify-center text-3xl mx-auto mb-2 relative z-10">
+                                <i class="fab fa-whatsapp"></i>
+                            </div>
+                            <h4 class="text-base font-bold text-white relative z-10">Kendala Transaksi?</h4>
+                            <p class="text-xs text-textMuted relative z-10 mb-2">Admin kami siap membantu mengecek pesananmu atau menjawab pertanyaan seputar Twidy Shop.</p>
+                            
+                            <a href="https://wa.me/628970108026?text=Halo%20Admin%20Twidy%20Shop,%20saya%20butuh%20bantuan%20terkait%20transaksi..." target="_blank" class="block w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-4 rounded-lg transition text-xs shadow-[0_0_15px_rgba(22,163,74,0.3)] relative z-10 flex justify-center items-center gap-2">
+                                <i class="fab fa-whatsapp text-sm"></i> Chat Admin Sekarang
+                            </a>
+                            <div class="text-[10px] text-textMuted mt-2 relative z-10"><i class="fas fa-clock text-green-400/70"></i> Fast Response: 08.00 - 22.00 WIB</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -352,7 +433,6 @@
 
     <!-- MODAL KERANJANG DIGITAL -->
     <div id="cartModal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-        <!-- Struktur Modal Keranjang -->
         <div class="bg-bgCard border border-borderDim rounded-2xl max-w-md w-full max-h-[90vh] flex flex-col relative shadow-2xl">
             <div class="p-5 border-b border-borderDim flex justify-between items-center">
                 <h2 class="text-lg font-bold text-white flex items-center gap-2"><i class="fas fa-shopping-cart text-blue-400"></i> Keranjang Digital</h2>
@@ -494,7 +574,6 @@
     </div>
 
     <script>
-        // PERHATIAN: brandKey sekarang lebih disederhanakan agar filter .includes() bekerja lebih maksimal
         const categoriesData = {
             game: [
                 { id: 'ml', name: 'Mobile Legends', brandKey: 'Mobile Legends', img: 'assets/ml-logo.png', hasServer: true, desc: 'Top Up Diamond Mobile Legends cepat & aman.' },
@@ -918,7 +997,6 @@
                 htmlDesktop += `<li><a href="#topup" onclick="selectItem('${currentCategory}', '${item.id}')" class="flex items-center gap-3 p-3 rounded-lg ${activeClassDesktop}"><img src="${item.img}" class="w-6 h-6 rounded object-cover border border-borderDim bg-bgInput" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\'><rect width=\'100%\' height=\'100%\' fill=\'%23131b2f\'/><text x=\'50%\' y=\'50%\' fill=\'%238b94a5\' font-family=\'sans-serif\' font-size=\'8\' dominant-baseline=\'middle\' text-anchor=\'middle\'>Logo</text></svg>'"><span class="truncate">${item.name}</span></a></li>`;
 
                 const activeClassMobile = isActive ? 'ring-2 ring-blue-500' : 'ring-1 ring-borderDim';
-                // Implementasi Trik Blur Background untuk format portrait
                 htmlMobile += `
                 <div onclick="selectItem('${currentCategory}', '${item.id}')" class="cursor-pointer overflow-hidden rounded-xl bg-white flex flex-col shadow-sm transition-transform hover:scale-105 ${activeClassMobile}">
                     <div class="aspect-[4/5] w-full relative overflow-hidden bg-[#0a0f1d] flex items-center justify-center p-2">
@@ -1046,7 +1124,6 @@
             }
         }
 
-        // PERBAIKAN LOGIKA PENCARIAN BRAND DIGIFLAZZ MENGGUNAKAN INCLUDES
         function renderNominals() {
             const container = document.getElementById('nominalContainer');
             if(allDigiflazzProducts.length === 0) {

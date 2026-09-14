@@ -45,6 +45,26 @@ let snap = new midtransClient.Snap({
   clientKey: process.env.MIDTRANS_CLIENT_KEY
 });
 
+// --- FUNGSI DETEKSI SUB-KATEGORI OTOMATIS KHUSUS EBOOK ---
+function detectEbookSubCategory(name, description) {
+    const text = (name + " " + description).toLowerCase();
+    const kamusKategori = {
+        'Sejarah': ['sejarah', 'history', 'kerajaan', 'biografi', 'perang', 'masa lalu', 'kuno'],
+        'Bisnis & Keuangan': ['bisnis', 'marketing', 'saham', 'investasi', 'keuangan', 'uang', 'jualan', 'cuan', 'ekonomi'],
+        'Teknologi & IT': ['coding', 'javascript', 'programmer', 'aplikasi', 'web', 'komputer', 'tutorial it', 'python', 'ai'],
+        'Fiksi & Sastra': ['novel', 'cerpen', 'komik', 'puisi', 'fiksi', 'cerita', 'romance'],
+        'Pendidikan': ['buku sekolah', 'pelajaran', 'ujian', 'cpns', 'soal', 'campus', 'kampus']
+    };
+
+    for (const [subCat, keywords] of Object.entries(kamusKategori)) {
+        if (keywords.some(keyword => text.includes(keyword))) {
+            return subCat;
+        }
+    }
+    return 'Umum';
+}
+// --- END FUNGSI DETEKSI ---
+
 let cachedProducts = null;
 let cacheTimestamp = 0;
 const CACHE_DURATION = 5 * 60 * 1000;
@@ -152,9 +172,13 @@ app.post('/api/admin/products', (req, res) => {
     }
 
     const digitalProducts = readDigitalDB();
+    const cat = category.toLowerCase();
+    const subCat = (cat === 'ebook') ? detectEbookSubCategory(name, description || '') : '';
+
     const newProduct = {
         id: `DIGI-${Date.now()}-${Math.floor(Math.random()*1000)}`,
-        category: category.toLowerCase(),
+        category: cat,
+        subCategory: subCat,
         name,
         price: parseInt(price),
         description: description || 'Produk digital siap download',
@@ -199,12 +223,18 @@ app.post('/api/admin/products/bulk', (req, res) => {
 
     let digitalProducts = readDigitalDB();
     products.forEach(p => {
+        const cat = (p.category || 'ebook').toLowerCase();
+        const namaProduk = p.name || 'Produk Tanpa Nama';
+        const descProduk = p.description || '';
+        const subCat = (cat === 'ebook') ? detectEbookSubCategory(namaProduk, descProduk) : '';
+
         digitalProducts.push({
             id: `DIGI-${Date.now()}-${Math.floor(Math.random()*1000)}`,
-            category: (p.category || 'ebook').toLowerCase(),
-            name: p.name || 'Produk Tanpa Nama',
+            category: cat,
+            subCategory: subCat,
+            name: namaProduk,
             price: parseInt(p.price || 0),
-            description: p.description || '',
+            description: descProduk,
             downloadUrl: p.downloadUrl || '#',
             image: p.image && p.image.trim() !== '' ? p.image : 'https://via.placeholder.com/150?text=TLIBRARY',
             created_at: new Date().toISOString()
@@ -223,9 +253,13 @@ app.put('/api/admin/products/:id', (req, res) => {
     let digitalProducts = readDigitalDB();
     const index = digitalProducts.findIndex(p => p.id === id);
     if (index > -1) {
+        const cat = category.toLowerCase();
+        const subCat = (cat === 'ebook') ? detectEbookSubCategory(name, description || '') : '';
+
         digitalProducts[index] = {
             ...digitalProducts[index],
-            category: category.toLowerCase(),
+            category: cat,
+            subCategory: subCat,
             name,
             price: parseInt(price),
             description: description || '',

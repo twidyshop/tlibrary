@@ -264,15 +264,30 @@
                     </div>
                     
                     <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
-                        <!-- Dropdown hanya akan muncul saat kategori Ebook -->
+                        <!-- Dropdown dengan 21 Kategori lengkap -->
                         <select id="ebookSubCatFilter" onchange="renderDigitalCards(currentCategory)" class="hidden bg-bgInput text-xs text-gray-900 border border-borderDim p-2.5 rounded-lg outline-none focus:border-blue-500 transition">
                             <option value="">Semua Sub-Kategori</option>
-                            <option value="Sejarah">Sejarah</option>
+                            <option value="Novel & Fiksi">Novel & Fiksi</option>
+                            <option value="Buku Anak">Buku Anak</option>
+                            <option value="Remaja">Remaja</option>
+                            <option value="Agama & Spiritual">Agama & Spiritual</option>
+                            <option value="Sejarah & Budaya">Sejarah & Budaya</option>
+                            <option value="Pengembangan Diri">Pengembangan Diri</option>
+                            <option value="Psikologi">Psikologi</option>
                             <option value="Bisnis & Keuangan">Bisnis & Keuangan</option>
-                            <option value="Teknologi & IT">Teknologi & IT</option>
-                            <option value="Fiksi & Sastra">Fiksi & Sastra</option>
                             <option value="Pendidikan">Pendidikan</option>
-                            <option value="Umum">Umum</option>
+                            <option value="Teknologi">Teknologi</option>
+                            <option value="Kesehatan & Kebugaran">Kesehatan & Kebugaran</option>
+                            <option value="Resep & Masakan">Resep & Masakan</option>
+                            <option value="Seni & Desain">Seni & Desain</option>
+                            <option value="Hobi & Keterampilan">Hobi & Keterampilan</option>
+                            <option value="Biografi & Memoar">Biografi & Memoar</option>
+                            <option value="Politik & Sosial">Politik & Sosial</option>
+                            <option value="Sastra & Puisi">Sastra & Puisi</option>
+                            <option value="Komik">Komik</option>
+                            <option value="Travel & Wisata">Travel & Wisata</option>
+                            <option value="Referensi">Referensi</option>
+                            <option value="Lainnya">Lainnya</option>
                         </select>
                         <div class="relative flex-1 md:w-60">
                             <i class="fas fa-search absolute left-3 top-3 text-textMuted text-xs"></i>
@@ -706,7 +721,7 @@
                     categoriesData[cat] = filtered.map(p => ({
                         id: p.id,
                         name: p.name,
-                        subCategory: p.subCategory || 'Umum', // Data tagihan otomatis masuk sini
+                        subCategory: p.subCategory || 'Lainnya', // Default jadi Lainnya
                         slug: generateSlug(p.name), 
                         brandKey: p.id,
                         img: p.image || 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'150\' height=\'150\'><rect width=\'100%\' height=\'100%\' fill=\'%23f3f4f6\'/><text x=\'50%\' y=\'50%\' fill=\'%236b7280\' font-family=\'sans-serif\' font-size=\'12\' dominant-baseline=\'middle\' text-anchor=\'middle\'>Cover</text></svg>',

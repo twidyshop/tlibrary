@@ -5,6 +5,7 @@ const axios = require('axios');
 const midtransClient = require('midtrans-client');
 const fs = require('fs');
 const path = require('path');
+const XLSX = require('xlsx'); // Tambahan Library Excel
 
 const app = express();
 app.use(express.json({ limit: '10mb' }));
@@ -167,11 +168,33 @@ app.post('/api/admin/products', (req, res) => {
     res.json({ success: true, message: 'Produk digital berhasil ditambahkan!' });
 });
 
-// Upload Masal / Bulk Import Data Produk (Restore)
+// Upload Masal / Bulk Import Data Produk (Restore JSON & EXCEL)
 app.post('/api/admin/products/bulk', (req, res) => {
-    const { products } = req.body;
+    let products = req.body.products;
+    
+    // Jika upload menggunakan file Excel (diterima sebagai base64 buffer dari klien)
+    if (req.body.fileData) {
+        try {
+            const buffer = Buffer.from(req.body.fileData, 'base64');
+            const workbook = XLSX.read(buffer, { type: 'buffer' });
+            const sheetName = workbook.SheetNames[0];
+            const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+            
+            products = rows.map(r => ({
+                category: String(r.category || r.Kategori || 'ebook').toLowerCase(),
+                name: String(r.name || r.Nama_Produk || 'Produk Tanpa Nama'),
+                price: parseInt(r.price || r.Harga || 0),
+                description: String(r.description || r.Deskripsi || ''),
+                downloadUrl: String(r.downloadUrl || r.Link_Download || '#'),
+                image: String(r.image || r.URL_Gambar || '')
+            }));
+        } catch (e) {
+            return res.status(400).json({ success: false, message: 'Gagal membaca format Excel!' });
+        }
+    }
+
     if (!Array.isArray(products) || products.length === 0) {
-        return res.status(400).json({ success: false, message: 'Format data masal tidak valid!' });
+        return res.status(400).json({ success: false, message: 'Data produk kosong atau format tidak valid!' });
     }
 
     let digitalProducts = readDigitalDB();
@@ -183,7 +206,7 @@ app.post('/api/admin/products/bulk', (req, res) => {
             price: parseInt(p.price || 0),
             description: p.description || '',
             downloadUrl: p.downloadUrl || '#',
-            image: p.image || 'https://via.placeholder.com/150?text=TLIBRARY',
+            image: p.image && p.image.trim() !== '' ? p.image : 'https://via.placeholder.com/150?text=TLIBRARY',
             created_at: new Date().toISOString()
         });
     });

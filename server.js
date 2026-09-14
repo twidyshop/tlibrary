@@ -134,10 +134,10 @@ app.get('/api/digital-products', (req, res) => {
 app.post('/api/admin/login', (req, res) => {
     const { username, password } = req.body;
     const adminUser = process.env.ADMIN_USER || 'admin';
-    const adminPass = process.env.ADMIN_PASS || 'tlibrary2026';
+    const adminPass = process.env.ADMIN_PASS || 'twidy2026';
 
     if (username === adminUser && password === adminPass) {
-        res.json({ success: true, token: 'tlibrary-admin-secure-token' });
+        res.json({ success: true, token: 'twidy-admin-secure-token' });
     } else {
         res.status(401).json({ success: false, message: 'Username atau Password salah!' });
     }

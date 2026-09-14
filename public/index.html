@@ -255,11 +255,30 @@
                 </div>
             </div>
 
-            <!-- Layout Produk Digital -->
+            <!-- LAYOUT PRODUK DIGITAL (DENGAN SEARCH BAR & FILTER DROPDOWN) -->
             <div id="digitalLayout" class="hidden space-y-6 pt-2">
-                <div class="flex justify-between items-center">
-                    <h2 id="digitalCategoryTitle" class="text-xl font-bold text-gray-900 uppercase">Daftar Produk Digital</h2>
-                    <div class="text-xs text-textMuted hidden sm:block">Pilih beberapa produk untuk dibeli sekaligus</div>
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-bgCard p-4 rounded-xl border border-borderDim shadow-sm">
+                    <div>
+                        <h2 id="digitalCategoryTitle" class="text-xl font-bold text-gray-900 uppercase">Daftar Produk Digital</h2>
+                        <div class="text-xs text-textMuted mt-1">Pilih beberapa produk untuk dibeli sekaligus</div>
+                    </div>
+                    
+                    <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                        <!-- Dropdown hanya akan muncul saat kategori Ebook -->
+                        <select id="ebookSubCatFilter" onchange="renderDigitalCards(currentCategory)" class="hidden bg-bgInput text-xs text-gray-900 border border-borderDim p-2.5 rounded-lg outline-none focus:border-blue-500 transition">
+                            <option value="">Semua Sub-Kategori</option>
+                            <option value="Sejarah">Sejarah</option>
+                            <option value="Bisnis & Keuangan">Bisnis & Keuangan</option>
+                            <option value="Teknologi & IT">Teknologi & IT</option>
+                            <option value="Fiksi & Sastra">Fiksi & Sastra</option>
+                            <option value="Pendidikan">Pendidikan</option>
+                            <option value="Umum">Umum</option>
+                        </select>
+                        <div class="relative flex-1 md:w-60">
+                            <i class="fas fa-search absolute left-3 top-3 text-textMuted text-xs"></i>
+                            <input type="text" id="digitalSearchInput" oninput="renderDigitalCards(currentCategory)" placeholder="Cari judul produk..." class="w-full bg-bgInput text-xs text-gray-900 border border-borderDim pl-8 pr-3 py-2.5 rounded-lg outline-none focus:border-blue-500 transition shadow-inner" />
+                        </div>
+                    </div>
                 </div>
                 <div id="digitalCardsContainer" class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4"></div>
             </div>
@@ -687,6 +706,7 @@
                     categoriesData[cat] = filtered.map(p => ({
                         id: p.id,
                         name: p.name,
+                        subCategory: p.subCategory || 'Umum', // Data tagihan otomatis masuk sini
                         slug: generateSlug(p.name), 
                         brandKey: p.id,
                         img: p.image || 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'150\' height=\'150\'><rect width=\'100%\' height=\'100%\' fill=\'%23f3f4f6\'/><text x=\'50%\' y=\'50%\' fill=\'%236b7280\' font-family=\'sans-serif\' font-size=\'12\' dominant-baseline=\'middle\' text-anchor=\'middle\'>Cover</text></svg>',
@@ -794,6 +814,17 @@
                 document.getElementById('ppobLayout').classList.add('hidden');
                 document.getElementById('digitalLayout').classList.remove('hidden');
                 document.getElementById('digitalCategoryTitle').innerText = `Daftar Produk ${cat.toUpperCase()}`;
+                
+                // Toggle Filter Dropdown Ebook
+                const filterDropdown = document.getElementById('ebookSubCatFilter');
+                if (cat === 'ebook') {
+                    filterDropdown.classList.remove('hidden');
+                } else {
+                    filterDropdown.classList.add('hidden');
+                    filterDropdown.value = '';
+                }
+                document.getElementById('digitalSearchInput').value = '';
+
                 renderDigitalCards(cat);
                 updateFloatingCartBtn();
             } else {
@@ -808,10 +839,24 @@
 
         function renderDigitalCards(cat) {
             const container = document.getElementById('digitalCardsContainer');
-            const items = categoriesData[cat] || [];
+            let items = categoriesData[cat] || [];
+
+            // 1. Filter dengan Search Text
+            const searchVal = document.getElementById('digitalSearchInput').value.toLowerCase();
+            if(searchVal) {
+                items = items.filter(i => i.name.toLowerCase().includes(searchVal) || i.desc.toLowerCase().includes(searchVal));
+            }
+
+            // 2. Filter Khusus Dropdown Ebook
+            if (cat === 'ebook') {
+                const subCatVal = document.getElementById('ebookSubCatFilter').value;
+                if (subCatVal) {
+                    items = items.filter(i => i.subCategory === subCatVal);
+                }
+            }
 
             if(items.length === 0) {
-                container.innerHTML = '<div class="col-span-full text-center py-12 text-textMuted text-sm">Belum ada produk di kategori ini. Silakan tambahkan melalui Admin Panel.</div>';
+                container.innerHTML = '<div class="col-span-full text-center py-12 text-textMuted text-sm">Tidak ada produk yang cocok / belum ada produk.</div>';
                 return;
             }
 
@@ -819,13 +864,14 @@
                 const inCart = digitalCart.find(c => c.id === item.id);
                 const btnText = inCart ? '<i class="fas fa-check"></i> Di Keranjang' : '<i class="fas fa-cart-plus"></i> Tambah';
                 const btnColor = inCart ? 'bg-green-600 text-white' : 'bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white border border-blue-200 group-hover:border-blue-600';
+                const badgeText = (cat === 'ebook' && item.subCategory) ? `Ebook • ${item.subCategory}` : cat;
                 
                 return `
                 <div class="bg-bgCard rounded-xl border border-borderDim p-3 md:p-4 flex flex-col justify-between transition hover:border-blue-500 hover:shadow-md group shadow-sm">
                     <div class="cursor-pointer" onclick="openProductModal('${cat}', '${item.id}')">
                         <div class="relative mb-2.5 overflow-hidden rounded-lg bg-bgInput aspect-[4/3] border border-borderDim">
                             <img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'200\'><rect width=\'100%\' height=\'100%\' fill=\'%23f3f4f6\'/><text x=\'50%\' y=\'50%\' fill=\'%236b7280\' font-family=\'sans-serif\' font-size=\'14\' dominant-baseline=\'middle\' text-anchor=\'middle\'>Cover</text></svg>'">
-                            <span class="absolute top-1.5 left-1.5 px-2 py-0.5 rounded bg-white/90 backdrop-blur-md text-[9px] font-bold text-blue-600 uppercase border border-borderDim shadow-sm">${cat}</span>
+                            <span class="absolute top-1.5 left-1.5 px-2 py-0.5 rounded bg-white/90 backdrop-blur-md text-[9px] font-bold text-blue-600 uppercase border border-borderDim shadow-sm">${badgeText}</span>
                         </div>
                         <h3 class="font-bold text-gray-900 text-xs md:text-sm mb-1 line-clamp-2 group-hover:text-blue-600 transition">${item.name}</h3>
                         <p class="text-textMuted text-[11px] line-clamp-2 mb-2">${item.desc}</p>
@@ -842,7 +888,7 @@
             selectedDigitalProduct = categoriesData[cat].find(i => i.id === id);
             if(!selectedDigitalProduct) return;
 
-            document.getElementById('modalCatBadge').innerText = cat.toUpperCase();
+            document.getElementById('modalCatBadge').innerText = (cat === 'ebook' && selectedDigitalProduct.subCategory) ? `EBOOK • ${selectedDigitalProduct.subCategory.toUpperCase()}` : cat.toUpperCase();
             document.getElementById('modalImg').src = selectedDigitalProduct.img;
             document.getElementById('modalTitle').innerText = selectedDigitalProduct.name;
             document.getElementById('modalPrice').innerText = `Rp ${selectedDigitalProduct.price.toLocaleString('id-ID')}`;
@@ -913,6 +959,15 @@
 
         function closeDigitalCart() {
             document.getElementById('cartModal').classList.add('hidden');
+        }
+
+        function removeFromCartModal(index) {
+            digitalCart.splice(index, 1);
+            renderCartModal();
+            updateFloatingCartBtn();
+            if(['ebook', 'ecourse', 'template', 'aplikasi'].includes(currentCategory)) {
+                renderDigitalCards(currentCategory);
+            }
         }
 
         function renderCartModal() {
@@ -1343,8 +1398,8 @@
         }
 
         function adminLogout() {
-            document.getElementById('adminLoginBox').classList.add('hidden');
-            document.getElementById('adminDashboardBox').classList.remove('hidden');
+            document.getElementById('adminLoginBox').classList.remove('hidden');
+            document.getElementById('adminDashboardBox').classList.add('hidden');
         }
 
         async function loadAdminProducts() {
@@ -1363,7 +1418,7 @@
                     <div class="bg-bgInput p-3 rounded-lg border border-borderDim flex justify-between items-center text-xs gap-3 shadow-sm">
                         <img src="${p.image}" class="w-10 h-10 rounded object-cover border border-borderDim" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'40\'><rect width=\'100%\' height=\'100%\' fill=\'%23f3f4f6\'/><text x=\'50%\' y=\'50%\' fill=\'%236b7280\' font-family=\'sans-serif\' font-size=\'8\' dominant-baseline=\'middle\' text-anchor=\'middle\'>Logo</text></svg>'">
                         <div class="flex-1 min-w-0">
-                            <div class="font-bold text-gray-900 uppercase text-[10px]"><span class="text-blue-600">[${p.category}]</span> ${p.name}</div>
+                            <div class="font-bold text-gray-900 uppercase text-[10px]"><span class="text-blue-600">[${p.category} ${p.category === 'ebook' && p.subCategory ? ` - ${p.subCategory}` : ''}]</span> ${p.name}</div>
                             <div class="text-textMuted truncate">Rp ${p.price.toLocaleString('id-ID')} • Link: <a href="${p.downloadUrl}" target="_blank" class="underline text-blue-500 hover:text-blue-700">${p.downloadUrl}</a></div>
                         </div>
                         <div class="flex gap-2">
@@ -1472,7 +1527,7 @@
         // --- FUNGSI BARU: Download Template Excel & Upload Masal Excel/JSON ---
         function downloadExcelTemplate() {
             const templateData = [
-                { category: "ebook", name: "Contoh Judul Ebook", price: 50000, description: "Deskripsi singkat ebook", downloadUrl: "https://drive.google.com/...", image: "https://image.url/cover.jpg" },
+                { category: "ebook", name: "Contoh Judul Ebook", price: 50000, description: "Buku sejarah tentang kerajaan masa lalu", downloadUrl: "https://drive.google.com/...", image: "https://image.url/cover.jpg" },
                 { category: "ecourse", name: "Contoh Judul Ecourse", price: 150000, description: "Deskripsi singkat ecourse", downloadUrl: "https://drive.google.com/...", image: "https://image.url/cover.jpg" }
             ];
             const worksheet = XLSX.utils.json_to_sheet(templateData);

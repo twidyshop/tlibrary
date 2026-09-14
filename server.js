@@ -48,12 +48,29 @@ let snap = new midtransClient.Snap({
 // --- FUNGSI DETEKSI SUB-KATEGORI OTOMATIS KHUSUS EBOOK ---
 function detectEbookSubCategory(name, description) {
     const text = (name + " " + description).toLowerCase();
+    
+    // Kamus kata kunci yang sudah disesuaikan dengan 21 kategori baru
     const kamusKategori = {
-        'Sejarah': ['sejarah', 'history', 'kerajaan', 'biografi', 'perang', 'masa lalu', 'kuno'],
-        'Bisnis & Keuangan': ['bisnis', 'marketing', 'saham', 'investasi', 'keuangan', 'uang', 'jualan', 'cuan', 'ekonomi'],
-        'Teknologi & IT': ['coding', 'javascript', 'programmer', 'aplikasi', 'web', 'komputer', 'tutorial it', 'python', 'ai'],
-        'Fiksi & Sastra': ['novel', 'cerpen', 'komik', 'puisi', 'fiksi', 'cerita', 'romance'],
-        'Pendidikan': ['buku sekolah', 'pelajaran', 'ujian', 'cpns', 'soal', 'campus', 'kampus']
+        'Novel & Fiksi': ['novel', 'fiksi', 'cerpen', 'romance', 'fantasi', 'thriller', 'misteri'],
+        'Buku Anak': ['anak', 'dongeng', 'balita', 'kids', 'cerita anak', 'buku mewarnai'],
+        'Remaja': ['remaja', 'teen', 'young adult', 'sekolah menengah', 'masa muda'],
+        'Agama & Spiritual': ['agama', 'spiritual', 'islam', 'kristen', 'doa', 'ibadah', 'tuhan', 'iman'],
+        'Sejarah & Budaya': ['sejarah', 'budaya', 'history', 'kerajaan', 'kuno', 'culture', 'tradisi'],
+        'Pengembangan Diri': ['pengembangan diri', 'self improvement', 'motivasi', 'produktivitas', 'self-help', 'sukses'],
+        'Psikologi': ['psikologi', 'mental', 'jiwa', 'psychology', 'mindset', 'trauma', 'pikiran'],
+        'Bisnis & Keuangan': ['bisnis', 'keuangan', 'marketing', 'saham', 'investasi', 'uang', 'ekonomi', 'cuan', 'startup'],
+        'Pendidikan': ['pendidikan', 'buku sekolah', 'pelajaran', 'ujian', 'cpns', 'soal', 'kampus', 'guru'],
+        'Teknologi': ['teknologi', 'coding', 'javascript', 'programmer', 'aplikasi', 'web', 'komputer', 'tutorial it', 'python', 'ai'],
+        'Kesehatan & Kebugaran': ['kesehatan', 'kebugaran', 'medis', 'diet', 'dokter', 'penyakit', 'olahraga', 'fitness', 'sehat'],
+        'Resep & Masakan': ['resep', 'masakan', 'masak', 'kuliner', 'makanan', 'food', 'kue', 'dapur'],
+        'Seni & Desain': ['seni', 'desain', 'art', 'design', 'menggambar', 'melukis', 'grafis', 'ilustrasi'],
+        'Hobi & Keterampilan': ['hobi', 'keterampilan', 'craft', 'kerajinan', 'berkebun', 'jahit', 'fotografi', 'otomotif'],
+        'Biografi & Memoar': ['biografi', 'memoar', 'tokoh', 'kisah hidup', 'biography', 'perjalanan hidup'],
+        'Politik & Sosial': ['politik', 'sosial', 'hukum', 'pemerintahan', 'sosiologi', 'negara', 'masyarakat'],
+        'Sastra & Puisi': ['sastra', 'puisi', 'sajak', 'syair', 'literature', 'pantun'],
+        'Komik': ['komik', 'manga', 'manhwa', 'comic', 'webtoon', 'grafis novel'],
+        'Travel & Wisata': ['travel', 'wisata', 'jalan-jalan', 'liburan', 'panduan wisata', 'guidebook', 'destinasi'],
+        'Referensi': ['referensi', 'kamus', 'ensiklopedia', 'jurnal', 'pedoman', 'panduan resmi', 'direktori']
     };
 
     for (const [subCat, keywords] of Object.entries(kamusKategori)) {
@@ -61,7 +78,9 @@ function detectEbookSubCategory(name, description) {
             return subCat;
         }
     }
-    return 'Umum';
+    
+    // Fallback jika tidak ada kata kunci yang cocok
+    return 'Lainnya'; 
 }
 // --- END FUNGSI DETEKSI ---
 

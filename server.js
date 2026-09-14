@@ -80,8 +80,8 @@ async function sendEmailReceipt(trx, targetEmail) {
     const emailHtml = `
         <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; color: #374151; background-color: #f9fafb; padding: 20px; border-radius: 12px; border: 1px solid #e5e7eb;">
             <div style="text-align: center; margin-bottom: 20px;">
-                <h1 style="color: #2563eb; margin: 0; font-size: 24px; font-weight: 800; letter-spacing: 1px;">TWIDY SHOP</h1>
-                <p style="margin: 5px 0 0 0; font-size: 12px; color: #6b7280;">twidyshop.my.id</p>
+                <h1 style="color: #2563eb; margin: 0; font-size: 24px; font-weight: 800; letter-spacing: 1px;">TLIBRARY</h1>
+                <p style="margin: 5px 0 0 0; font-size: 12px; color: #6b7280;">tlibrary.my.id</p>
             </div>
             
             <div style="background-color: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid #e5e7eb;">
@@ -101,14 +101,14 @@ async function sendEmailReceipt(trx, targetEmail) {
             <p style="margin-top: 20px; font-size: 12px; color: #9ca3af; text-align: center; line-height: 1.5;">
                 Harap simpan email ini sebagai bukti pembelian yang sah.<br>
                 Jika Anda memiliki pertanyaan, silakan hubungi Customer Service kami via WhatsApp.<br><br>
-                &copy; ${new Date().getFullYear()} Twidy Shop. All rights reserved.
+                &copy; ${new Date().getFullYear()} TLIBRARY. All rights reserved.
             </p>
         </div>
     `;
 
     try {
         const response = await axios.post('https://api.resend.com/emails', {
-            from: 'Twidy Shop <noreply@twidyshop.my.id>',
+            from: 'TLIBRARY <noreply@tlibrary.my.id>',
             to: targetEmail,
             subject: `✅ Akses Produk: Pesanan Anda Berhasil! (${trx.order_id})`,
             html: emailHtml
@@ -134,10 +134,10 @@ app.get('/api/digital-products', (req, res) => {
 app.post('/api/admin/login', (req, res) => {
     const { username, password } = req.body;
     const adminUser = process.env.ADMIN_USER || 'admin';
-    const adminPass = process.env.ADMIN_PASS || 'twidy2026';
+    const adminPass = process.env.ADMIN_PASS || 'tlibrary2026';
 
     if (username === adminUser && password === adminPass) {
-        res.json({ success: true, token: 'twidy-admin-secure-token' });
+        res.json({ success: true, token: 'tlibrary-admin-secure-token' });
     } else {
         res.status(401).json({ success: false, message: 'Username atau Password salah!' });
     }
@@ -158,7 +158,7 @@ app.post('/api/admin/products', (req, res) => {
         price: parseInt(price),
         description: description || 'Produk digital siap download',
         downloadUrl,
-        image: image && image.trim() !== '' ? image : 'https://via.placeholder.com/150?text=TwidyShop',
+        image: image && image.trim() !== '' ? image : 'https://via.placeholder.com/150?text=TLIBRARY',
         created_at: new Date().toISOString()
     };
 
@@ -183,7 +183,7 @@ app.post('/api/admin/products/bulk', (req, res) => {
             price: parseInt(p.price || 0),
             description: p.description || '',
             downloadUrl: p.downloadUrl || '#',
-            image: p.image || 'https://via.placeholder.com/150?text=TwidyShop',
+            image: p.image || 'https://via.placeholder.com/150?text=TLIBRARY',
             created_at: new Date().toISOString()
         });
     });
@@ -207,7 +207,7 @@ app.put('/api/admin/products/:id', (req, res) => {
             price: parseInt(price),
             description: description || '',
             downloadUrl,
-            image: image && image.trim() !== '' ? image : 'https://via.placeholder.com/150?text=TwidyShop'
+            image: image && image.trim() !== '' ? image : 'https://via.placeholder.com/150?text=TLIBRARY'
         };
         saveDigitalDB(digitalProducts);
         res.json({ success: true, message: 'Produk berhasil diperbarui!' });
@@ -319,7 +319,7 @@ app.post('/api/checkout', async (req, res) => {
     const { targetId, serverId, price, productName, productCode, isDigital, isPasca, downloadUrl, cartItems } = req.body;
     if (!targetId) return res.status(400).json({ message: 'Data kurang lengkap' });
 
-    const orderId = `TWIDY-${Date.now()}`;
+    const orderId = `TLIB-${Date.now()}`;
     const fullTarget = serverId ? `${targetId}${serverId}` : targetId;
     
     let amount = 0;
@@ -341,7 +341,7 @@ app.post('/api/checkout', async (req, res) => {
     } else {
         if (!productCode) return res.status(400).json({ message: 'Data kurang lengkap' });
         amount = parseInt(price || 0);
-        originalProductName = productName || 'Produk Digital Twidy';
+        originalProductName = productName || 'Produk Digital TLIBRARY';
         
         itemDetails = [{
             id: productCode.substring(0, 50),
@@ -372,7 +372,7 @@ app.post('/api/checkout', async (req, res) => {
     let parameter = {
       transaction_details: { order_id: orderId, gross_amount: amount },
       item_details: itemDetails,
-      customer_details: { first_name: "Pelanggan", last_name: "TwidyShop", email: isDigital ? targetId : "customer@twidyshop.my.id" }
+      customer_details: { first_name: "Pelanggan", last_name: "TLIBRARY", email: isDigital ? targetId : "customer@tlibrary.my.id" }
     };
 
     let transaction = await snap.createTransaction(parameter);
@@ -503,4 +503,4 @@ app.get('*', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server Twidy Shop berjalan di port ${PORT}`));
+app.listen(PORT, () => console.log(`Server TLIBRARY berjalan di port ${PORT}`));

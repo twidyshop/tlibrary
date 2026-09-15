@@ -295,7 +295,7 @@ app.delete('/api/admin/products/:id', (req, res) => {
 // --- END FITUR DIGITAL ---
 
 
-// --- INTEGRASI API HAYBI (DENGAN BULLETPROOF MAPPER & 1% MARGIN) ---
+// --- INTEGRASI API HAYBI (DENGAN SMART BRAND DETECTOR & 1% MARGIN) ---
 app.get('/api/products', async (req, res) => {
   const user = process.env.HAYBI_USERNAME;
   const key = process.env.HAYBI_API_KEY;
@@ -328,7 +328,7 @@ app.get('/api/products', async (req, res) => {
         return res.status(400).json({ message: 'Gagal ambil data', error: raw });
       }
 
-      // BULLETPROOF MAPPER: Deteksi harga, sku, dan nama secara otomatis tanpa takut salah nama key
+      // MAPPER DENGAN SMART BRAND DETECTOR
       cachedProducts = targetData.map(produk => {
           let hargaDasar = 0;
           const possiblePriceKeys = ['hargareseller', 'hargadasar', 'hargamember', 'hargajual', 'harga', 'price', 'harga_dasar', 'harga_jual', 'base_price', 'amount', 'nominal', 'harian'];
@@ -340,7 +340,6 @@ app.get('/api/products', async (req, res) => {
               }
           }
 
-          // Fallback ekstrem: cari nilai angka apa saja dalam objek produk yang > 500
           if (hargaDasar === 0) {
               for (const k in produk) {
                   const val = parseInt(produk[k]);
@@ -356,13 +355,31 @@ app.get('/api/products', async (req, res) => {
 
           const skuCode = produk.kode_produk || produk.kode || produk.buyer_sku_code || produk.sku || produk.product_code || 'UNKNOWN';
           const prodName = produk.nama_produk || produk.nama || produk.product_name || produk.title || produk.name || 'Produk Haybi';
+          
+          // DETEKSI OTOMATIS BRAND BERDASARKAN SKU / NAMA PRODUK
+          let detectedBrand = produk.brand || produk.kategori || produk.provider || 'Umum';
+          const textCheck = (skuCode + " " + prodName).toUpperCase();
+
+          if (textCheck.startsWith('TS') || textCheck.includes('TELKOMSEL')) detectedBrand = 'Telkomsel';
+          else if (textCheck.startsWith('IS') || textCheck.includes('INDOSAT') || textCheck.includes('IM3')) detectedBrand = 'Indosat';
+          else if (textCheck.startsWith('AX') || textCheck.includes('AXIS')) detectedBrand = 'Axis';
+          else if (textCheck.startsWith('SM') || textCheck.includes('SF') || textCheck.includes('SMART')) detectedBrand = 'Smartfren';
+          else if (textCheck.startsWith('TR') || textCheck.includes('TRI')) detectedBrand = 'Tri';
+          else if (textCheck.startsWith('XL') || textCheck.includes('XL')) detectedBrand = 'XL';
+          else if (textCheck.startsWith('BY') || textCheck.includes('BY.U')) detectedBrand = 'by.U';
+          else if (textCheck.includes('DANA')) detectedBrand = 'DANA';
+          else if (textCheck.includes('OVO')) detectedBrand = 'OVO';
+          else if (textCheck.includes('GOPAY')) detectedBrand = 'GO PAY';
+          else if (textCheck.includes('SHOPEE') || textCheck.includes('SPAY')) detectedBrand = 'SHOPEE PAY';
+          else if (textCheck.includes('LINK') || textCheck.includes('LINKAJA')) detectedBrand = 'LINKAJA';
+          else if (textCheck.includes('PLN') || textCheck.includes('TOKEN')) detectedBrand = 'Token PLN';
 
           return {
               buyer_sku_code: skuCode,
               product_name: prodName,
               price: hargaDasar > 0 ? (hargaDasar + margin) : 1000,
-              buyer_product_status: true, // Paksa aktif agar tampil di web
-              brand: produk.brand || produk.kategori || produk.provider || 'Umum',
+              buyer_product_status: true,
+              brand: detectedBrand, // Brand sudah disesuaikan dengan frontend
               note: produk.keterangan || produk.desc || 'Tersedia',
               isPasca: false
           };

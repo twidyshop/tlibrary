@@ -295,7 +295,7 @@ app.delete('/api/admin/products/:id', (req, res) => {
 // --- END FITUR DIGITAL ---
 
 
-// --- INTEGRASI API HAYBI (DENGAN LENGKAP GAME BRAND DETECTOR & 1% MARGIN) ---
+// --- INTEGRASI API HAYBI DENGAN SMART MAPPER LENGKAP ---
 app.get('/api/products', async (req, res) => {
   const user = process.env.HAYBI_USERNAME;
   const key = process.env.HAYBI_API_KEY;
@@ -328,7 +328,6 @@ app.get('/api/products', async (req, res) => {
         return res.status(400).json({ message: 'Gagal ambil data', error: raw });
       }
 
-      // MAPPER DENGAN SMART BRAND & GAME DETECTOR
       cachedProducts = targetData.map(produk => {
           let hargaDasar = 0;
           const possiblePriceKeys = ['hargareseller', 'hargadasar', 'hargamember', 'hargajual', 'harga', 'price', 'harga_dasar', 'harga_jual', 'base_price', 'amount', 'nominal', 'harian'];
@@ -350,22 +349,32 @@ app.get('/api/products', async (req, res) => {
               }
           }
 
-          // Margin profit 1% dengan batas minimum Rp200
           const margin = Math.max(200, Math.round(hargaDasar * 0.01));
 
           const skuCode = produk.kode_produk || produk.kode || produk.buyer_sku_code || produk.sku || produk.product_code || 'UNKNOWN';
           const prodName = produk.nama_produk || produk.nama || produk.product_name || produk.title || produk.name || 'Produk Haybi';
           
-          // DETEKSI OTOMATIS BRAND & GAME
-          let detectedBrand = produk.brand || produk.kategori || produk.provider || 'Umum';
-          const textCheck = (skuCode + " " + prodName + " " + (produk.kategori || '')).toUpperCase();
+          let catStr = (produk.kategori || '').toUpperCase();
+          let brandStr = (produk.brand || produk.provider || '').toUpperCase();
+          let textCheck = (skuCode + " " + prodName + " " + catStr + " " + brandStr).toUpperCase();
 
+          // 1. FILTER KATEGORI (Memisahkan Pulsa murni dari Data & Voucher)
+          let detectedCategory = 'Umum';
+          if (textCheck.includes('DATA') || textCheck.includes('KUOTA') || textCheck.includes('INTERNET')) detectedCategory = 'Data';
+          else if (textCheck.includes('VOUCHER') || textCheck.includes('MASA AKTIF') || textCheck.includes('KARTU PERDANA')) detectedCategory = 'Voucher';
+          else if (textCheck.includes('E-MONEY') || textCheck.includes('SALDO') || textCheck.includes('DANA') || textCheck.includes('OVO')) detectedCategory = 'E-Money';
+          else if (textCheck.includes('GAME') || textCheck.includes('MOBILE LEGENDS')) detectedCategory = 'Games';
+          else if (textCheck.includes('PLN') || textCheck.includes('TOKEN')) detectedCategory = 'PLN';
+          else detectedCategory = 'Pulsa'; // Default jika bersih dari embel-embel, maka ini Pulsa Reguler
+
+          // 2. DETEKSI BRAND (Operator)
+          let detectedBrand = produk.brand || produk.provider || 'Umum';
           // Pulsa & Operator
-          if (textCheck.startsWith('TS') || textCheck.includes('TELKOMSEL')) detectedBrand = 'Telkomsel';
+          if (textCheck.startsWith('TS') || textCheck.includes('TELKOMSEL') || textCheck.includes('TSEL')) detectedBrand = 'Telkomsel';
           else if (textCheck.startsWith('IS') || textCheck.includes('INDOSAT') || textCheck.includes('IM3')) detectedBrand = 'Indosat';
           else if (textCheck.startsWith('AX') || textCheck.includes('AXIS')) detectedBrand = 'Axis';
           else if (textCheck.startsWith('SM') || textCheck.includes('SF') || textCheck.includes('SMART')) detectedBrand = 'Smartfren';
-          else if (textCheck.startsWith('TR') || textCheck.includes('TRI')) detectedBrand = 'Tri';
+          else if (textCheck.startsWith('TR') || textCheck.includes('TRI') || textCheck.includes('THREE')) detectedBrand = 'Tri';
           else if (textCheck.startsWith('XL') || textCheck.includes('XL')) detectedBrand = 'XL';
           else if (textCheck.startsWith('BY') || textCheck.includes('BY.U')) detectedBrand = 'by.U';
           // E-Money
@@ -389,9 +398,10 @@ app.get('/api/products', async (req, res) => {
           return {
               buyer_sku_code: skuCode,
               product_name: prodName,
+              category: detectedCategory, // Ditambahkan agar frontend bisa ngefilter pulsa reguler
               price: hargaDasar > 0 ? (hargaDasar + margin) : 1000,
               buyer_product_status: true,
-              brand: detectedBrand, // Brand sudah disesuaikan dengan frontend
+              brand: detectedBrand, 
               note: produk.keterangan || produk.desc || 'Tersedia',
               isPasca: false
           };
@@ -443,13 +453,54 @@ app.post('/api/inquiry-pasca', async (req, res) => {
 });
 // --- END INTEGRASI API HAYBI ---
 
-app.get('/api/transactions', (req, res) => {
+// --- ENDPOINT TRANSAKSI (DENGAN AUTO-POLLING SINKRONISASI REALTIME) ---
+app.get('/api/transactions', async (req, res) => {
     try {
-        return res.status(200).json(readDB().reverse());
+        let db = readDB();
+        let needsSave = false;
+        
+        // AUTO SYNC STATUS: Cek max 5 transaksi terakhir yang masih 'DIPROSES'
+        const pendingTrx = db.filter(t => t.status === 'DIPROSES' && !t.is_digital).slice(-5); 
+        if (pendingTrx.length > 0) {
+            const user = process.env.HAYBI_USERNAME;
+            const key = process.env.HAYBI_API_KEY;
+            
+            if (user && key) {
+                await Promise.all(pendingTrx.map(async (trx) => {
+                    try {
+                        const sign = crypto.createHash('md5').update(user + key + trx.order_id).digest('hex');
+                        const checkRes = await axios.post('https://haybi.id/api/h2h/cek-status', {
+                            username: user,
+                            ref_id: trx.order_id,
+                            sign: sign
+                        });
+                        
+                        const result = checkRes.data;
+                        if (result && result.status) {
+                            const hStatus = result.status.toLowerCase();
+                            if (hStatus === 'sukses' || hStatus === 'success') {
+                                trx.status = 'SUKSES';
+                                trx.sn = result.sn || result.pesan || trx.sn;
+                                needsSave = true;
+                            } else if (hStatus === 'gagal' || hStatus === 'error') {
+                                trx.status = 'GAGAL';
+                                trx.sn = result.pesan || 'Transaksi Gagal';
+                                needsSave = true;
+                            }
+                        }
+                    } catch (err) {
+                        // Abaikan error agar tidak merusak fungsi get API keseluruhan
+                    }
+                }));
+                if (needsSave) saveDB(db); // Simpan database otomatis jika ada yang berubah jadi SUKSES
+            }
+        }
+        return res.status(200).json(db.reverse());
     } catch (e) {
         return res.status(500).json({ message: 'Error Database' });
     }
 });
+// --- END TRANSAKSI ---
 
 app.post('/api/checkout', async (req, res) => {
   try {

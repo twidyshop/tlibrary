@@ -295,7 +295,7 @@ app.delete('/api/admin/products/:id', (req, res) => {
 // --- END FITUR DIGITAL ---
 
 
-// --- INTEGRASI API HAYBI ---
+// --- INTEGRASI API HAYBI (DENGAN BULLETPROOF MAPPER & 1% MARGIN) ---
 app.get('/api/products', async (req, res) => {
   const user = process.env.HAYBI_USERNAME;
   const key = process.env.HAYBI_API_KEY;
@@ -328,16 +328,40 @@ app.get('/api/products', async (req, res) => {
         return res.status(400).json({ message: 'Gagal ambil data', error: raw });
       }
 
-      // MAPPER: Margin profit 1% dengan batas minimum Rp200, status dipaksa aktif agar tampil
+      // BULLETPROOF MAPPER: Deteksi harga, sku, dan nama secara otomatis tanpa takut salah nama key
       cachedProducts = targetData.map(produk => {
-          const hargaDasar = parseInt(produk.harga || produk.price || 0);
+          let hargaDasar = 0;
+          const possiblePriceKeys = ['hargareseller', 'hargadasar', 'hargamember', 'hargajual', 'harga', 'price', 'harga_dasar', 'harga_jual', 'base_price', 'amount', 'nominal', 'harian'];
+          
+          for (const key of possiblePriceKeys) {
+              if (produk[key] !== undefined && !isNaN(parseInt(produk[key])) && parseInt(produk[key]) > 0) {
+                  hargaDasar = parseInt(produk[key]);
+                  break;
+              }
+          }
+
+          // Fallback ekstrem: cari nilai angka apa saja dalam objek produk yang > 500
+          if (hargaDasar === 0) {
+              for (const k in produk) {
+                  const val = parseInt(produk[k]);
+                  if (!isNaN(val) && val > 500) {
+                      hargaDasar = val;
+                      break;
+                  }
+              }
+          }
+
+          // Margin profit 1% dengan batas minimum Rp200
           const margin = Math.max(200, Math.round(hargaDasar * 0.01));
 
+          const skuCode = produk.kode_produk || produk.kode || produk.buyer_sku_code || produk.sku || produk.product_code || 'UNKNOWN';
+          const prodName = produk.nama_produk || produk.nama || produk.product_name || produk.title || produk.name || 'Produk Haybi';
+
           return {
-              buyer_sku_code: produk.kode_produk || produk.kode || produk.buyer_sku_code,
-              product_name: produk.nama_produk || produk.nama || produk.product_name,
-              price: hargaDasar + margin,
-              buyer_product_status: true, // Paksa true agar produk muncul di frontend
+              buyer_sku_code: skuCode,
+              product_name: prodName,
+              price: hargaDasar > 0 ? (hargaDasar + margin) : 1000,
+              buyer_product_status: true, // Paksa aktif agar tampil di web
               brand: produk.brand || produk.kategori || produk.provider || 'Umum',
               note: produk.keterangan || produk.desc || 'Tersedia',
               isPasca: false

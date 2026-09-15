@@ -350,7 +350,6 @@ app.get('/api/products', async (req, res) => {
           }
 
           const margin = Math.max(200, Math.round(hargaDasar * 0.01));
-
           const skuCode = produk.kode_produk || produk.kode || produk.buyer_sku_code || produk.sku || produk.product_code || 'UNKNOWN';
           const prodName = produk.nama_produk || produk.nama || produk.product_name || produk.title || produk.name || 'Produk Haybi';
           
@@ -358,47 +357,67 @@ app.get('/api/products', async (req, res) => {
           let brandStr = (produk.brand || produk.provider || '').toUpperCase();
           let textCheck = (skuCode + " " + prodName + " " + catStr + " " + brandStr).toUpperCase();
 
-          // 1. FILTER KATEGORI (Memisahkan Pulsa murni dari Data & Voucher)
-          let detectedCategory = 'Umum';
-          if (textCheck.includes('DATA') || textCheck.includes('KUOTA') || textCheck.includes('INTERNET')) detectedCategory = 'Data';
-          else if (textCheck.includes('VOUCHER') || textCheck.includes('MASA AKTIF') || textCheck.includes('KARTU PERDANA')) detectedCategory = 'Voucher';
-          else if (textCheck.includes('E-MONEY') || textCheck.includes('SALDO') || textCheck.includes('DANA') || textCheck.includes('OVO')) detectedCategory = 'E-Money';
-          else if (textCheck.includes('GAME') || textCheck.includes('MOBILE LEGENDS')) detectedCategory = 'Games';
-          else if (textCheck.includes('PLN') || textCheck.includes('TOKEN')) detectedCategory = 'PLN';
-          else detectedCategory = 'Pulsa'; // Default jika bersih dari embel-embel, maka ini Pulsa Reguler
-
-          // 2. DETEKSI BRAND (Operator)
+          // DETEKSI OTOMATIS BRAND SESUAI FRONTEND
           let detectedBrand = produk.brand || produk.provider || 'Umum';
-          // Pulsa & Operator
-          if (textCheck.startsWith('TS') || textCheck.includes('TELKOMSEL') || textCheck.includes('TSEL')) detectedBrand = 'Telkomsel';
-          else if (textCheck.startsWith('IS') || textCheck.includes('INDOSAT') || textCheck.includes('IM3')) detectedBrand = 'Indosat';
-          else if (textCheck.startsWith('AX') || textCheck.includes('AXIS')) detectedBrand = 'Axis';
-          else if (textCheck.startsWith('SM') || textCheck.includes('SF') || textCheck.includes('SMART')) detectedBrand = 'Smartfren';
-          else if (textCheck.startsWith('TR') || textCheck.includes('TRI') || textCheck.includes('THREE')) detectedBrand = 'Tri';
-          else if (textCheck.startsWith('XL') || textCheck.includes('XL')) detectedBrand = 'XL';
-          else if (textCheck.startsWith('BY') || textCheck.includes('BY.U')) detectedBrand = 'by.U';
+          
+          // Operator (Pulsa, Data, dsb)
+          if (textCheck.includes('TELKOMSEL') || textCheck.includes('TSEL') || skuCode.startsWith('TS')) detectedBrand = 'Telkomsel';
+          else if (textCheck.includes('INDOSAT') || textCheck.includes('IM3') || skuCode.startsWith('IS') || skuCode.startsWith('INDO')) detectedBrand = 'Indosat';
+          else if (textCheck.includes('AXIS') || skuCode.startsWith('AX')) detectedBrand = 'Axis';
+          else if (textCheck.includes('SMARTFREN') || textCheck.includes('SMART') || skuCode.startsWith('SM') || skuCode.startsWith('SF')) detectedBrand = 'Smartfren';
+          else if (textCheck.includes('TRI') || textCheck.includes('THREE') || skuCode.startsWith('TR') || skuCode.startsWith('TH')) detectedBrand = 'Tri';
+          else if (textCheck.includes('XL') || skuCode.startsWith('XL')) detectedBrand = 'XL';
+          else if (textCheck.includes('BY.U') || textCheck.includes('BYU') || skuCode.startsWith('BY')) detectedBrand = 'by.U';
+          
           // E-Money
           else if (textCheck.includes('DANA')) detectedBrand = 'DANA';
           else if (textCheck.includes('OVO')) detectedBrand = 'OVO';
-          else if (textCheck.includes('GOPAY')) detectedBrand = 'GO PAY';
+          else if (textCheck.includes('GOPAY') || textCheck.includes('GO PAY')) detectedBrand = 'GO PAY';
           else if (textCheck.includes('SHOPEE') || textCheck.includes('SPAY')) detectedBrand = 'SHOPEE PAY';
           else if (textCheck.includes('LINK') || textCheck.includes('LINKAJA')) detectedBrand = 'LINKAJA';
+          
           // PLN
           else if (textCheck.includes('PLN') || textCheck.includes('TOKEN')) detectedBrand = 'Token PLN';
-          // Games
-          else if (textCheck.includes('MOBILE LEGENDS') || textCheck.includes('MLBB') || textCheck.startsWith('ML')) detectedBrand = 'Mobile Legends';
+          
+          // Daftar Lengkap Game (Update sesuai Haybi)
+          else if (textCheck.includes('MOBILE LEGENDS') || textCheck.includes('MLBB')) detectedBrand = 'Mobile Legends';
           else if (textCheck.includes('FREE FIRE') || textCheck.includes('FF')) detectedBrand = 'Free Fire';
           else if (textCheck.includes('PUBG')) detectedBrand = 'PUBG Mobile';
           else if (textCheck.includes('DOMINO') || textCheck.includes('HIGGS')) detectedBrand = 'Higgs Domino';
           else if (textCheck.includes('GENSHIN')) detectedBrand = 'Genshin Impact';
           else if (textCheck.includes('VALORANT')) detectedBrand = 'Valorant';
           else if (textCheck.includes('POINT BLANK') || textCheck.includes('PB')) detectedBrand = 'Point Blank';
-          else if (textCheck.includes('STEAM') || textCheck.includes('HAGO') || textCheck.includes('ROBLOX')) detectedBrand = 'Voucher Game';
+          else if (textCheck.includes('CALL OF DUTY') || textCheck.includes('CODM')) detectedBrand = 'Call of Duty Mobile';
+          else if (textCheck.includes('HONOR OF KINGS') || textCheck.includes('HOK')) detectedBrand = 'Honor of Kings';
+          else if (textCheck.includes('ARENA OF VALOR') || textCheck.includes('AOV')) detectedBrand = 'Arena of Valor';
+          else if (textCheck.includes('LORDS MOBILE')) detectedBrand = 'Lords Mobile';
+          else if (textCheck.includes('MAGIC CHESS')) detectedBrand = 'Magic Chess';
+          else if (textCheck.includes('WHERE WINDS MEET')) detectedBrand = 'Where Winds Meet';
+          else if (textCheck.includes('ROBLOX')) detectedBrand = 'Roblox';
+          else if (textCheck.includes('GOOGLE PLAY')) detectedBrand = 'Google Play';
+
+          // PAKSA KATEGORI AGAR TIDAK ADA PRODUK YANG SEMBUNYI DI FRONTEND
+          let detectedCategory = 'Umum';
+          const pulsaBrands = ['Telkomsel', 'Indosat', 'Axis', 'Smartfren', 'Tri', 'XL', 'by.U'];
+          const emoneyBrands = ['DANA', 'OVO', 'GO PAY', 'SHOPEE PAY', 'LINKAJA'];
+          const gameBrands = ['Mobile Legends', 'Free Fire', 'PUBG Mobile', 'Higgs Domino', 'Genshin Impact', 'Valorant', 'Point Blank', 'Call of Duty Mobile', 'Honor of Kings', 'Arena of Valor', 'Lords Mobile', 'Magic Chess', 'Where Winds Meet', 'Roblox', 'Google Play'];
+
+          if (pulsaBrands.includes(detectedBrand)) {
+              detectedCategory = 'Pulsa'; // Apapun jenisnya (Reguler/Data/Voucher), paksa masuk tab Pulsa
+          } else if (emoneyBrands.includes(detectedBrand)) {
+              detectedCategory = 'E-Money';
+          } else if (gameBrands.includes(detectedBrand)) {
+              detectedCategory = 'Games';
+          } else if (detectedBrand === 'Token PLN') {
+              detectedCategory = 'PLN';
+          } else {
+              detectedCategory = produk.kategori || 'Umum';
+          }
 
           return {
               buyer_sku_code: skuCode,
               product_name: prodName,
-              category: detectedCategory, // Ditambahkan agar frontend bisa ngefilter pulsa reguler
+              category: detectedCategory, 
               price: hargaDasar > 0 ? (hargaDasar + margin) : 1000,
               buyer_product_status: true,
               brand: detectedBrand, 

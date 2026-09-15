@@ -180,7 +180,6 @@ app.post('/api/admin/login', (req, res) => {
     }
 });
 
-// Tambah Produk Digital Satuan
 app.post('/api/admin/products', (req, res) => {
     const { category, name, price, description, downloadUrl, image } = req.body;
     if (!category || !name || !price || !downloadUrl) {
@@ -208,7 +207,6 @@ app.post('/api/admin/products', (req, res) => {
     res.json({ success: true, message: 'Produk digital berhasil ditambahkan!' });
 });
 
-// Upload Masal / Bulk Import Data Produk (Restore JSON & EXCEL)
 app.post('/api/admin/products/bulk', (req, res) => {
     let products = req.body.products;
     
@@ -260,7 +258,6 @@ app.post('/api/admin/products/bulk', (req, res) => {
     res.json({ success: true, message: `Berhasil mengimpor ${products.length} produk secara masal!` });
 });
 
-// Edit/Update Produk Digital
 app.put('/api/admin/products/:id', (req, res) => {
     const { id } = req.params;
     const { category, name, price, description, downloadUrl, image } = req.body;
@@ -299,7 +296,6 @@ app.delete('/api/admin/products/:id', (req, res) => {
 
 
 // --- INTEGRASI API HAYBI ---
-// Endpoint Tarik Semua Produk Haybi (Multi-Kategori) + Margin Profit
 app.get('/api/products', async (req, res) => {
   const user = process.env.HAYBI_USERNAME;
   const key = process.env.HAYBI_API_KEY;
@@ -332,16 +328,21 @@ app.get('/api/products', async (req, res) => {
         return res.status(400).json({ message: 'Gagal ambil data', error: raw });
       }
 
-      // MAPPER: Ubah struktur Haybi jadi standar Digiflazz biar Frontend aman
-      cachedProducts = targetData.map(produk => ({
-          buyer_sku_code: produk.kode_produk || produk.kode || produk.buyer_sku_code,
-          product_name: produk.nama_produk || produk.nama || produk.product_name,
-          price: parseInt(produk.harga || produk.price || 0) + 200, // Margin
-          buyer_product_status: ['normal', 'aktif', '1', 1, 'sukses', true, 'tersedia', 'open'].includes(String(produk.status || '').toLowerCase()),
-          brand: produk.brand || produk.kategori || produk.provider || 'Umum',
-          note: produk.keterangan || produk.desc || 'Tersedia',
-          isPasca: false // Standard PPOB pre-paid
-      }));
+      // MAPPER: Margin profit 1% dengan batas minimum Rp200, status dipaksa aktif agar tampil
+      cachedProducts = targetData.map(produk => {
+          const hargaDasar = parseInt(produk.harga || produk.price || 0);
+          const margin = Math.max(200, Math.round(hargaDasar * 0.01));
+
+          return {
+              buyer_sku_code: produk.kode_produk || produk.kode || produk.buyer_sku_code,
+              product_name: produk.nama_produk || produk.nama || produk.product_name,
+              price: hargaDasar + margin,
+              buyer_product_status: true, // Paksa true agar produk muncul di frontend
+              brand: produk.brand || produk.kategori || produk.provider || 'Umum',
+              note: produk.keterangan || produk.desc || 'Tersedia',
+              isPasca: false
+          };
+      });
       
       cacheTimestamp = now;
     }
@@ -352,7 +353,6 @@ app.get('/api/products', async (req, res) => {
   }
 });
 
-// Endpoint Cek Tagihan Pascabayar (Inquiry) Haybi
 app.post('/api/inquiry-pasca', async (req, res) => {
     const { sku, targetId } = req.body;
     const user = process.env.HAYBI_USERNAME;
@@ -373,9 +373,7 @@ app.post('/api/inquiry-pasca', async (req, res) => {
         });
 
         const result = haybiRes.data;
-        // Asumsi sistem Haybi mengembalikan detail tagihan pada endpoint transaksi jika itu SKU pascabayar
         if (result && (result.status === 'sukses' || result.status === 'pending') && result.tagihan) {
-            // Mapping untuk UI Frontend
             const mappedData = {
                 status: 'Sukses',
                 selling_price: parseInt(result.tagihan) || parseInt(result.harga),
@@ -392,7 +390,6 @@ app.post('/api/inquiry-pasca', async (req, res) => {
 });
 // --- END INTEGRASI API HAYBI ---
 
-// Endpoint Riwayat Transaksi Real-time
 app.get('/api/transactions', (req, res) => {
     try {
         return res.status(200).json(readDB().reverse());
@@ -401,7 +398,6 @@ app.get('/api/transactions', (req, res) => {
     }
 });
 
-// Endpoint Checkout & Buat Transaksi Midtrans
 app.post('/api/checkout', async (req, res) => {
   try {
     const { targetId, serverId, price, productName, productCode, isDigital, isPasca, downloadUrl, cartItems } = req.body;
@@ -470,7 +466,6 @@ app.post('/api/checkout', async (req, res) => {
   }
 });
 
-// Webhook Midtrans (Eksekusi Transaksi H2H Haybi)
 app.post('/api/webhook', async (req, res) => {
   try {
     const notif = req.body;
@@ -484,7 +479,6 @@ app.post('/api/webhook', async (req, res) => {
     if (transaction_status === 'settlement' || transaction_status === 'capture') {
         if (['SUKSES', 'DIPROSES', 'GAGAL'].includes(trx.status)) return res.status(200).send("OK");
         
-        // JIKA PRODUK DIGITAL SUKSES DIBAYAR
         if (trx.is_digital) {
             trx.status = 'SUKSES';
             if (trx.cart_items && Array.isArray(trx.cart_items)) {
@@ -501,7 +495,6 @@ app.post('/api/webhook', async (req, res) => {
         trx.status = 'DIPROSES';
         saveDB(db);
 
-        // Eksekusi PPOB ke HAYBI
         const user = process.env.HAYBI_USERNAME;
         const key = process.env.HAYBI_API_KEY;
         if (user && key) {
@@ -545,8 +538,6 @@ app.post('/api/webhook', async (req, res) => {
   }
 });
 
-// Webhook / Callback Haybi
-// Note: Pastikan di dashboard Haybi kamu mengisi Callback URL dengan: https://tlibrary.my.id/api/haybi-webhook
 app.post('/api/haybi-webhook', (req, res) => {
   try {
     const payload = req.body;
@@ -584,7 +575,6 @@ app.post('/api/haybi-webhook', (req, res) => {
   }
 });
 
-// ROUTING SPA
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });

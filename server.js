@@ -295,7 +295,7 @@ app.delete('/api/admin/products/:id', (req, res) => {
 // --- END FITUR DIGITAL ---
 
 
-// --- INTEGRASI API HAYBI (DENGAN SMART BRAND DETECTOR & 1% MARGIN) ---
+// --- INTEGRASI API HAYBI (DENGAN LENGKAP GAME BRAND DETECTOR & 1% MARGIN) ---
 app.get('/api/products', async (req, res) => {
   const user = process.env.HAYBI_USERNAME;
   const key = process.env.HAYBI_API_KEY;
@@ -328,7 +328,7 @@ app.get('/api/products', async (req, res) => {
         return res.status(400).json({ message: 'Gagal ambil data', error: raw });
       }
 
-      // MAPPER DENGAN SMART BRAND DETECTOR
+      // MAPPER DENGAN SMART BRAND & GAME DETECTOR
       cachedProducts = targetData.map(produk => {
           let hargaDasar = 0;
           const possiblePriceKeys = ['hargareseller', 'hargadasar', 'hargamember', 'hargajual', 'harga', 'price', 'harga_dasar', 'harga_jual', 'base_price', 'amount', 'nominal', 'harian'];
@@ -356,10 +356,11 @@ app.get('/api/products', async (req, res) => {
           const skuCode = produk.kode_produk || produk.kode || produk.buyer_sku_code || produk.sku || produk.product_code || 'UNKNOWN';
           const prodName = produk.nama_produk || produk.nama || produk.product_name || produk.title || produk.name || 'Produk Haybi';
           
-          // DETEKSI OTOMATIS BRAND BERDASARKAN SKU / NAMA PRODUK
+          // DETEKSI OTOMATIS BRAND & GAME
           let detectedBrand = produk.brand || produk.kategori || produk.provider || 'Umum';
-          const textCheck = (skuCode + " " + prodName).toUpperCase();
+          const textCheck = (skuCode + " " + prodName + " " + (produk.kategori || '')).toUpperCase();
 
+          // Pulsa & Operator
           if (textCheck.startsWith('TS') || textCheck.includes('TELKOMSEL')) detectedBrand = 'Telkomsel';
           else if (textCheck.startsWith('IS') || textCheck.includes('INDOSAT') || textCheck.includes('IM3')) detectedBrand = 'Indosat';
           else if (textCheck.startsWith('AX') || textCheck.includes('AXIS')) detectedBrand = 'Axis';
@@ -367,12 +368,23 @@ app.get('/api/products', async (req, res) => {
           else if (textCheck.startsWith('TR') || textCheck.includes('TRI')) detectedBrand = 'Tri';
           else if (textCheck.startsWith('XL') || textCheck.includes('XL')) detectedBrand = 'XL';
           else if (textCheck.startsWith('BY') || textCheck.includes('BY.U')) detectedBrand = 'by.U';
+          // E-Money
           else if (textCheck.includes('DANA')) detectedBrand = 'DANA';
           else if (textCheck.includes('OVO')) detectedBrand = 'OVO';
           else if (textCheck.includes('GOPAY')) detectedBrand = 'GO PAY';
           else if (textCheck.includes('SHOPEE') || textCheck.includes('SPAY')) detectedBrand = 'SHOPEE PAY';
           else if (textCheck.includes('LINK') || textCheck.includes('LINKAJA')) detectedBrand = 'LINKAJA';
+          // PLN
           else if (textCheck.includes('PLN') || textCheck.includes('TOKEN')) detectedBrand = 'Token PLN';
+          // Games
+          else if (textCheck.includes('MOBILE LEGENDS') || textCheck.includes('MLBB') || textCheck.startsWith('ML')) detectedBrand = 'Mobile Legends';
+          else if (textCheck.includes('FREE FIRE') || textCheck.includes('FF')) detectedBrand = 'Free Fire';
+          else if (textCheck.includes('PUBG')) detectedBrand = 'PUBG Mobile';
+          else if (textCheck.includes('DOMINO') || textCheck.includes('HIGGS')) detectedBrand = 'Higgs Domino';
+          else if (textCheck.includes('GENSHIN')) detectedBrand = 'Genshin Impact';
+          else if (textCheck.includes('VALORANT')) detectedBrand = 'Valorant';
+          else if (textCheck.includes('POINT BLANK') || textCheck.includes('PB')) detectedBrand = 'Point Blank';
+          else if (textCheck.includes('STEAM') || textCheck.includes('HAGO') || textCheck.includes('ROBLOX')) detectedBrand = 'Voucher Game';
 
           return {
               buyer_sku_code: skuCode,

@@ -1,7 +1,7 @@
 {
-  "name": "tlibrary-digiflazz-aws",
+  "name": "tlibrary-haybi-aws",
   "version": "1.0.0",
-  "description": "TLIBRARY Auto-Sync Digiflazz + Midtrans for AWS",
+  "description": "TLIBRARY Auto-Sync Haybi + Midtrans for AWS",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

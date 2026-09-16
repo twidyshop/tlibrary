@@ -330,7 +330,7 @@ app.get('/api/products', async (req, res) => {
                       price: parseInt(p.price) + calculateMargin(parseInt(p.price)),
                       buyer_product_status: p.buyer_product_status && p.seller_product_status,
                       brand: p.brand,
-                      note: p.desc || 'Tersedia',
+                      note: 'Tersedia', // <-- DIPERBAIKI: Hapus p.desc agar tulisan ijo bersih
                       isPasca: false,
                       provider: 'digiflazz' // Label penanda eksekusi webhook nanti
                   })).filter(p => !['E-Money', 'PLN'].includes(p.category) && !p.category.toLowerCase().includes('token')); 
@@ -393,7 +393,7 @@ app.get('/api/products', async (req, res) => {
                           price: hargaDasar + calculateMargin(hargaDasar),
                           buyer_product_status: true,
                           brand: detectedBrand,
-                          note: produk.keterangan || 'Tersedia',
+                          note: 'Tersedia', // <-- DIPERBAIKI: Bersih dan seragam dengan Digiflazz
                           isPasca: false,
                           provider: 'haybi' // Label penanda
                       };

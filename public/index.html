@@ -206,7 +206,7 @@
                                     </div>
                                     <div id="serverContainer">
                                         <label class="block text-[10px] md:text-xs text-textMuted mb-1">Server ID</label>
-                                        <input type="text" id="serverId" placeholder="Contoh: 1234" class="w-full bg-bgInput p-3 rounded-lg border border-borderDim text-xs md:text-sm focus:border-blue-500 outline-none text-gray-900 shadow-inner" />
+                                        <input type="text" id="serverId" placeholder="Contoh: 1234 (opsional)" class="w-full bg-bgInput p-3 rounded-lg border border-borderDim text-xs md:text-sm focus:border-blue-500 outline-none text-gray-900 shadow-inner" />
                                     </div>
                                 </div>
                             </div>
@@ -408,7 +408,7 @@
         <div id="view-admin" class="space-y-6 hidden min-h-[60vh]">
             <div id="adminLoginBox" class="bg-bgCard rounded-xl p-6 border border-borderDim max-w-md mx-auto space-y-4 shadow-sm">
                 <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2"><i class="fas fa-lock text-yellow-500"></i> Login Admin Panel</h2>
-                <p class="text-textMuted text-xs">Masukkan kredensial admin untuk mengelola produk digital.</p>
+                <p class="text-textMuted text-xs">Masukkan kredensial admin untuk mengelola produk digital & melihat laporan.</p>
                 <div>
                     <label class="block text-xs text-textMuted mb-1">Username</label>
                     <input type="text" id="adminUser" class="w-full bg-bgInput p-3 rounded-lg border border-borderDim text-sm text-gray-900 outline-none focus:border-blue-500 shadow-inner" placeholder="admin" />
@@ -420,11 +420,11 @@
                 <button onclick="adminLogin()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-lg transition text-sm shadow-md">Masuk Dashboard</button>
             </div>
 
-            <div id="adminDashboardBox" class="bg-bgCard rounded-xl p-6 border border-borderDim max-w-4xl mx-auto space-y-6 hidden shadow-sm">
+            <div id="adminDashboardBox" class="bg-bgCard rounded-xl p-6 border border-borderDim max-w-5xl mx-auto space-y-6 hidden shadow-sm">
                 <div class="flex justify-between items-center pb-4 border-b border-borderDim">
-                    <h2 class="text-xl font-bold text-gray-900"><i class="fas fa-cogs text-blue-600"></i> Kelola Produk Digital & Backup</h2>
+                    <h2 class="text-xl font-bold text-gray-900"><i class="fas fa-cogs text-blue-600"></i> Kelola Sistem & Laporan</h2>
                     <div class="flex gap-2">
-                        <button onclick="exportBackup()" class="bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white border border-blue-200 px-3 py-1.5 rounded text-xs transition"><i class="fas fa-download"></i> Backup JSON</button>
+                        <button onclick="exportBackup()" class="bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white border border-blue-200 px-3 py-1.5 rounded text-xs transition"><i class="fas fa-download"></i> Backup Produk Digital</button>
                         <button onclick="adminLogout()" class="bg-red-50 text-red-600 hover:bg-red-600 hover:text-white border border-red-200 px-3 py-1.5 rounded text-xs transition">Logout</button>
                     </div>
                 </div>
@@ -477,8 +477,38 @@
 
                 <div>
                     <h3 class="font-bold text-sm text-gray-900 mb-3">Daftar Produk Digital Aktif</h3>
-                    <div id="adminProductList" class="space-y-2"></div>
+                    <div id="adminProductList" class="space-y-2 max-h-60 overflow-y-auto pr-2 border border-borderDim rounded-lg p-2 bg-bgInput"></div>
                 </div>
+
+                <!-- NEW: TABEL TRANSAKSI KESELURUHAN & EXPORT EXCEL -->
+                <div class="mt-8 border-t border-borderDim pt-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
+                        <h3 class="font-bold text-lg text-gray-900"><i class="fas fa-list-alt text-blue-600"></i> Riwayat Transaksi Global</h3>
+                        <button onclick="exportTransactionsExcel()" class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg text-xs font-bold shadow-sm transition flex items-center gap-2">
+                            <i class="fas fa-file-excel"></i> Export Laporan ke Excel
+                        </button>
+                    </div>
+                    
+                    <div class="overflow-x-auto bg-bgInput rounded-xl border border-borderDim p-0 shadow-inner">
+                        <table class="w-full text-left text-xs text-gray-700 whitespace-nowrap">
+                            <thead class="bg-gray-200 border-b border-borderDim">
+                                <tr>
+                                    <th class="p-3 font-bold">Waktu & Order ID</th>
+                                    <th class="p-3 font-bold">Tujuan / Email</th>
+                                    <th class="p-3 font-bold">Produk & Tipe</th>
+                                    <th class="p-3 font-bold">Harga</th>
+                                    <th class="p-3 font-bold">Status</th>
+                                    <th class="p-3 font-bold">Provider / Ket</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminTransactionList" class="divide-y divide-borderDim">
+                                <tr><td colspan="6" class="text-center py-6 text-textMuted">Memuat data transaksi...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- END NEW SECTION -->
+
             </div>
         </div>
 
@@ -688,6 +718,9 @@
         let digitalCart = [];
         let snapClientKeyLoaded = false;
 
+        // VARIABEL GLOBAL BARU BUAT NAMPUNG DATA EXCEL ADMIN
+        window.adminTransactionsData = []; 
+
         function initApp() {
             renderSidebar();
             selectItem('game', categoriesData.game[0].id, false); 
@@ -721,7 +754,7 @@
                     categoriesData[cat] = filtered.map(p => ({
                         id: p.id,
                         name: p.name,
-                        subCategory: p.subCategory || 'Lainnya', // Default jadi Lainnya
+                        subCategory: p.subCategory || 'Lainnya', 
                         slug: generateSlug(p.name), 
                         brandKey: p.id,
                         img: p.image || 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'150\' height=\'150\'><rect width=\'100%\' height=\'100%\' fill=\'%23f3f4f6\'/><text x=\'50%\' y=\'50%\' fill=\'%236b7280\' font-family=\'sans-serif\' font-size=\'12\' dominant-baseline=\'middle\' text-anchor=\'middle\'>Cover</text></svg>',
@@ -770,7 +803,15 @@
             } else {
                 const targetView = document.getElementById('view-' + viewName);
                 if(targetView) targetView.classList.remove('hidden');
-                if(viewName === 'admin') loadAdminProducts();
+                
+                // JIKA BUKA TAB ADMIN & UDAH LOGIN, RELOAD DATA TRANSAKSI
+                if(viewName === 'admin') {
+                    loadAdminProducts();
+                    if(!document.getElementById('adminDashboardBox').classList.contains('hidden')) {
+                        loadAdminTransactions();
+                    }
+                }
+                
                 history.pushState({}, '', '/' + viewName);
             }
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -830,7 +871,6 @@
                 document.getElementById('digitalLayout').classList.remove('hidden');
                 document.getElementById('digitalCategoryTitle').innerText = `Daftar Produk ${cat.toUpperCase()}`;
                 
-                // Toggle Filter Dropdown Ebook
                 const filterDropdown = document.getElementById('ebookSubCatFilter');
                 if (cat === 'ebook') {
                     filterDropdown.classList.remove('hidden');
@@ -856,13 +896,11 @@
             const container = document.getElementById('digitalCardsContainer');
             let items = categoriesData[cat] || [];
 
-            // 1. Filter dengan Search Text
             const searchVal = document.getElementById('digitalSearchInput').value.toLowerCase();
             if(searchVal) {
                 items = items.filter(i => i.name.toLowerCase().includes(searchVal) || i.desc.toLowerCase().includes(searchVal));
             }
 
-            // 2. Filter Khusus Dropdown Ebook
             if (cat === 'ebook') {
                 const subCatVal = document.getElementById('ebookSubCatFilter').value;
                 if (subCatVal) {
@@ -1127,9 +1165,8 @@
             
             document.getElementById('serverContainer').style.display = activeItem.hasServer ? 'block' : 'none';
             
-            // Logika kustomisasi placeholder Server ID berdasarkan game
             if (activeItem.hasServer) {
-                let placeholderText = "Contoh: 1234";
+                let placeholderText = "Contoh: 1234 (opsional)";
                 if (activeItem.id === 'genshin' || activeItem.id === 'hsr') {
                     placeholderText = "Contoh: os_asia, os_usa, dll";
                 } else if (activeItem.id === 'ragnarok') {
@@ -1420,6 +1457,9 @@
                     document.getElementById('adminLoginBox').classList.add('hidden');
                     document.getElementById('adminDashboardBox').classList.remove('hidden');
                     loadAdminProducts();
+                    
+                    // NEW: LANGSUNG LOAD DATA TRANSAKSI SAAT ADMIN LOGIN SUKSES
+                    loadAdminTransactions();
                 } else {
                     alert(data.message);
                 }
@@ -1444,7 +1484,7 @@
                 }
 
                 container.innerHTML = list.map(p => `
-                    <div class="bg-bgInput p-3 rounded-lg border border-borderDim flex justify-between items-center text-xs gap-3 shadow-sm">
+                    <div class="bg-bgCard p-3 rounded-lg border border-borderDim flex justify-between items-center text-xs gap-3 shadow-sm mb-2">
                         <img src="${p.image}" class="w-10 h-10 rounded object-cover border border-borderDim" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'40\'><rect width=\'100%\' height=\'100%\' fill=\'%23f3f4f6\'/><text x=\'50%\' y=\'50%\' fill=\'%236b7280\' font-family=\'sans-serif\' font-size=\'8\' dominant-baseline=\'middle\' text-anchor=\'middle\'>Logo</text></svg>'">
                         <div class="flex-1 min-w-0">
                             <div class="font-bold text-gray-900 uppercase text-[10px]"><span class="text-blue-600">[${p.category} ${p.category === 'ebook' && p.subCategory ? ` - ${p.subCategory}` : ''}]</span> ${p.name}</div>
@@ -1458,6 +1498,85 @@
                 `).join('');
             } catch(e) { console.error(e); }
         }
+
+        // --- FUNGSI BARU: LOAD SEMUA DATA TRANSAKSI UNTUK ADMIN ---
+        async function loadAdminTransactions() {
+            const tbody = document.getElementById('adminTransactionList');
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-textMuted"><i class="fas fa-spinner fa-spin"></i> Memuat data transaksi...</td></tr>';
+            try {
+                const res = await fetch('/api/transactions');
+                const db = await res.json();
+                
+                // Simpan ke variabel global buat keperluan Export ke Excel
+                window.adminTransactionsData = db;
+                
+                if(db.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-textMuted">Belum ada transaksi di database.</td></tr>';
+                    return;
+                }
+                
+                tbody.innerHTML = db.map(t => {
+                    let badgeColor = 'bg-yellow-50 text-yellow-600 border-yellow-200';
+                    if(t.status === 'SUKSES') badgeColor = 'bg-green-50 text-green-600 border-green-200';
+                    if(t.status === 'GAGAL') badgeColor = 'bg-red-50 text-red-600 border-red-200';
+                    
+                    const dateStr = new Date(t.created_at).toLocaleString('id-ID');
+                    const prov = t.is_digital ? 'TLIBRARY' : (t.provider || '-');
+                    
+                    return `
+                        <tr class="hover:bg-bgCard transition border-b border-borderDim">
+                            <td class="p-3"><div class="font-bold text-gray-900">${t.order_id}</div><div class="text-[10px] text-textMuted">${dateStr}</div></td>
+                            <td class="p-3 font-mono">${t.target_id}</td>
+                            <td class="p-3 text-xs max-w-[200px] truncate" title="${t.product_name}">
+                                ${t.product_name} <br>
+                                <span class="text-[9px] font-bold text-blue-500 uppercase">${t.is_digital ? 'DIGITAL' : 'PPOB / GAME'}</span>
+                            </td>
+                            <td class="p-3 font-bold text-blue-600">Rp ${t.amount.toLocaleString('id-ID')}</td>
+                            <td class="p-3"><span class="px-2 py-1 rounded text-[10px] font-bold border ${badgeColor}">${t.status}</span></td>
+                            <td class="p-3 text-[10px] max-w-[150px]">
+                                <div class="font-bold uppercase text-gray-700">${prov}</div>
+                                <div class="truncate text-textMuted" title="${t.sn || '-'}">${t.sn || '-'}</div>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            } catch(e) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-red-500">Gagal memuat transaksi jaringan.</td></tr>';
+            }
+        }
+
+        // --- FUNGSI BARU: EXPORT DATA TRANSAKSI KE EXCEL ---
+        function exportTransactionsExcel() {
+            if (!window.adminTransactionsData || window.adminTransactionsData.length === 0) {
+                return alert('Tidak ada data transaksi untuk diexport.');
+            }
+            
+            // Mapping data json agar judul kolom rapi di excel
+            const dataToExport = window.adminTransactionsData.map(t => ({
+                'Waktu Transaksi': new Date(t.created_at).toLocaleString('id-ID'),
+                'Order ID': t.order_id,
+                'Tujuan / Email': t.target_id,
+                'Nama Produk': t.product_name,
+                'Kategori': t.is_digital ? 'Produk Digital' : 'PPOB/Game',
+                'Harga Beli (Rp)': t.amount,
+                'Status': t.status,
+                'Provider': t.is_digital ? 'TLIBRARY' : (t.provider ? t.provider.toUpperCase() : '-'),
+                'SN / Keterangan': t.sn || '-'
+            }));
+
+            const ws = XLSX.utils.json_to_sheet(dataToExport);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Laporan_Transaksi");
+            
+            // Bikin lebar kolom di excel lebih proper (nggak sempit)
+            const wscols = [
+                {wch: 20}, {wch: 25}, {wch: 20}, {wch: 35}, {wch: 15}, {wch: 15}, {wch: 12}, {wch: 15}, {wch: 50}
+            ];
+            ws['!cols'] = wscols;
+
+            XLSX.writeFile(wb, `Laporan_Transaksi_TLIBRARY_${new Date().getTime()}.xlsx`);
+        }
+        // --- END FUNGSI BARU ---
 
         async function addNewDigitalProduct() {
             const category = document.getElementById('newCat').value;
@@ -1553,7 +1672,6 @@
                 });
         }
 
-        // --- FUNGSI BARU: Download Template Excel & Upload Masal Excel/JSON ---
         function downloadExcelTemplate() {
             const templateData = [
                 { category: "ebook", name: "Contoh Judul Ebook", price: 50000, description: "Buku sejarah tentang kerajaan masa lalu", downloadUrl: "https://drive.google.com/...", image: "https://image.url/cover.jpg" },
@@ -1618,7 +1736,6 @@
                 } else { alert(data.message); }
             } catch(err) { alert('Gagal mengunggah data masal!'); }
         }
-        // --- END FUNGSI BARU ---
 
         async function deleteDigitalProduct(id) {
             if(!confirm('Yakin ingin menghapus produk ini?')) return;

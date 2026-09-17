@@ -298,10 +298,10 @@ app.delete('/api/admin/products/:id', (req, res) => {
 // --- FUNGSI HELPER MARGIN (1%, Min Rp 200, Max Rp 500) ---
 function calculateMargin(hargaAsli) {
     const persentase = Math.round(hargaAsli * 0.01);
-    return Math.max(200, Math.min(500, persentase)); // Batas bawah 200, batas atas 500
+    return Math.max(200, Math.min(500, persentase)); 
 }
 
-// --- INTEGRASI H2H HYBRID (DIGIFLAZZ + HAYBI) ---
+// --- INTEGRASI H2H HYBRID (DIGIFLAZZ + HAYBI DENGAN FALLBACK) ---
 app.get('/api/products', async (req, res) => {
   try {
     const now = Date.now();
@@ -312,43 +312,8 @@ app.get('/api/products', async (req, res) => {
       const hbUser = process.env.HAYBI_USERNAME;
       const hbKey = process.env.HAYBI_API_KEY;
 
-      // 1. FETCH DARI DIGIFLAZZ (Semua kecuali E-Money, PLN, & Game yang dimigrasi)
-      if (dfUser && dfKey) {
-          try {
-              const sign = crypto.createHash('md5').update(dfUser + dfKey + 'depo').digest('hex');
-              const dfRes = await axios.post('https://api.digiflazz.com/v1/price-list', { 
-                  cmd: 'prepaid', 
-                  username: dfUser, 
-                  sign: sign 
-              }, { headers: { 'Content-Type': 'application/json' } });
-              
-              if (dfRes.data && Array.isArray(dfRes.data.data)) {
-                  const dfMapped = dfRes.data.data.map(p => ({
-                      buyer_sku_code: p.buyer_sku_code,
-                      product_name: p.product_name,
-                      category: p.category,
-                      price: parseInt(p.price) + calculateMargin(parseInt(p.price)),
-                      buyer_product_status: p.buyer_product_status && p.seller_product_status,
-                      brand: p.brand,
-                      note: 'Tersedia', // <-- DIPERBAIKI: Hapus p.desc agar tulisan ijo bersih
-                      isPasca: false,
-                      provider: 'digiflazz' // Label penanda eksekusi webhook nanti
-                  })).filter(p => {
-                      const cat = (p.category || '').toLowerCase();
-                      const brand = (p.brand || '').toUpperCase();
-                      const isEmoneyOrPLN = ['e-money', 'pln'].includes(p.category) || cat.includes('token listrik');
-                      const isMigratedGame = brand.includes('MOBILE LEGENDS') || brand.includes('FREE FIRE') || brand.includes('PUBG') || brand.includes('ROBLOX');
-                      return !isEmoneyOrPLN && !isMigratedGame;
-                  }); 
-                  
-                  combinedProducts.push(...dfMapped);
-              }
-          } catch (e) {
-              console.error("Digiflazz Fetch Error:", e.message);
-          }
-      }
-
-      // 2. FETCH DARI HAYBI (PLN, E-Money, & Game Migrasi Terpilih)
+      // 1. FETCH DARI HAYBI DULU (PLN, E-Money, & Game Migrasi)
+      let haybiProducts = [];
       if (hbUser && hbKey) {
           try {
               const refId = `SYNC_${Date.now()}`;
@@ -362,7 +327,7 @@ app.get('/api/products', async (req, res) => {
               
               const rawH = hRes.data?.data || hRes.data;
               if (Array.isArray(rawH)) {
-                  const hbMapped = rawH.map(produk => {
+                  haybiProducts = rawH.map(produk => {
                       let hargaDasar = parseInt(produk.harga || produk.price || produk.hargadasar || 0);
                       if (hargaDasar === 0) {
                           for (const k in produk) {
@@ -393,11 +358,13 @@ app.get('/api/products', async (req, res) => {
                           detectedCategory = 'PLN';
                           detectedBrand = 'PLN';
                           isTarget = true;
-                      } else if (textCheck.includes('MOBILE LEGENDS') || textCheck.includes('MLBB') || originalBrand.includes('MOBILE LEGENDS')) {
+                      } 
+                      // FILTER PENDETEKSI GAME DIPERLUAS AGAR AMAN
+                      else if (textCheck.includes('MOBILE LEGEND') || textCheck.includes('MLBB') || originalBrand.includes('MOBILE LEGEND') || originalBrand.includes('MLBB')) {
                           detectedCategory = 'Games';
                           detectedBrand = 'Mobile Legends';
                           isTarget = true;
-                      } else if (textCheck.includes('FREE FIRE') || textCheck.includes('DIAMOND FF') || originalBrand.includes('FREE FIRE')) {
+                      } else if (textCheck.includes('FREE FIRE') || textCheck.includes('FREEFIRE') || textCheck.includes(' FF') || originalBrand.includes('FREE FIRE') || originalBrand.includes('FREEFIRE') || originalBrand === 'FF') {
                           detectedCategory = 'Games';
                           detectedBrand = 'Free Fire';
                           isTarget = true;
@@ -424,14 +391,61 @@ app.get('/api/products', async (req, res) => {
                           isTarget
                       };
                   }).filter(p => p.isTarget); 
-
-                  combinedProducts.push(...hbMapped);
               }
           } catch (e) {
               console.error("Haybi Fetch Error:", e.message);
           }
       }
 
+      // Daftar game yang BERHASIL ditarik dari Haybi untuk validasi fallback
+      const haybiGameBrands = new Set(haybiProducts.filter(p => p.category === 'Games').map(p => p.brand.toUpperCase()));
+
+      // 2. FETCH DARI DIGIFLAZZ (Semua kecuali E-Money, PLN, & Game yang sukses ditarik Haybi)
+      let digiflazzProducts = [];
+      if (dfUser && dfKey) {
+          try {
+              const sign = crypto.createHash('md5').update(dfUser + dfKey + 'depo').digest('hex');
+              const dfRes = await axios.post('https://api.digiflazz.com/v1/price-list', { 
+                  cmd: 'prepaid', 
+                  username: dfUser, 
+                  sign: sign 
+              }, { headers: { 'Content-Type': 'application/json' } });
+              
+              if (dfRes.data && Array.isArray(dfRes.data.data)) {
+                  digiflazzProducts = dfRes.data.data.map(p => ({
+                      buyer_sku_code: p.buyer_sku_code,
+                      product_name: p.product_name,
+                      category: p.category,
+                      price: parseInt(p.price) + calculateMargin(parseInt(p.price)),
+                      buyer_product_status: p.buyer_product_status && p.seller_product_status,
+                      brand: p.brand,
+                      note: 'Tersedia', 
+                      isPasca: false,
+                      provider: 'digiflazz' 
+                  })).filter(p => {
+                      const cat = (p.category || '').toLowerCase();
+                      const brand = (p.brand || '').toUpperCase();
+                      
+                      // Exclude mutlak untuk E-Money & PLN (Sudah 100% di Haybi)
+                      const isEmoneyOrPLN = ['e-money', 'pln'].includes(p.category) || cat.includes('token listrik');
+                      if (isEmoneyOrPLN) return false;
+
+                      // FALLBACK SYSTEM: Hanya hilangkan dari Digiflazz JIKA di Haybi ada. 
+                      // Jika Haybi gagal / kosong, Digiflazz akan otomatis back-up menutupi yang kosong.
+                      if ((brand.includes('MOBILE LEGEND') || brand.includes('MLBB')) && haybiGameBrands.has('MOBILE LEGENDS')) return false;
+                      if ((brand.includes('FREE FIRE') || brand === 'FF') && haybiGameBrands.has('FREE FIRE')) return false;
+                      if (brand.includes('PUBG') && haybiGameBrands.has('PUBG MOBILE')) return false;
+                      if (brand.includes('ROBLOX') && haybiGameBrands.has('ROBLOX')) return false;
+
+                      return true;
+                  }); 
+              }
+          } catch (e) {
+              console.error("Digiflazz Fetch Error:", e.message);
+          }
+      }
+
+      combinedProducts = [...haybiProducts, ...digiflazzProducts];
       cachedProducts = combinedProducts;
       cacheTimestamp = now;
     }

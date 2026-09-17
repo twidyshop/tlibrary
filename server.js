@@ -312,7 +312,7 @@ app.get('/api/products', async (req, res) => {
       const hbUser = process.env.HAYBI_USERNAME;
       const hbKey = process.env.HAYBI_API_KEY;
 
-      // 1. FETCH DARI DIGIFLAZZ (Semua kecuali PLN & E-Money)
+      // 1. FETCH DARI DIGIFLAZZ (Semua kecuali E-Money, PLN, & Game yang dimigrasi)
       if (dfUser && dfKey) {
           try {
               const sign = crypto.createHash('md5').update(dfUser + dfKey + 'depo').digest('hex');
@@ -333,8 +333,13 @@ app.get('/api/products', async (req, res) => {
                       note: 'Tersedia', // <-- DIPERBAIKI: Hapus p.desc agar tulisan ijo bersih
                       isPasca: false,
                       provider: 'digiflazz' // Label penanda eksekusi webhook nanti
-                  })).filter(p => !['E-Money', 'PLN'].includes(p.category) && !p.category.toLowerCase().includes('token')); 
-                  // Filter out E-Money & PLN dari Digiflazz biar Haybi yang ambil alih
+                  })).filter(p => {
+                      const cat = (p.category || '').toLowerCase();
+                      const brand = (p.brand || '').toUpperCase();
+                      const isEmoneyOrPLN = ['e-money', 'pln'].includes(p.category) || cat.includes('token listrik');
+                      const isMigratedGame = brand.includes('MOBILE LEGENDS') || brand.includes('FREE FIRE') || brand.includes('PUBG') || brand.includes('ROBLOX');
+                      return !isEmoneyOrPLN && !isMigratedGame;
+                  }); 
                   
                   combinedProducts.push(...dfMapped);
               }
@@ -343,7 +348,7 @@ app.get('/api/products', async (req, res) => {
           }
       }
 
-      // 2. FETCH DARI HAYBI (Khusus PLN & E-Money saja)
+      // 2. FETCH DARI HAYBI (PLN, E-Money, & Game Migrasi Terpilih)
       if (hbUser && hbKey) {
           try {
               const refId = `SYNC_${Date.now()}`;
@@ -366,38 +371,59 @@ app.get('/api/products', async (req, res) => {
                           }
                       }
 
-                      const skuCode = produk.kode_produk || produk.kode || produk.buyer_sku_code;
-                      const prodName = produk.nama_produk || produk.nama || produk.product_name;
-                      let textCheck = (skuCode + " " + prodName).toUpperCase();
+                      const skuCode = String(produk.kode_produk || produk.kode || produk.buyer_sku_code || '').toUpperCase();
+                      const prodName = String(produk.nama_produk || produk.nama || produk.product_name || '').toUpperCase();
+                      let textCheck = (skuCode + " " + prodName);
+                      let originalBrand = String(produk.brand || produk.provider || '').toUpperCase();
 
                       // Deteksi Kategori Haybi
                       let detectedCategory = 'Umum';
-                      let detectedBrand = produk.brand || produk.provider || 'Umum';
+                      let detectedBrand = originalBrand || 'Umum';
+                      let isTarget = false;
 
                       if (textCheck.includes('DANA') || textCheck.includes('OVO') || textCheck.includes('GOPAY') || textCheck.includes('SHOPEE') || textCheck.includes('LINKAJA') || textCheck.includes('E-MONEY')) {
                           detectedCategory = 'E-Money';
+                          isTarget = true;
                           if (textCheck.includes('DANA')) detectedBrand = 'DANA';
                           else if (textCheck.includes('OVO')) detectedBrand = 'OVO';
                           else if (textCheck.includes('GOPAY') || textCheck.includes('GO PAY')) detectedBrand = 'GO PAY';
                           else if (textCheck.includes('SHOPEE')) detectedBrand = 'SHOPEE PAY';
                           else if (textCheck.includes('LINKAJA')) detectedBrand = 'LINKAJA';
-                      } else if (textCheck.includes('PLN') || textCheck.includes('TOKEN')) {
+                      } else if (textCheck.includes('PLN') || (textCheck.includes('TOKEN') && textCheck.includes('LISTRIK'))) {
                           detectedCategory = 'PLN';
-                          detectedBrand = 'Token PLN';
+                          detectedBrand = 'PLN';
+                          isTarget = true;
+                      } else if (textCheck.includes('MOBILE LEGENDS') || textCheck.includes('MLBB') || originalBrand.includes('MOBILE LEGENDS')) {
+                          detectedCategory = 'Games';
+                          detectedBrand = 'Mobile Legends';
+                          isTarget = true;
+                      } else if (textCheck.includes('FREE FIRE') || textCheck.includes('DIAMOND FF') || originalBrand.includes('FREE FIRE')) {
+                          detectedCategory = 'Games';
+                          detectedBrand = 'Free Fire';
+                          isTarget = true;
+                      } else if (textCheck.includes('PUBG') || originalBrand.includes('PUBG')) {
+                          detectedCategory = 'Games';
+                          detectedBrand = 'PUBG Mobile';
+                          isTarget = true;
+                      } else if (textCheck.includes('ROBLOX') || originalBrand.includes('ROBLOX')) {
+                          detectedCategory = 'Games';
+                          detectedBrand = 'Roblox';
+                          isTarget = true;
                       }
 
                       return {
-                          buyer_sku_code: skuCode,
-                          product_name: prodName,
+                          buyer_sku_code: produk.kode_produk || produk.kode || produk.buyer_sku_code,
+                          product_name: produk.nama_produk || produk.nama || produk.product_name,
                           category: detectedCategory,
                           price: hargaDasar + calculateMargin(hargaDasar),
                           buyer_product_status: true,
                           brand: detectedBrand,
-                          note: 'Tersedia', // <-- DIPERBAIKI: Bersih dan seragam dengan Digiflazz
+                          note: 'Tersedia', 
                           isPasca: false,
-                          provider: 'haybi' // Label penanda
+                          provider: 'haybi',
+                          isTarget
                       };
-                  }).filter(p => ['E-Money', 'PLN'].includes(p.category)); // AMBIL HANYA E-MONEY & PLN DARI HAYBI
+                  }).filter(p => p.isTarget); 
 
                   combinedProducts.push(...hbMapped);
               }

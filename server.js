@@ -338,12 +338,16 @@ app.get('/api/products', async (req, res) => {
 
                       const skuCode = String(produk.kode_produk || produk.kode || produk.buyer_sku_code || '').toUpperCase();
                       const prodName = String(produk.nama_produk || produk.nama || produk.product_name || '').toUpperCase();
-                      let textCheck = (skuCode + " " + prodName);
-                      let originalBrand = String(produk.brand || produk.provider || '').toUpperCase();
+                      
+                      // PERBAIKAN HAYBI: Ambil semua kemungkinan field identifier game dari Haybi
+                      const rawBrand = String(produk.brand || produk.provider || produk.operator || produk.kategori || produk.tipe || '').toUpperCase();
+                      
+                      // GABUNGKAN semuanya menjadi 1 kalimat raksasa untuk dipindai
+                      let textCheck = (skuCode + " " + prodName + " " + rawBrand);
 
                       // Deteksi Kategori Haybi
                       let detectedCategory = 'Umum';
-                      let detectedBrand = originalBrand || 'Umum';
+                      let detectedBrand = rawBrand || 'Umum';
                       let isTarget = false;
 
                       if (textCheck.includes('DANA') || textCheck.includes('OVO') || textCheck.includes('GOPAY') || textCheck.includes('SHOPEE') || textCheck.includes('LINKAJA') || textCheck.includes('E-MONEY')) {
@@ -359,20 +363,20 @@ app.get('/api/products', async (req, res) => {
                           detectedBrand = 'PLN';
                           isTarget = true;
                       } 
-                      // FILTER PENDETEKSI GAME DIPERLUAS AGAR AMAN
-                      else if (textCheck.includes('MOBILE LEGEND') || textCheck.includes('MLBB') || originalBrand.includes('MOBILE LEGEND') || originalBrand.includes('MLBB')) {
+                      // FILTER PENDETEKSI GAME SUPER LUAS
+                      else if (textCheck.includes('MOBILE LEGEND') || textCheck.includes('MLBB')) {
                           detectedCategory = 'Games';
                           detectedBrand = 'Mobile Legends';
                           isTarget = true;
-                      } else if (textCheck.includes('FREE FIRE') || textCheck.includes('FREEFIRE') || textCheck.includes(' FF') || originalBrand.includes('FREE FIRE') || originalBrand.includes('FREEFIRE') || originalBrand === 'FF') {
+                      } else if (textCheck.includes('FREE FIRE') || textCheck.includes('FREEFIRE') || textCheck.includes(' FF')) {
                           detectedCategory = 'Games';
                           detectedBrand = 'Free Fire';
                           isTarget = true;
-                      } else if (textCheck.includes('PUBG') || originalBrand.includes('PUBG')) {
+                      } else if (textCheck.includes('PUBG')) {
                           detectedCategory = 'Games';
                           detectedBrand = 'PUBG Mobile';
                           isTarget = true;
-                      } else if (textCheck.includes('ROBLOX') || originalBrand.includes('ROBLOX')) {
+                      } else if (textCheck.includes('ROBLOX')) {
                           detectedCategory = 'Games';
                           detectedBrand = 'Roblox';
                           isTarget = true;
@@ -397,10 +401,22 @@ app.get('/api/products', async (req, res) => {
           }
       }
 
-      // Daftar game yang BERHASIL ditarik dari Haybi untuk validasi fallback
-      const haybiGameBrands = new Set(haybiProducts.filter(p => p.category === 'Games').map(p => p.brand.toUpperCase()));
+      // SAFEGUARD ANTI-ZONK: Hitung jumlah produk per game di Haybi
+      const haybiGameCounts = {};
+      haybiProducts.forEach(p => {
+          if (p.category === 'Games') {
+              const b = (p.brand || '').toUpperCase();
+              haybiGameCounts[b] = (haybiGameCounts[b] || 0) + 1;
+          }
+      });
+      
+      // FALLBACK SYARAT: Haybi HANYA akan mematikan Digiflazz JIKA jumlah produk gamenya lebih dari 2.
+      // Ini mencegah bug jika Haybi tiba-tiba cuma memunculkan 1 produk (misal cuma "Cek Username")
+      const haybiGameBrands = new Set(
+          Object.keys(haybiGameCounts).filter(b => haybiGameCounts[b] >= 3)
+      );
 
-      // 2. FETCH DARI DIGIFLAZZ (Semua kecuali E-Money, PLN, & Game yang sukses ditarik Haybi)
+      // 2. FETCH DARI DIGIFLAZZ (Semua kecuali E-Money, PLN, & Game yang sukses ditarik Haybi dg aman)
       let digiflazzProducts = [];
       if (dfUser && dfKey) {
           try {
@@ -430,8 +446,7 @@ app.get('/api/products', async (req, res) => {
                       const isEmoneyOrPLN = ['e-money', 'pln'].includes(p.category) || cat.includes('token listrik');
                       if (isEmoneyOrPLN) return false;
 
-                      // FALLBACK SYSTEM: Hanya hilangkan dari Digiflazz JIKA di Haybi ada. 
-                      // Jika Haybi gagal / kosong, Digiflazz akan otomatis back-up menutupi yang kosong.
+                      // FALLBACK SYSTEM: Hanya hilangkan dari Digiflazz JIKA di Haybi aman (produk >= 3)
                       if ((brand.includes('MOBILE LEGEND') || brand.includes('MLBB')) && haybiGameBrands.has('MOBILE LEGENDS')) return false;
                       if ((brand.includes('FREE FIRE') || brand === 'FF') && haybiGameBrands.has('FREE FIRE')) return false;
                       if (brand.includes('PUBG') && haybiGameBrands.has('PUBG MOBILE')) return false;

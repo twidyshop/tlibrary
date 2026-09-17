@@ -177,10 +177,10 @@
                 <!-- Bagian Tengah (Input & Nominal) -->
                 <div class="lg:col-span-6 space-y-4 md:space-y-6">
                     <div class="bg-bgCard rounded-xl p-4 md:p-6 border border-borderDim flex items-center gap-4 shadow-sm">
-                        <img id="activeItemImg" src="assets/ml-logo.png" alt="Logo" class="w-16 h-16 md:w-20 md:h-20 rounded-xl object-cover shadow-sm border border-borderDim bg-bgInput" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'80\'><rect width=\'100%\' height=\'100%\' fill=\'%23f3f4f6\'/><text x=\'50%\' y=\'50%\' fill=\'%236b7280\' font-family=\'sans-serif\' font-size=\'12\' dominant-baseline=\'middle\' text-anchor=\'middle\'>Logo</text></svg>'">
+                        <img id="activeItemImg" src="assets/roblox-logo.png" alt="Logo" class="w-16 h-16 md:w-20 md:h-20 rounded-xl object-cover shadow-sm border border-borderDim bg-bgInput" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'80\'><rect width=\'100%\' height=\'100%\' fill=\'%23f3f4f6\'/><text x=\'50%\' y=\'50%\' fill=\'%236b7280\' font-family=\'sans-serif\' font-size=\'12\' dominant-baseline=\'middle\' text-anchor=\'middle\'>Logo</text></svg>'">
                         <div class="flex-1 min-w-0">
-                            <h2 id="activeItemTitle" class="text-lg md:text-2xl font-bold mb-1 text-gray-900 truncate">Mobile Legends</h2>
-                            <p id="activeItemDesc" class="text-textMuted text-xs md:text-sm truncate">Top Up Diamond Mobile Legends cepat & aman.</p>
+                            <h2 id="activeItemTitle" class="text-lg md:text-2xl font-bold mb-1 text-gray-900 truncate">Roblox</h2>
+                            <p id="activeItemDesc" class="text-textMuted text-xs md:text-sm truncate">Top Up Robux Roblox resmi & instan.</p>
                         </div>
                     </div>
 
@@ -231,9 +231,9 @@
                         </h3>
                         
                         <div class="flex gap-3 mb-4">
-                            <img id="cartImg" src="assets/ml-logo.png" alt="Logo" class="w-10 h-10 rounded object-cover border border-borderDim bg-bgInput" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'40\'><rect width=\'100%\' height=\'100%\' fill=\'%23f3f4f6\'/><text x=\'50%\' y=\'50%\' fill=\'%236b7280\' font-family=\'sans-serif\' font-size=\'10\' dominant-baseline=\'middle\' text-anchor=\'middle\'>Logo</text></svg>'">
+                            <img id="cartImg" src="assets/roblox-logo.png" alt="Logo" class="w-10 h-10 rounded object-cover border border-borderDim bg-bgInput" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'40\'><rect width=\'100%\' height=\'100%\' fill=\'%23f3f4f6\'/><text x=\'50%\' y=\'50%\' fill=\'%236b7280\' font-family=\'sans-serif\' font-size=\'10\' dominant-baseline=\'middle\' text-anchor=\'middle\'>Logo</text></svg>'">
                             <div class="flex-1 min-w-0">
-                                <div id="cartItemName" class="text-[10px] md:text-xs text-textMuted mb-0.5 font-medium truncate">Mobile Legends</div>
+                                <div id="cartItemName" class="text-[10px] md:text-xs text-textMuted mb-0.5 font-medium truncate">Roblox</div>
                                 <div class="text-xs md:text-sm font-bold text-gray-900 leading-tight break-words" id="cartProduct">Pilih Nominal</div>
                                 <div class="text-[10px] text-blue-600 mt-0.5">Instan & Otomatis</div>
                             </div>
@@ -665,6 +665,7 @@
     <script>
         const categoriesData = {
             game: [
+                { id: 'roblox', name: 'Roblox', brandKey: 'Roblox', img: 'assets/roblox-logo.png', hasServer: false, desc: 'Top Up Robux Roblox resmi & instan.' },
                 { id: 'ml', name: 'Mobile Legends', brandKey: 'Mobile Legends', img: 'assets/ml-logo.png', hasServer: true, desc: 'Top Up Diamond Mobile Legends cepat & aman.' },
                 { id: 'ff', name: 'Free Fire', brandKey: 'Free Fire', img: 'assets/ff-logo.png', hasServer: false, desc: 'Top Up Diamond Free Fire instan.' },
                 { id: 'pubg', name: 'PUBG Mobile', brandKey: 'PUBG Mobile', img: 'assets/pubg-logo.png', hasServer: false, desc: 'Top Up UC PUBG Mobile harga promo.' },
@@ -1487,7 +1488,7 @@
                     <div class="bg-bgCard p-3 rounded-lg border border-borderDim flex justify-between items-center text-xs gap-3 shadow-sm mb-2">
                         <img src="${p.image}" class="w-10 h-10 rounded object-cover border border-borderDim" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'40\'><rect width=\'100%\' height=\'100%\' fill=\'%23f3f4f6\'/><text x=\'50%\' y=\'50%\' fill=\'%236b7280\' font-family=\'sans-serif\' font-size=\'8\' dominant-baseline=\'middle\' text-anchor=\'middle\'>Logo</text></svg>'">
                         <div class="flex-1 min-w-0">
-                            <div class="font-bold text-gray-900 uppercase text-[10px]"><span class="text-blue-600">[${p.category} ${p.category === 'ebook' && p.subCategory ? ` - ${p.subCategory}` : ''}]</span> ${p.name}</div>
+                            <div class="font-bold text-gray-900 uppercase text-[10px]"><span class="text-blue-600">[${p.category} ${p.category === 'ebook' && p.subCategory ? \` - \${p.subCategory}\` : ''}]</span> ${p.name}</div>
                             <div class="text-textMuted truncate">Rp ${p.price.toLocaleString('id-ID')} • Link: <a href="${p.downloadUrl}" target="_blank" class="underline text-blue-500 hover:text-blue-700">${p.downloadUrl}</a></div>
                         </div>
                         <div class="flex gap-2">

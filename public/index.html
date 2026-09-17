@@ -7,7 +7,7 @@
     <!-- Meta SEO & Favicon -->
     <title>TLIBRARY - Top Up Game Termurah & Produk Digital</title>
     <meta name="description" content="Situs top up game termurah, beli diamond ML, FF, pulsa, e-money (Dana, OVO, Gopay), token PLN, dan produk digital instan otomatis 24 jam.">
-    <meta name="keywords" content="top up game murah, tlibrary, beli diamond ml, top up ff, pulsa murah, token pln, digital store, top up roblox">
+    <meta name="keywords" content="top up game murah, tlibrary, beli diamond ml, top up ff, pulsa murah, token pln, digital store, top up honkai star rail">
     <link rel="icon" type="image/png" href="favicon.png">
 
     <!-- Tambahan library XLSX untuk template & konversi excel klien -->
@@ -21,13 +21,13 @@
             theme: {
                 extend: {
                     colors: {
-                        bgMain: '#f3f4f6',      
-                        bgCard: '#ffffff',      
-                        bgInput: '#f9fafb',     
-                        primary: '#3b82f6',     
+                        bgMain: '#f3f4f6',      // Background utama terang (Gray-100)
+                        bgCard: '#ffffff',      // Warna kartu putih bersih
+                        bgInput: '#f9fafb',     // Background input sedikit abu (Gray-50)
+                        primary: '#3b82f6',     // Warna biru aksen
                         primaryHover: '#2563eb',
-                        textMuted: '#6b7280',   
-                        borderDim: '#e5e7eb'    
+                        textMuted: '#6b7280',   // Teks pudar / abu-abu (Gray-500)
+                        borderDim: '#e5e7eb'    // Border abu-abu tipis (Gray-200)
                     },
                     fontFamily: { sans: ['Inter', 'sans-serif'] }
                 }
@@ -57,6 +57,7 @@
     <!-- Sticky Navbar -->
     <nav class="sticky top-0 z-40 flex justify-between items-center px-4 md:px-10 py-3 bg-bgCard/90 backdrop-blur-md border-b border-borderDim shadow-sm">
         
+        <!-- LOGO BARU TLIBRARY -->
         <div class="flex items-center gap-2 md:gap-3 cursor-pointer group" onclick="navigate('home')">
             <img src="logo.png" alt="TLIBRARY Logo" class="w-8 h-8 md:w-11 md:h-11 rounded-lg md:rounded-xl shadow-[0_0_15px_rgba(59,130,246,0.3)] group-hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] transition-all duration-300 object-cover" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'40\'><rect width=\'100%\' height=\'100%\' fill=\'%233b82f6\' rx=\'10\'/><text x=\'50%\' y=\'50%\' fill=\'white\' font-family=\'sans-serif\' font-size=\'20\' font-weight=\'bold\' dominant-baseline=\'middle\' text-anchor=\'middle\'>T</text></svg>'">
             <div class="flex flex-col justify-center">
@@ -97,7 +98,9 @@
         <a href="#riwayat" onclick="navigate('riwayat'); toggleMobileMenu();" class="block py-2 text-gray-700"><i class="fas fa-search mr-2"></i> Cek Riwayat</a>
         <a href="#promo" onclick="navigate('promo'); toggleMobileMenu();" class="block py-2 text-gray-700"><i class="fas fa-tag mr-2"></i> Promo</a>
         <a href="#panduan" onclick="navigate('panduan'); toggleMobileMenu();" class="block py-2 text-gray-700"><i class="fas fa-headset mr-2"></i> Panduan & Bantuan</a>
+        <!-- Download APK Menu Mobile -->
         <a href="tlibrary.apk" download class="block py-2 text-green-600 font-bold border-t border-borderDim mt-2 pt-2"><i class="fab fa-android mr-2 text-lg"></i> Download Aplikasi (APK)</a>
+        
         <a href="#admin" onclick="navigate('admin'); toggleMobileMenu();" class="block py-2 text-yellow-600 border-t border-borderDim mt-2 pt-2"><i class="fas fa-lock mr-2"></i> Admin Panel</a>
     </div>
 
@@ -107,6 +110,7 @@
         <!-- VIEW 1: TOPUP & PPOB -->
         <div id="view-topup" class="space-y-4 md:space-y-6 relative">
             
+            <!-- Hero Banner Responsive (Full Width & Auto Height) -->
             <div id="home" class="relative rounded-2xl border border-borderDim overflow-hidden shadow-md group bg-bgCard">
                 <img src="banner-hero.png" alt="Promo TLIBRARY" class="w-full h-auto group-hover:scale-[1.01] transition-transform duration-500 origin-center" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'1200\' height=\'400\'><rect width=\'100%\' height=\'100%\' fill=\'%23ffffff\'/><text x=\'50%\' y=\'50%\' fill=\'%236b7280\' font-family=\'sans-serif\' font-size=\'24\' dominant-baseline=\'middle\' text-anchor=\'middle\'>BANNER HERO KOSONG</text></svg>'">
             </div>
@@ -137,6 +141,7 @@
                 <!-- Sidebar / Kategori Kiri -->
                 <div class="lg:col-span-3 bg-bgCard rounded-xl p-4 border border-borderDim h-max shadow-sm">
                     
+                    <!-- TOMBOL DOWNLOAD APK FLOATING CARD -->
                     <a href="tlibrary.apk" download class="block mb-3 bg-gradient-to-r from-blue-50 to-white border border-blue-200 rounded-xl p-2 md:p-2.5 hover:border-blue-400 transition-all shadow-sm relative overflow-hidden group">
                         <div class="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         <div class="flex items-center justify-between relative z-10">
@@ -157,14 +162,15 @@
                         </div>
                     </a>
 
+                    <!-- Search Input -->
                     <div class="relative mb-3">
                         <i class="fas fa-search absolute left-3 top-3 text-textMuted text-xs"></i>
                         <input type="text" id="gameSearch" placeholder="Cari layanan..." oninput="filterSidebarItems()" class="w-full bg-bgInput text-xs md:text-sm pl-8 pr-3 py-2.5 rounded-lg border border-borderDim focus:outline-none focus:border-blue-500 text-gray-900 placeholder-textMuted transition" />
                     </div>
                     
                     <div id="sidebarListContainer" class="max-h-[500px] overflow-y-auto pr-1 hide-scrollbar">
-                        <ul class="space-y-1 text-sm font-semibold" id="sidebarListDesktop"></ul>
-                        <div class="grid grid-cols-3 gap-3 lg:hidden mt-3" id="sidebarGridMobile"></div>
+                        <ul class="space-y-1 text-sm font-semibold hidden lg:block" id="sidebarListDesktop"></ul>
+                        <div class="grid grid-cols-3 gap-3 lg:hidden" id="sidebarGridMobile"></div>
                     </div>
                 </div>
 
@@ -249,7 +255,7 @@
                 </div>
             </div>
 
-            <!-- LAYOUT PRODUK DIGITAL -->
+            <!-- LAYOUT PRODUK DIGITAL (DENGAN SEARCH BAR & FILTER DROPDOWN) -->
             <div id="digitalLayout" class="hidden space-y-6 pt-2">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-bgCard p-4 rounded-xl border border-borderDim shadow-sm">
                     <div>
@@ -258,6 +264,7 @@
                     </div>
                     
                     <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                        <!-- Dropdown dengan 21 Kategori lengkap -->
                         <select id="ebookSubCatFilter" onchange="renderDigitalCards(currentCategory)" class="hidden bg-bgInput text-xs text-gray-900 border border-borderDim p-2.5 rounded-lg outline-none focus:border-blue-500 transition">
                             <option value="">Semua Sub-Kategori</option>
                             <option value="Novel & Fiksi">Novel & Fiksi</option>
@@ -331,6 +338,7 @@
         <!-- VIEW 4: PUSAT PANDUAN & BANTUAN -->
         <div id="view-panduan" class="space-y-6 hidden min-h-[60vh]">
             <div class="max-w-5xl mx-auto space-y-6">
+                <!-- Header -->
                 <div class="bg-gradient-to-r from-blue-50 to-bgCard p-6 md:p-8 rounded-2xl border border-blue-100 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
                     <div>
                         <h2 class="text-2xl md:text-3xl font-extrabold text-blue-900 mb-2">Pusat Panduan & Bantuan</h2>
@@ -340,6 +348,7 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Step by Step Panduan -->
                     <div class="md:col-span-2 space-y-4">
                         <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2"><i class="fas fa-book text-blue-600"></i> Cara Transaksi</h3>
                         <div class="space-y-3">
@@ -361,29 +370,34 @@
                                 <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold flex-shrink-0">3</div>
                                 <div>
                                     <h4 class="text-sm font-bold text-gray-900 mb-1">Selesaikan Pembayaran</h4>
-                                    <p class="text-xs text-textMuted leading-relaxed">Klik tombol "Bayar Sekarang". Anda akan diarahkan ke halaman QRIS.</p>
+                                    <p class="text-xs text-textMuted leading-relaxed">Klik tombol "Bayar Sekarang". Anda akan diarahkan ke halaman QRIS. Scan menggunakan Gopay, OVO, Dana, ShopeePay, atau M-Banking.</p>
                                 </div>
                             </div>
                             <div class="bg-bgCard p-4 rounded-xl border border-borderDim flex gap-4 items-start hover:border-blue-300 transition shadow-sm">
                                 <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold flex-shrink-0">4</div>
                                 <div>
                                     <h4 class="text-sm font-bold text-gray-900 mb-1">Pesanan Sukses Otomatis</h4>
-                                    <p class="text-xs text-textMuted leading-relaxed">Setelah pembayaran berhasil, pesanan langsung diproses sistem.</p>
+                                    <p class="text-xs text-textMuted leading-relaxed">Setelah pembayaran berhasil, pesanan akan langsung diproses oleh sistem dalam hitungan detik. Cek menu <a href="#riwayat" onclick="navigate('riwayat')" class="text-blue-600 underline">Cek Riwayat</a> untuk melacak pesananmu.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
+                    <!-- Panel Bantuan Langsung -->
                     <div class="space-y-4">
                         <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2"><i class="fas fa-life-ring text-green-500"></i> Bantuan CS</h3>
                         <div class="bg-bgCard p-6 rounded-xl border border-borderDim text-center space-y-4 relative overflow-hidden group hover:border-green-300 transition shadow-sm">
+                            <div class="absolute -right-6 -top-6 text-7xl text-green-50 group-hover:text-green-100 transition-colors transform rotate-12"><i class="fab fa-whatsapp"></i></div>
                             <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-2 relative z-10">
                                 <i class="fab fa-whatsapp"></i>
                             </div>
                             <h4 class="text-base font-bold text-gray-900 relative z-10">Kendala Transaksi?</h4>
+                            <p class="text-xs text-textMuted relative z-10 mb-2">Admin kami siap membantu mengecek pesananmu atau menjawab pertanyaan seputar TLIBRARY.</p>
+                            
                             <a href="https://wa.me/628970108026?text=Halo%20Admin%20TLIBRARY,%20saya%20butuh%20bantuan%20terkait%20transaksi..." target="_blank" class="block w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-4 rounded-lg transition text-xs shadow-md relative z-10 flex justify-center items-center gap-2">
                                 <i class="fab fa-whatsapp text-sm"></i> Chat Admin Sekarang
                             </a>
+                            <div class="text-[10px] text-gray-500 mt-2 relative z-10"><i class="fas fa-clock text-green-600"></i> Fast Response: 08.00 - 22.00 WIB</div>
                         </div>
                     </div>
                 </div>
@@ -394,6 +408,7 @@
         <div id="view-admin" class="space-y-6 hidden min-h-[60vh]">
             <div id="adminLoginBox" class="bg-bgCard rounded-xl p-6 border border-borderDim max-w-md mx-auto space-y-4 shadow-sm">
                 <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2"><i class="fas fa-lock text-yellow-500"></i> Login Admin Panel</h2>
+                <p class="text-textMuted text-xs">Masukkan kredensial admin untuk mengelola produk digital & melihat laporan.</p>
                 <div>
                     <label class="block text-xs text-textMuted mb-1">Username</label>
                     <input type="text" id="adminUser" class="w-full bg-bgInput p-3 rounded-lg border border-borderDim text-sm text-gray-900 outline-none focus:border-blue-500 shadow-inner" placeholder="admin" />
@@ -409,9 +424,60 @@
                 <div class="flex justify-between items-center pb-4 border-b border-borderDim">
                     <h2 class="text-xl font-bold text-gray-900"><i class="fas fa-cogs text-blue-600"></i> Kelola Sistem & Laporan</h2>
                     <div class="flex gap-2">
-                        <button onclick="exportBackup()" class="bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white border border-blue-200 px-3 py-1.5 rounded text-xs transition"><i class="fas fa-download"></i> Backup Produk</button>
+                        <button onclick="exportBackup()" class="bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white border border-blue-200 px-3 py-1.5 rounded text-xs transition"><i class="fas fa-download"></i> Backup Produk Digital</button>
                         <button onclick="adminLogout()" class="bg-red-50 text-red-600 hover:bg-red-600 hover:text-white border border-red-200 px-3 py-1.5 rounded text-xs transition">Logout</button>
                     </div>
+                </div>
+
+                <div class="bg-bgInput p-4 rounded-xl border border-borderDim space-y-4">
+                    <h3 class="font-bold text-sm text-gray-900"><i class="fas fa-plus-circle text-blue-600"></i> Tambah Produk Digital Satuan</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs text-textMuted mb-1">Kategori</label>
+                            <select id="newCat" class="w-full bg-bgCard p-2.5 rounded-lg border border-borderDim text-xs text-gray-900">
+                                <option value="ebook">Ebook</option>
+                                <option value="ecourse">Ecourse</option>
+                                <option value="template">Template</option>
+                                <option value="aplikasi">Aplikasi</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-textMuted mb-1">Nama Produk</label>
+                            <input type="text" id="newName" placeholder="Misal: Ebook Rahasia JS" class="w-full bg-bgCard p-2.5 rounded-lg border border-borderDim text-xs text-gray-900" />
+                        </div>
+                        <div>
+                            <label class="block text-xs text-textMuted mb-1">Harga (Rp)</label>
+                            <input type="number" id="newPrice" placeholder="50000" class="w-full bg-bgCard p-2.5 rounded-lg border border-borderDim text-xs text-gray-900" />
+                        </div>
+                        <div>
+                            <label class="block text-xs text-textMuted mb-1">URL Gambar Cover (Link Internet)</label>
+                            <input type="text" id="newImage" placeholder="https://image.url/cover.jpg" class="w-full bg-bgCard p-2.5 rounded-lg border border-borderDim text-xs text-gray-900" />
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs text-textMuted mb-1">Link Download (Google Drive / URL)</label>
+                            <input type="text" id="newUrl" placeholder="https://drive.google.com/..." class="w-full bg-bgCard p-2.5 rounded-lg border border-borderDim text-xs text-gray-900" />
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs text-textMuted mb-1">Deskripsi Lengkap Produk</label>
+                            <textarea id="newDesc" placeholder="Keterangan lengkap produk..." class="w-full bg-bgCard p-2.5 rounded-lg border border-borderDim text-xs text-gray-900" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <button onclick="addNewDigitalProduct()" class="bg-green-600 hover:bg-green-500 text-white font-bold px-4 py-2 rounded-lg text-xs transition shadow-sm"><i class="fas fa-save"></i> Simpan Produk Digital</button>
+                </div>
+
+                <!-- UPLOAD EXCEL / JSON -->
+                <div class="bg-bgInput p-4 rounded-xl border border-borderDim space-y-3">
+                    <h3 class="font-bold text-sm text-gray-900"><i class="fas fa-file-excel text-green-600"></i> Upload Masal via Excel / JSON</h3>
+                    <div class="flex items-center gap-2">
+                        <button onclick="downloadExcelTemplate()" class="bg-green-50 text-green-600 border border-green-200 hover:bg-green-600 hover:text-white px-3 py-1.5 rounded text-xs transition"><i class="fas fa-download"></i> Download Template Excel</button>
+                    </div>
+                    <input type="file" id="bulkFile" accept=".json, .xlsx, .xls" class="w-full text-xs text-textMuted file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500 cursor-pointer mt-2" />
+                    <button onclick="uploadBulkProducts()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2 rounded-lg text-xs transition shadow-sm"><i class="fas fa-upload"></i> Proses Upload Masal</button>
+                </div>
+
+                <div>
+                    <h3 class="font-bold text-sm text-gray-900 mb-3">Daftar Produk Digital Aktif</h3>
+                    <div id="adminProductList" class="space-y-2 max-h-60 overflow-y-auto pr-2 border border-borderDim rounded-lg p-2 bg-bgInput"></div>
                 </div>
 
                 <!-- NEW: TABEL TRANSAKSI KESELURUHAN & EXPORT EXCEL -->
@@ -441,6 +507,8 @@
                         </table>
                     </div>
                 </div>
+                <!-- END NEW SECTION -->
+
             </div>
         </div>
 
@@ -512,6 +580,49 @@
         </div>
     </div>
 
+    <!-- MODAL EDIT PRODUK DIGITAL -->
+    <div id="editDigitalModal" class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-bgCard border border-borderDim rounded-2xl max-w-md w-full p-6 relative shadow-2xl">
+            <div class="flex justify-between items-center mb-4 border-b border-borderDim pb-2">
+                <h2 class="text-lg font-bold text-gray-900"><i class="fas fa-edit text-blue-600"></i> Edit Produk Digital</h2>
+                <button onclick="closeEditDigitalModal()" class="text-textMuted hover:text-gray-900 transition"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="space-y-3">
+                <input type="hidden" id="editProdId" />
+                <div>
+                    <label class="block text-xs text-textMuted mb-1">Kategori</label>
+                    <select id="editProdCat" class="w-full bg-bgInput p-2.5 rounded-lg border border-borderDim text-xs text-gray-900">
+                        <option value="ebook">Ebook</option>
+                        <option value="ecourse">Ecourse</option>
+                        <option value="template">Template</option>
+                        <option value="aplikasi">Aplikasi</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs text-textMuted mb-1">Nama Produk</label>
+                    <input type="text" id="editProdName" class="w-full bg-bgInput p-2.5 rounded-lg border border-borderDim text-xs text-gray-900" />
+                </div>
+                <div>
+                    <label class="block text-xs text-textMuted mb-1">Harga (Rp)</label>
+                    <input type="number" id="editProdPrice" class="w-full bg-bgInput p-2.5 rounded-lg border border-borderDim text-xs text-gray-900" />
+                </div>
+                <div>
+                    <label class="block text-xs text-textMuted mb-1">URL Gambar Cover</label>
+                    <input type="text" id="editProdImage" class="w-full bg-bgInput p-2.5 rounded-lg border border-borderDim text-xs text-gray-900" />
+                </div>
+                <div>
+                    <label class="block text-xs text-textMuted mb-1">Link Download</label>
+                    <input type="text" id="editProdUrl" class="w-full bg-bgInput p-2.5 rounded-lg border border-borderDim text-xs text-gray-900" />
+                </div>
+                <div>
+                    <label class="block text-xs text-textMuted mb-1">Deskripsi</label>
+                    <textarea id="editProdDesc" class="w-full bg-bgInput p-2.5 rounded-lg border border-borderDim text-xs text-gray-900" rows="2"></textarea>
+                </div>
+                <button onclick="updateDigitalProduct()" class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-2.5 rounded-lg text-xs transition mt-2 shadow-sm"><i class="fas fa-save"></i> Simpan Perubahan</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="mt-12 bg-white py-8 border-t border-borderDim">
         <div class="max-w-[1400px] mx-auto px-4 md:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
@@ -545,6 +656,10 @@
             <p style="margin: 0; font-size: 11px; font-weight: bold;">*** INFO / LINK DOWNLOAD ***</p>
             <h3 id="struk-sn" style="margin: 4px 0 0 0; font-size: 11px; word-break: break-all; color: #1e3a8a; white-space: pre-wrap; text-align: left;"></h3>
         </div>
+
+        <div style="border-top: 1px dashed #000; margin-top: 12px; padding-top: 10px;">
+            <p style="font-size: 10px; margin: 0; line-height: 1.4;">BUKTI PEMBELIAN YANG SAH<br>Terima Kasih ^_^</p>
+        </div>
     </div>
 
     <script>
@@ -552,8 +667,8 @@
             game: [
                 { id: 'ml', name: 'Mobile Legends', brandKey: 'Mobile Legends', img: 'assets/ml-logo.png', hasServer: true, desc: 'Top Up Diamond Mobile Legends cepat & aman.' },
                 { id: 'ff', name: 'Free Fire', brandKey: 'Free Fire', img: 'assets/ff-logo.png', hasServer: false, desc: 'Top Up Diamond Free Fire instan.' },
-                { id: 'roblox', name: 'Roblox', brandKey: 'Roblox', img: 'assets/roblox-logo.png', hasServer: false, desc: 'Top Up Robux & Gamepass Roblox instan.' },
                 { id: 'pubg', name: 'PUBG Mobile', brandKey: 'PUBG Mobile', img: 'assets/pubg-logo.png', hasServer: false, desc: 'Top Up UC PUBG Mobile harga promo.' },
+                { id: 'roblox', name: 'Roblox', brandKey: 'Roblox', img: 'assets/roblox-logo.png', hasServer: false, desc: 'Top Up Robux Roblox instan.' },
                 { id: 'valo', name: 'Valorant', brandKey: 'Valorant', img: 'assets/valo-logo.png', hasServer: false, desc: 'Beli Valorant Points cepat.' },
                 { id: 'genshin', name: 'Genshin Impact', brandKey: 'Genshin Impact', img: 'assets/genshin-logo.png', hasServer: true, desc: 'Top Up Genesis Crystal resmi.' },
                 { id: 'hsr', name: 'Honkai: Star Rail', brandKey: 'Honkai Star Rail', img: 'assets/hsr-logo.png', hasServer: true, desc: 'Top Up Oneiric Shard cepat.' },
@@ -561,6 +676,7 @@
                 { id: 'ragnarok', name: 'Ragnarok Origin', brandKey: 'Ragnarok Origin', img: 'assets/ragnarok-logo.png', hasServer: true, desc: 'Top Up Nyan Berry termurah.' },
                 { id: 'aov', name: 'Arena of Valor', brandKey: 'Arena of Valor', img: 'assets/aov-logo.png', hasServer: false, desc: 'Top Up Voucher AOV instan.' },
                 { id: 'hok', name: 'Honor of Kings', brandKey: 'Honor of Kings', img: 'assets/hok-logo.png', hasServer: false, desc: 'Top Up Tokens Honor of Kings.' },
+                { id: 'lords', name: 'Lords Mobile', brandKey: 'Lords Mobile', img: 'assets/lords-logo.png', hasServer: false, desc: 'Top Up Diamonds Lords Mobile.' },
                 { id: 'pb', name: 'Point Blank', brandKey: 'Point Blank', img: 'assets/pb-logo.png', hasServer: false, desc: 'Top Up PB Cash.' }
             ],
             pulsa: [
@@ -602,14 +718,402 @@
         let selectedDigitalProduct = null;
         let digitalCart = [];
         let snapClientKeyLoaded = false;
+
+        // VARIABEL GLOBAL BARU BUAT NAMPUNG DATA EXCEL ADMIN
         window.adminTransactionsData = []; 
 
         function initApp() {
             renderSidebar();
             selectItem('game', categoriesData.game[0].id, false); 
-            fetchDigitalProducts();
+
+            fetchDigitalProducts().then(() => {
+                checkUrlSlugOnLoad();
+            });
+
             fetchProductsWithTimeout(8000);
             loadMidtransConfig();
+        }
+
+        function generateSlug(text) {
+            return text.toLowerCase()
+                .replace(/[^\w ]+/g, '')
+                .replace(/ +/g, '-');
+        }
+
+        async function fetchDigitalProducts() {
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 6000);
+
+                const res = await fetch('/api/digital-products', { signal: controller.signal });
+                clearTimeout(timeoutId);
+                const json = await res.json();
+                allDigitalProducts = json.data || [];
+
+                ['ebook', 'ecourse', 'template', 'aplikasi'].forEach(cat => {
+                    const filtered = allDigitalProducts.filter(p => p.category === cat);
+                    categoriesData[cat] = filtered.map(p => ({
+                        id: p.id,
+                        name: p.name,
+                        subCategory: p.subCategory || 'Lainnya', 
+                        slug: generateSlug(p.name), 
+                        brandKey: p.id,
+                        img: p.image || 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'150\' height=\'150\'><rect width=\'100%\' height=\'100%\' fill=\'%23f3f4f6\'/><text x=\'50%\' y=\'50%\' fill=\'%236b7280\' font-family=\'sans-serif\' font-size=\'12\' dominant-baseline=\'middle\' text-anchor=\'middle\'>Cover</text></svg>',
+                        hasServer: false,
+                        desc: p.description,
+                        downloadUrl: p.downloadUrl,
+                        price: p.price
+                    }));
+                });
+
+                if(['ebook', 'ecourse', 'template', 'aplikasi'].includes(currentCategory)) {
+                    renderDigitalCards(currentCategory);
+                }
+            } catch(e) { console.error('Fetch digital timeout/error', e); }
+        }
+
+        function checkUrlSlugOnLoad() {
+            const pathSegments = window.location.pathname.split('/').filter(Boolean);
+            if (pathSegments.length > 0) {
+                const targetSlug = pathSegments[pathSegments.length - 1];
+                
+                for (let cat of ['ebook', 'ecourse', 'template', 'aplikasi']) {
+                    const found = categoriesData[cat].find(p => p.slug === targetSlug);
+                    if (found) {
+                        switchCategory(cat);
+                        openProductModal(cat, found.id, false);
+                        break;
+                    }
+                }
+            }
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+        }
+
+        function navigate(viewName) {
+            ['topup', 'riwayat', 'promo', 'panduan', 'admin'].forEach(v => {
+                const el = document.getElementById('view-' + v);
+                if(el) el.classList.add('hidden');
+            });
+            
+            if(viewName === 'home' || viewName === 'topup') {
+                document.getElementById('view-topup').classList.remove('hidden');
+                history.pushState({}, '', '/');
+            } else {
+                const targetView = document.getElementById('view-' + viewName);
+                if(targetView) targetView.classList.remove('hidden');
+                
+                // JIKA BUKA TAB ADMIN & UDAH LOGIN, RELOAD DATA TRANSAKSI
+                if(viewName === 'admin') {
+                    loadAdminProducts();
+                    if(!document.getElementById('adminDashboardBox').classList.contains('hidden')) {
+                        loadAdminTransactions();
+                    }
+                }
+                
+                history.pushState({}, '', '/' + viewName);
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        async function loadMidtransConfig() {
+            if (snapClientKeyLoaded) return;
+            try {
+                const res = await fetch('/api/config');
+                const data = await res.json();
+                if(data.clientKey) {
+                    const script = document.createElement('script');
+                    script.src = 'https://app.midtrans.com/snap/snap.js';
+                    script.setAttribute('data-client-key', data.clientKey);
+                    script.async = true;
+                    document.head.appendChild(script);
+                    snapClientKeyLoaded = true;
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        async function fetchProductsWithTimeout(timeoutMs = 8000) {
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+                const res = await fetch('/api/products', { signal: controller.signal });
+                clearTimeout(timeoutId);
+                const data = await res.json();
+                if (data.data) {
+                    allDigiflazzProducts = data.data.filter(i => i.buyer_product_status);
+                    if(['game', 'pulsa', 'emoney', 'pln', 'tagihan'].includes(currentCategory)) {
+                        if (!activeItem || !activeItem.isPasca) renderNominals();
+                    }
+                }
+            } catch (err) {
+                console.warn('Fetch PPOB timeout', err);
+                const container = document.getElementById('nominalContainer');
+                if(container && allDigiflazzProducts.length === 0 && (!activeItem || !activeItem.isPasca)) {
+                    container.innerHTML = '<div class="col-span-2 text-center text-yellow-500 text-xs py-4">Gagal memuat harga dari server. Coba refresh.</div>';
+                }
+            }
+        }
+
+        function switchCategory(cat) {
+            currentCategory = cat;
+            ['game', 'pulsa', 'emoney', 'pln', 'tagihan', 'ebook', 'ecourse', 'template', 'aplikasi'].forEach(c => {
+                const btn = document.getElementById('btnCat' + c.charAt(0).toUpperCase() + c.slice(1));
+                if(btn) {
+                    btn.className = (c === cat) ? "flex-shrink-0 px-4 py-2 rounded-lg bg-blue-600 text-white text-xs md:text-sm font-bold transition" : "flex-shrink-0 px-4 py-2 rounded-lg bg-bgInput text-textMuted hover:text-gray-900 border border-borderDim text-xs md:text-sm font-bold transition";
+                }
+            });
+
+            const isDigital = ['ebook', 'ecourse', 'template', 'aplikasi'].includes(cat);
+            if(isDigital) {
+                document.getElementById('ppobLayout').classList.add('hidden');
+                document.getElementById('digitalLayout').classList.remove('hidden');
+                document.getElementById('digitalCategoryTitle').innerText = `Daftar Produk ${cat.toUpperCase()}`;
+                
+                const filterDropdown = document.getElementById('ebookSubCatFilter');
+                if (cat === 'ebook') {
+                    filterDropdown.classList.remove('hidden');
+                } else {
+                    filterDropdown.classList.add('hidden');
+                    filterDropdown.value = '';
+                }
+                document.getElementById('digitalSearchInput').value = '';
+
+                renderDigitalCards(cat);
+                updateFloatingCartBtn();
+            } else {
+                document.getElementById('ppobLayout').classList.remove('hidden');
+                document.getElementById('digitalLayout').classList.add('hidden');
+                renderSidebar();
+                const firstItem = categoriesData[cat][0];
+                if(firstItem) selectItem(cat, firstItem.id, false); 
+                document.getElementById('floatingCartBtn').classList.replace('scale-100', 'scale-0');
+            }
+        }
+
+        function renderDigitalCards(cat) {
+            const container = document.getElementById('digitalCardsContainer');
+            let items = categoriesData[cat] || [];
+
+            const searchVal = document.getElementById('digitalSearchInput').value.toLowerCase();
+            if(searchVal) {
+                items = items.filter(i => i.name.toLowerCase().includes(searchVal) || i.desc.toLowerCase().includes(searchVal));
+            }
+
+            if (cat === 'ebook') {
+                const subCatVal = document.getElementById('ebookSubCatFilter').value;
+                if (subCatVal) {
+                    items = items.filter(i => i.subCategory === subCatVal);
+                }
+            }
+
+            if(items.length === 0) {
+                container.innerHTML = '<div class="col-span-full text-center py-12 text-textMuted text-sm">Tidak ada produk yang cocok / belum ada produk.</div>';
+                return;
+            }
+
+            container.innerHTML = items.map(item => {
+                const inCart = digitalCart.find(c => c.id === item.id);
+                const btnText = inCart ? '<i class="fas fa-check"></i> Di Keranjang' : '<i class="fas fa-cart-plus"></i> Tambah';
+                const btnColor = inCart ? 'bg-green-600 text-white' : 'bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white border border-blue-200 group-hover:border-blue-600';
+                const badgeText = (cat === 'ebook' && item.subCategory) ? `Ebook • ${item.subCategory}` : cat;
+                
+                return `
+                <div class="bg-bgCard rounded-xl border border-borderDim p-3 md:p-4 flex flex-col justify-between transition hover:border-blue-500 hover:shadow-md group shadow-sm">
+                    <div class="cursor-pointer" onclick="openProductModal('${cat}', '${item.id}')">
+                        <div class="relative mb-2.5 overflow-hidden rounded-lg bg-bgInput aspect-[4/3] border border-borderDim">
+                            <img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'200\'><rect width=\'100%\' height=\'100%\' fill=\'%23f3f4f6\'/><text x=\'50%\' y=\'50%\' fill=\'%236b7280\' font-family=\'sans-serif\' font-size=\'14\' dominant-baseline=\'middle\' text-anchor=\'middle\'>Cover</text></svg>'">
+                            <span class="absolute top-1.5 left-1.5 px-2 py-0.5 rounded bg-white/90 backdrop-blur-md text-[9px] font-bold text-blue-600 uppercase border border-borderDim shadow-sm">${badgeText}</span>
+                        </div>
+                        <h3 class="font-bold text-gray-900 text-xs md:text-sm mb-1 line-clamp-2 group-hover:text-blue-600 transition">${item.name}</h3>
+                        <p class="text-textMuted text-[11px] line-clamp-2 mb-2">${item.desc}</p>
+                    </div>
+                    <div class="pt-2.5 border-t border-borderDim flex flex-col sm:flex-row sm:items-center justify-between gap-2 mt-auto">
+                        <div class="text-xs md:text-sm font-extrabold text-blue-600">Rp ${item.price.toLocaleString('id-ID')}</div>
+                        <button onclick="toggleCartItem('${item.id}', '${item.name}', ${item.price}, '${item.downloadUrl}', '${item.img}')" class="${btnColor} px-2.5 py-1.5 rounded text-[10px] md:text-xs font-bold transition flex justify-center items-center gap-1">${btnText}</button>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        function openProductModal(cat, id, updateHistory = true) {
+            selectedDigitalProduct = categoriesData[cat].find(i => i.id === id);
+            if(!selectedDigitalProduct) return;
+
+            document.getElementById('modalCatBadge').innerText = (cat === 'ebook' && selectedDigitalProduct.subCategory) ? `EBOOK • ${selectedDigitalProduct.subCategory.toUpperCase()}` : cat.toUpperCase();
+            document.getElementById('modalImg').src = selectedDigitalProduct.img;
+            document.getElementById('modalTitle').innerText = selectedDigitalProduct.name;
+            document.getElementById('modalPrice').innerText = `Rp ${selectedDigitalProduct.price.toLocaleString('id-ID')}`;
+            document.getElementById('modalDesc').innerText = selectedDigitalProduct.desc;
+            
+            const inCart = digitalCart.find(c => c.id === selectedDigitalProduct.id);
+            const btn = document.getElementById('btnModalAddToCart');
+            if(inCart) {
+                btn.innerHTML = '<i class="fas fa-check"></i> Sudah di Keranjang';
+                btn.classList.replace('bg-blue-600', 'bg-green-600');
+                btn.classList.replace('hover:bg-blue-500', 'hover:bg-green-500');
+            } else {
+                btn.innerHTML = '<i class="fas fa-cart-plus"></i> Tambah Keranjang';
+                btn.classList.replace('bg-green-600', 'bg-blue-600');
+                btn.classList.replace('hover:bg-green-500', 'hover:bg-blue-500');
+            }
+            
+            document.getElementById('productModal').classList.remove('hidden');
+
+            if (updateHistory) {
+                history.pushState({ productId: id }, '', '/' + selectedDigitalProduct.slug);
+            }
+        }
+
+        function closeProductModal() {
+            document.getElementById('productModal').classList.add('hidden');
+            history.pushState({}, '', '/');
+        }
+
+        function addToCartModal() {
+            if(!selectedDigitalProduct) return;
+            const inCart = digitalCart.find(c => c.id === selectedDigitalProduct.id);
+            if(!inCart) {
+                toggleCartItem(selectedDigitalProduct.id, selectedDigitalProduct.name, selectedDigitalProduct.price, selectedDigitalProduct.downloadUrl, selectedDigitalProduct.img);
+            }
+            closeProductModal();
+            openDigitalCart();
+        }
+
+        function toggleCartItem(id, name, price, downloadUrl, img) {
+            const index = digitalCart.findIndex(c => c.id === id);
+            if(index > -1) {
+                digitalCart.splice(index, 1);
+            } else {
+                digitalCart.push({ id, name, price, downloadUrl, img });
+            }
+            updateFloatingCartBtn();
+            renderDigitalCards(currentCategory);
+        }
+
+        function updateFloatingCartBtn() {
+            const btn = document.getElementById('floatingCartBtn');
+            const count = document.getElementById('floatingCartCount');
+            const isDigitalView = ['ebook', 'ecourse', 'template', 'aplikasi'].includes(currentCategory);
+            
+            if(digitalCart.length > 0 && isDigitalView) {
+                btn.classList.replace('scale-0', 'scale-100');
+                count.innerText = digitalCart.length;
+            } else {
+                btn.classList.replace('scale-100', 'scale-0');
+            }
+        }
+
+        function openDigitalCart() {
+            renderCartModal();
+            document.getElementById('cartModal').classList.remove('hidden');
+        }
+
+        function closeDigitalCart() {
+            document.getElementById('cartModal').classList.add('hidden');
+        }
+
+        function removeFromCartModal(index) {
+            digitalCart.splice(index, 1);
+            renderCartModal();
+            updateFloatingCartBtn();
+            if(['ebook', 'ecourse', 'template', 'aplikasi'].includes(currentCategory)) {
+                renderDigitalCards(currentCategory);
+            }
+        }
+
+        function renderCartModal() {
+            const container = document.getElementById('cartItemsContainer');
+            const totalEl = document.getElementById('cartModalTotal');
+            
+            if(digitalCart.length === 0) {
+                container.innerHTML = '<div class="text-center py-10 text-textMuted"><i class="fas fa-shopping-basket text-4xl mb-3 opacity-30"></i><p class="text-sm">Keranjang masih kosong</p></div>';
+                totalEl.innerText = 'Rp 0';
+                return;
+            }
+
+            let total = 0;
+            container.innerHTML = digitalCart.map((item, index) => {
+                total += item.price;
+                return `
+                <div class="flex items-center gap-3 bg-bgInput p-2.5 rounded-xl border border-borderDim">
+                    <img src="${item.img}" class="w-12 h-12 rounded-lg object-cover border border-borderDim">
+                    <div class="flex-1 min-w-0">
+                        <div class="font-bold text-gray-900 text-xs truncate">${item.name}</div>
+                        <div class="text-blue-600 font-extrabold text-sm mt-0.5">Rp ${item.price.toLocaleString('id-ID')}</div>
+                    </div>
+                    <button onclick="removeFromCartModal(${index})" class="w-8 h-8 flex items-center justify-center rounded-lg bg-red-50 text-red-600 hover:bg-red-600 hover:text-white border border-red-200 hover:border-red-600 transition"><i class="fas fa-trash-alt text-xs"></i></button>
+                </div>
+                `;
+            }).join('');
+            
+            totalEl.innerText = `Rp ${total.toLocaleString('id-ID')}`;
+        }
+
+        async function checkoutMultiDigital() {
+            if(digitalCart.length === 0) return alert('Keranjang kosong!');
+            
+            const email = document.getElementById('cartEmail').value.trim();
+            if(!email) {
+                alert('Masukkan email penerima akses terlebih dahulu!');
+                document.getElementById('cartEmail').focus();
+                return;
+            }
+
+            const btn = document.getElementById('btnCartCheckout');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('/api/checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        targetId: email,
+                        isDigital: true,
+                        cartItems: digitalCart
+                    })
+                });
+                const data = await res.json();
+                btn.innerHTML = '<i class="fas fa-wallet"></i> Checkout Semua &rarr;';
+                btn.disabled = false;
+
+                if (data.token) {
+                    closeDigitalCart();
+                    digitalCart = [];
+                    updateFloatingCartBtn();
+                    renderDigitalCards(currentCategory);
+
+                    window.snap.pay(data.token, {
+                        onSuccess: function(result){ 
+                            alert('Pembayaran Berhasil! Link download dikirim otomatis.'); 
+                            document.getElementById('searchOrderId').value = data.orderId;
+                            navigate('riwayat');
+                            searchTransaction();
+                        },
+                        onPending: function(result){ 
+                            alert('Silakan selesaikan pembayaran QRIS Anda.'); 
+                            document.getElementById('searchOrderId').value = data.orderId;
+                            navigate('riwayat');
+                            searchTransaction();
+                        },
+                        onError: function(result){ alert('Pembayaran Gagal.'); },
+                        onClose: function(){ 
+                            document.getElementById('searchOrderId').value = data.orderId;
+                            navigate('riwayat');
+                            searchTransaction();
+                        }
+                    });
+                } else {
+                    alert('Gagal membuat transaksi: ' + (data.error || 'Kesalahan server.'));
+                }
+            } catch (e) {
+                alert('Kesalahan jaringan.');
+                btn.innerHTML = '<i class="fas fa-wallet"></i> Checkout Semua &rarr;';
+                btn.disabled = false;
+            }
         }
 
         function renderSidebar(filter = '') {
@@ -630,7 +1134,8 @@
                 htmlMobile += `
                 <div onclick="selectItem('${currentCategory}', '${item.id}')" class="cursor-pointer overflow-hidden rounded-xl bg-white flex flex-col shadow-sm transition-transform hover:scale-105 ${activeClassMobile}">
                     <div class="aspect-[4/5] w-full relative overflow-hidden bg-gray-50 flex items-center justify-center p-2">
-                        <img src="${item.img}" class="w-full h-full object-contain relative z-10" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'40\'><rect width=\'100%\' height=\'100%\' fill=\'%23f3f4f6\'/><text x=\'50%\' y=\'50%\' fill=\'%236b7280\' font-family=\'sans-serif\' font-size=\'8\' dominant-baseline=\'middle\' text-anchor=\'middle\'>Logo</text></svg>'">
+                        <img src="${item.img}" class="absolute inset-0 w-full h-full object-cover blur-xl opacity-20 scale-125" aria-hidden="true">
+                        <img src="${item.img}" class="w-full h-full object-contain relative z-10 drop-shadow-[0_5px_5px_rgba(0,0,0,0.15)]" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'40\\' height=\\'40\\'><rect width=\\'100%\\' height=\\'100%\\' fill=\\'%23f3f4f6\\'/><text x=\\'50%\\' y=\\'50%\\' fill=\\'%236b7280\\' font-family=\\'sans-serif\\' font-size=\\'8\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\'>Logo</text></svg>'">
                     </div>
                     <div class="p-2 flex items-center justify-center bg-white h-[36px] z-20 relative border-t border-borderDim">
                         <span class="text-[10px] sm:text-xs font-bold text-gray-900 truncate text-center w-full">${item.name}</span>
@@ -638,8 +1143,8 @@
                 </div>`;
             });
 
-            if(listDesktop) listDesktop.innerHTML = htmlDesktop || '<li class="p-3 text-xs text-textMuted text-center">Layanan tidak ditemukan</li>';
-            if(gridMobile) gridMobile.innerHTML = htmlMobile || '<div class="col-span-3 p-3 text-xs text-textMuted text-center">Layanan tidak ditemukan</div>';
+            listDesktop.innerHTML = htmlDesktop || '<li class="p-3 text-xs text-textMuted text-center">Layanan tidak ditemukan</li>';
+            gridMobile.innerHTML = htmlMobile || '<div class="col-span-3 p-3 text-xs text-textMuted text-center">Layanan tidak ditemukan</div>';
         }
 
         function filterSidebarItems() {
@@ -660,6 +1165,19 @@
             const isTagihan = cat === 'tagihan';
             
             document.getElementById('serverContainer').style.display = activeItem.hasServer ? 'block' : 'none';
+            
+            if (activeItem.hasServer) {
+                let placeholderText = "Contoh: 1234 (opsional)";
+                if (activeItem.id === 'genshin' || activeItem.id === 'hsr') {
+                    placeholderText = "Contoh: os_asia, os_usa, dll";
+                } else if (activeItem.id === 'ragnarok') {
+                    placeholderText = "Masukkan Server / Region ID";
+                } else if (activeItem.id === 'ml') {
+                    placeholderText = "Contoh: 1234";
+                }
+                document.getElementById('serverId').placeholder = placeholderText;
+            }
+
             document.getElementById('labelTargetHeader').innerHTML = (isPln || isTagihan) ? '<i class="fas fa-bolt text-textMuted"></i> Nomor Meter / Pelanggan' : (isGame ? '<i class="fas fa-user text-textMuted"></i> User ID' : '<i class="fas fa-phone text-textMuted"></i> Nomor HP Tujuan');
             document.getElementById('labelTargetInput').innerHTML = (isPln || isTagihan) ? 'No Meter / ID Pelanggan' : (isGame ? 'Masukkan User ID' : 'Masukkan Nomor HP');
             document.getElementById('targetId').value = '';
@@ -668,8 +1186,88 @@
 
             renderSidebar(document.getElementById('gameSearch').value);
             
-            if (!activeItem.isPasca) {
+            if (activeItem.isPasca) {
+                document.getElementById('nominalContainer').innerHTML = `
+                    <div class="col-span-2 space-y-4">
+                        <div class="bg-blue-50 border border-blue-200 p-3 rounded-lg text-xs text-blue-800 shadow-sm">
+                            <i class="fas fa-info-circle"></i> Masukkan Nomor Pelanggan lalu klik tombol di bawah untuk mengecek nominal tagihan bulan ini.
+                        </div>
+                        <button onclick="cekTagihanPasca(event)" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-lg transition text-xs md:text-sm shadow-md">
+                            <i class="fas fa-search"></i> Cek Tagihan Sekarang
+                        </button>
+                    </div>
+                `;
+                selectedProduct = null;
+                updateCartUI();
+            } else {
                 renderNominals();
+            }
+
+            if (autoScroll) {
+                setTimeout(() => {
+                    const scrollTarget = document.getElementById('targetLabelSection');
+                    if(scrollTarget) {
+                        const y = scrollTarget.getBoundingClientRect().top + window.scrollY - 140;
+                        window.scrollTo({ top: y, behavior: 'smooth' });
+                    }
+                }, 100);
+            }
+        }
+
+        async function cekTagihanPasca(event) {
+            const targetId = document.getElementById('targetId').value.trim();
+            if(!targetId) {
+                alert('Masukkan Nomor Pelanggan terlebih dahulu!');
+                document.getElementById('targetId').focus();
+                return;
+            }
+
+            const btn = event.currentTarget;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengecek ke Server...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('/api/inquiry-pasca', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ sku: activeItem.sku, targetId })
+                });
+                const data = await res.json();
+                
+                if(data.success) {
+                    const tagihan = data.data;
+                    const margin = 2000;
+                    const finalPrice = tagihan.selling_price + margin; 
+
+                    selectedProduct = {
+                        product_name: `Tagihan ${tagihan.customer_name || targetId}`,
+                        price: finalPrice,
+                        buyer_sku_code: activeItem.sku,
+                        isPasca: true
+                    };
+
+                    const namaCustomer = tagihan.customer_name || 'Tidak ada nama';
+                    const periode = tagihan.desc?.detail?.[0]?.periode || tagihan.desc?.tarif || 'Bulan Berjalan';
+
+                    document.getElementById('nominalContainer').innerHTML = `
+                        <div class="col-span-2 bg-bgInput p-5 rounded-xl border border-blue-500 space-y-3 shadow-inner">
+                            <div class="text-[10px] md:text-xs text-blue-600 font-bold uppercase mb-2"><i class="fas fa-check-circle"></i> Tagihan Ditemukan</div>
+                            <div class="flex justify-between text-xs md:text-sm"><span class="text-textMuted">Nama:</span> <span class="font-bold text-gray-900 text-right break-words max-w-[60%]">${namaCustomer}</span></div>
+                            <div class="flex justify-between text-xs md:text-sm"><span class="text-textMuted">Periode:</span> <span class="font-bold text-gray-900">${periode}</span></div>
+                            <div class="flex justify-between text-xs md:text-sm pt-2 border-t border-borderDim"><span class="text-textMuted">Total Tagihan + Admin:</span> <span class="font-extrabold text-blue-600">Rp ${finalPrice.toLocaleString('id-ID')}</span></div>
+                        </div>
+                    `;
+                    updateCartUI();
+                } else {
+                    alert('Gagal cek tagihan: ' + (data.message || 'Tagihan tidak ditemukan atau sudah lunas.'));
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+            } catch(e) {
+                alert('Kesalahan jaringan saat mengecek tagihan.');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
             }
         }
 
@@ -727,86 +1325,501 @@
             } else {
                 document.getElementById('cartItemName').innerText = activeItem.name;
                 document.getElementById('cartImg').src = activeItem.img;
-                document.getElementById('cartProduct').innerText = 'Pilih Nominal';
+                document.getElementById('cartProduct').innerText = (activeItem && activeItem.isPasca) ? 'Lakukan Cek Tagihan' : 'Pilih Nominal';
                 document.getElementById('cartPrice').innerText = 'Rp 0';
             }
         }
 
-        async function fetchProductsWithTimeout(timeoutMs = 8000) {
-            try {
-                const res = await fetch('/api/products');
-                const data = await res.json();
-                if (data.data) {
-                    allDigiflazzProducts = data.data.filter(i => i.buyer_product_status);
-                    if(['game', 'pulsa', 'emoney', 'pln', 'tagihan'].includes(currentCategory)) {
-                        renderNominals();
-                    }
-                }
-            } catch (err) { console.warn('Fetch PPOB error', err); }
+        function downloadStruk(orderId, waktu, produk, tujuan, harga, sn) {
+            document.getElementById('struk-trxid').innerText = orderId;
+            document.getElementById('struk-waktu').innerText = waktu;
+            document.getElementById('struk-produk').innerText = produk;
+            document.getElementById('struk-tujuan').innerText = tujuan;
+            document.getElementById('struk-harga').innerText = harga;
+            
+            const rawSnText = sn.replace(/<br\s*\/?>/mg, "\n");
+            document.getElementById('struk-sn').innerHTML = sn.includes('<br>') ? rawSnText : sn;
+
+            setTimeout(() => {
+                html2canvas(document.querySelector("#struk-container"), { scale: 2, logging: false }).then(canvas => {
+                    let link = document.createElement('a');
+                    link.download = `Struk-${orderId}.png`;
+                    link.href = canvas.toDataURL("image/png");
+                    link.click();
+                });
+            }, 50);
         }
 
-        async function fetchDigitalProducts() {
+        function hubungiCS(orderId) {
+            const pesan = `Halo Admin TLIBRARY, saya butuh bantuan untuk pesanan saya dengan TRXID: ${orderId}`;
+            window.open(`https://wa.me/628970108026?text=${encodeURIComponent(pesan)}`, '_blank');
+        }
+
+        async function searchTransaction() {
+            const query = document.getElementById('searchOrderId').value.trim();
+            const tbody = document.getElementById('transactionResultBody');
+
+            if(query.length < 5) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center py-6 text-yellow-600"><i class="fas fa-shield-alt"></i> Masukkan minimal 5 karakter (Order ID / Nomor / Email) untuk menjaga privasi transaksi.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = '<tr><td colspan="7" class="text-center py-6 text-textMuted"><i class="fas fa-spinner fa-spin"></i> Mencari transaksi...</td></tr>';
+
+            try {
+                const res = await fetch('/api/transactions');
+                const data = await res.json();
+                const filtered = data.filter(t => t.order_id.toLowerCase().includes(query.toLowerCase()) || t.target_id.toLowerCase().includes(query.toLowerCase()));
+
+                if(filtered.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="text-center py-6 text-red-500">Transaksi tidak ditemukan.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = filtered.map(t => {
+                    let badgeColor = 'bg-yellow-50 text-yellow-600 border-yellow-200';
+                    if(t.status === 'SUKSES') badgeColor = 'bg-green-50 text-green-600 border-green-200';
+                    if(t.status === 'GAGAL') badgeColor = 'bg-red-50 text-red-600 border-red-200';
+
+                    const escapedProductName = t.product_name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                    let rawSn = t.sn ? t.sn : '-';
+                    
+                    let snDisplay = rawSn;
+                    if (snDisplay.includes('http')) {
+                        snDisplay = snDisplay.replace(/\n/g, '<br>');
+                        const urlRegex = /(https?:\/\/[^\s]+)/g;
+                        snDisplay = snDisplay.replace(urlRegex, '<a href="$1" target="_blank" class="text-blue-600 underline hover:text-blue-500 inline-flex items-center gap-1 mt-1"><i class="fas fa-external-link-alt"></i> Buka Link</a>');
+                    }
+                    
+                    const escapedSn = rawSn.replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, '<br>');
+                    const dateStr = new Date(t.created_at).toLocaleString('id-ID');
+
+                    return `
+                        <tr class="hidden md:table-row border-b border-borderDim">
+                            <td class="p-3 font-mono"><div><span class="text-gray-900 font-bold">${t.order_id}</span></div><div class="text-[10px] text-textMuted">${dateStr}</div></td>
+                            <td class="p-3 font-medium text-gray-900">${t.target_id}</td>
+                            <td class="p-3 text-gray-800">${t.product_name}</td>
+                            <td class="p-3 font-bold text-blue-600">Rp ${t.amount.toLocaleString('id-ID')}</td>
+                            <td class="p-3"><span class="px-2.5 py-1 rounded-full text-[10px] font-bold border ${badgeColor}">${t.status}</span></td>
+                            <td class="p-3 font-mono text-xs text-green-600 font-bold leading-relaxed whitespace-pre-wrap">${snDisplay}</td>
+                            <td class="p-3 text-center">
+                                <div class="flex items-center justify-center gap-1.5">
+                                    <button onclick="downloadStruk('${t.order_id}', '${dateStr}', '${escapedProductName}', '${t.target_id}', '${t.amount.toLocaleString('id-ID')}', '${escapedSn}')" class="bg-blue-50 text-blue-600 border border-blue-200 hover:bg-blue-600 hover:text-white px-2.5 py-2 rounded transition text-xs" title="Simpan Struk"><i class="fas fa-print"></i></button>
+                                    <button onclick="hubungiCS('${t.order_id}')" class="bg-green-50 text-green-600 border border-green-200 hover:bg-green-600 hover:text-white px-2.5 py-2 rounded transition text-xs" title="Bantuan Admin"><i class="fab fa-whatsapp"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr class="md:hidden block border-b border-borderDim p-4 space-y-3">
+                            <td colspan="7" class="block w-full p-0">
+                                <div class="bg-bgInput rounded-xl p-4 border border-borderDim space-y-3 shadow-sm">
+                                    <div class="flex justify-between items-start border-b border-borderDim pb-2">
+                                        <div>
+                                            <div class="font-mono font-bold text-gray-900 text-xs">${t.order_id}</div>
+                                            <div class="text-[10px] text-textMuted">${dateStr}</div>
+                                        </div>
+                                        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold border ${badgeColor}">${t.status}</span>
+                                    </div>
+                                    <div class="space-y-1 text-xs">
+                                        <div class="flex justify-between"><span class="text-textMuted">Tujuan:</span> <span class="font-medium text-gray-900">${t.target_id}</span></div>
+                                        <div class="flex justify-between"><span class="text-textMuted">Produk:</span> <span class="font-medium text-gray-900 text-right max-w-[200px] truncate">${t.product_name}</span></div>
+                                        <div class="flex justify-between"><span class="text-textMuted">Total:</span> <span class="font-bold text-blue-600">Rp ${t.amount.toLocaleString('id-ID')}</span></div>
+                                    </div>
+                                    <div class="bg-bgCard p-2.5 rounded-lg border border-borderDim font-mono text-xs text-green-600 font-bold leading-relaxed whitespace-pre-wrap">
+                                        <div class="text-[10px] text-textMuted uppercase mb-1">SN / Link Download:</div>
+                                        ${snDisplay}
+                                    </div>
+                                    <div class="flex gap-2 pt-1">
+                                        <button onclick="downloadStruk('${t.order_id}', '${dateStr}', '${escapedProductName}', '${t.target_id}', '${t.amount.toLocaleString('id-ID')}', '${escapedSn}')" class="flex-1 bg-blue-50 text-blue-600 border border-blue-200 hover:bg-blue-600 hover:text-white py-2 rounded-lg transition text-xs font-bold flex items-center justify-center gap-1.5"><i class="fas fa-print"></i> Simpan Struk</button>
+                                        <button onclick="hubungiCS('${t.order_id}')" class="flex-1 bg-green-50 text-green-600 border border-green-200 hover:bg-green-600 hover:text-white py-2 rounded-lg transition text-xs font-bold flex items-center justify-center gap-1.5"><i class="fab fa-whatsapp"></i> Bantuan CS</button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            } catch (e) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center py-6 text-red-500">Kesalahan memuat data.</td></tr>';
+            }
+        }
+
+        async function adminLogin() {
+            const username = document.getElementById('adminUser').value.trim();
+            const password = document.getElementById('adminPass').value.trim();
+
+            try {
+                const res = await fetch('/api/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await res.json();
+                if(data.success) {
+                    document.getElementById('adminLoginBox').classList.add('hidden');
+                    document.getElementById('adminDashboardBox').classList.remove('hidden');
+                    loadAdminProducts();
+                    
+                    // NEW: LANGSUNG LOAD DATA TRANSAKSI SAAT ADMIN LOGIN SUKSES
+                    loadAdminTransactions();
+                } else {
+                    alert(data.message);
+                }
+            } catch(e) { alert('Gagal login.'); }
+        }
+
+        function adminLogout() {
+            document.getElementById('adminLoginBox').classList.remove('hidden');
+            document.getElementById('adminDashboardBox').classList.add('hidden');
+        }
+
+        async function loadAdminProducts() {
             try {
                 const res = await fetch('/api/digital-products');
                 const json = await res.json();
-                allDigitalProducts = json.data || [];
+                const list = json.data || [];
+                const container = document.getElementById('adminProductList');
+
+                if(list.length === 0) {
+                    container.innerHTML = '<div class="text-xs text-textMuted py-4 text-center">Belum ada produk digital tersimpan.</div>';
+                    return;
+                }
+
+                container.innerHTML = list.map(p => `
+                    <div class="bg-bgCard p-3 rounded-lg border border-borderDim flex justify-between items-center text-xs gap-3 shadow-sm mb-2">
+                        <img src="${p.image}" class="w-10 h-10 rounded object-cover border border-borderDim" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'40\'><rect width=\'100%\' height=\'100%\' fill=\'%23f3f4f6\'/><text x=\'50%\' y=\'50%\' fill=\'%236b7280\' font-family=\'sans-serif\' font-size=\'8\' dominant-baseline=\'middle\' text-anchor=\'middle\'>Logo</text></svg>'">
+                        <div class="flex-1 min-w-0">
+                            <div class="font-bold text-gray-900 uppercase text-[10px]"><span class="text-blue-600">[${p.category} ${p.category === 'ebook' && p.subCategory ? ` - ${p.subCategory}` : ''}]</span> ${p.name}</div>
+                            <div class="text-textMuted truncate">Rp ${p.price.toLocaleString('id-ID')} • Link: <a href="${p.downloadUrl}" target="_blank" class="underline text-blue-500 hover:text-blue-700">${p.downloadUrl}</a></div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="openEditDigitalModal('${p.id}')" class="bg-blue-50 text-blue-600 border border-blue-200 hover:bg-blue-600 hover:text-white px-2.5 py-1 rounded transition"><i class="fas fa-edit"></i></button>
+                            <button onclick="deleteDigitalProduct('${p.id}')" class="bg-red-50 text-red-600 border border-red-200 hover:bg-red-600 hover:text-white px-2.5 py-1 rounded transition"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                `).join('');
             } catch(e) { console.error(e); }
         }
 
-        function switchCategory(cat) {
-            currentCategory = cat;
-            ['game', 'pulsa', 'emoney', 'pln', 'tagihan', 'ebook', 'ecourse', 'template', 'aplikasi'].forEach(c => {
-                const btn = document.getElementById('btnCat' + c.charAt(0).toUpperCase() + c.slice(1));
-                if(btn) {
-                    btn.className = (c === cat) ? "flex-shrink-0 px-4 py-2 rounded-lg bg-blue-600 text-white text-xs md:text-sm font-bold transition" : "flex-shrink-0 px-4 py-2 rounded-lg bg-bgInput text-textMuted hover:text-gray-900 border border-borderDim text-xs md:text-sm font-bold transition";
-                }
-            });
-
-            const isDigital = ['ebook', 'ecourse', 'template', 'aplikasi'].includes(cat);
-            if(isDigital) {
-                document.getElementById('ppobLayout').classList.add('hidden');
-                document.getElementById('digitalLayout').classList.remove('hidden');
-            } else {
-                document.getElementById('ppobLayout').classList.remove('hidden');
-                document.getElementById('digitalLayout').classList.add('hidden');
-                renderSidebar();
-                const firstItem = categoriesData[cat][0];
-                if(firstItem) selectItem(cat, firstItem.id, false); 
-            }
-        }
-
-        function navigate(viewName) {
-            ['topup', 'riwayat', 'promo', 'panduan', 'admin'].forEach(v => {
-                const el = document.getElementById('view-' + v);
-                if(el) el.classList.add('hidden');
-            });
-            if(viewName === 'home' || viewName === 'topup') {
-                document.getElementById('view-topup').classList.remove('hidden');
-            } else {
-                const targetView = document.getElementById('view-' + viewName);
-                if(targetView) targetView.classList.remove('hidden');
-            }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function toggleMobileMenu() {
-            document.getElementById('mobileMenu').classList.toggle('hidden');
-        }
-
-        async function loadMidtransConfig() {
+        // --- FUNGSI BARU: LOAD SEMUA DATA TRANSAKSI UNTUK ADMIN ---
+        async function loadAdminTransactions() {
+            const tbody = document.getElementById('adminTransactionList');
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-textMuted"><i class="fas fa-spinner fa-spin"></i> Memuat data transaksi...</td></tr>';
             try {
-                const res = await fetch('/api/config');
-                const data = await res.json();
-                if(data.clientKey && !snapClientKeyLoaded) {
-                    const script = document.createElement('script');
-                    script.src = 'https://app.midtrans.com/snap/snap.js';
-                    script.setAttribute('data-client-key', data.clientKey);
-                    script.async = true;
-                    document.head.appendChild(script);
-                    snapClientKeyLoaded = true;
+                const res = await fetch('/api/transactions');
+                const db = await res.json();
+                
+                // Simpan ke variabel global buat keperluan Export ke Excel
+                window.adminTransactionsData = db;
+                
+                if(db.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-textMuted">Belum ada transaksi di database.</td></tr>';
+                    return;
                 }
-            } catch (e) { console.error(e); }
+                
+                tbody.innerHTML = db.map(t => {
+                    let badgeColor = 'bg-yellow-50 text-yellow-600 border-yellow-200';
+                    if(t.status === 'SUKSES') badgeColor = 'bg-green-50 text-green-600 border-green-200';
+                    if(t.status === 'GAGAL') badgeColor = 'bg-red-50 text-red-600 border-red-200';
+                    
+                    const dateStr = new Date(t.created_at).toLocaleString('id-ID');
+                    const prov = t.is_digital ? 'TLIBRARY' : (t.provider || '-');
+                    
+                    return `
+                        <tr class="hover:bg-bgCard transition border-b border-borderDim">
+                            <td class="p-3"><div class="font-bold text-gray-900">${t.order_id}</div><div class="text-[10px] text-textMuted">${dateStr}</div></td>
+                            <td class="p-3 font-mono">${t.target_id}</td>
+                            <td class="p-3 text-xs max-w-[200px] truncate" title="${t.product_name}">
+                                ${t.product_name} <br>
+                                <span class="text-[9px] font-bold text-blue-500 uppercase">${t.is_digital ? 'DIGITAL' : 'PPOB / GAME'}</span>
+                            </td>
+                            <td class="p-3 font-bold text-blue-600">Rp ${t.amount.toLocaleString('id-ID')}</td>
+                            <td class="p-3"><span class="px-2 py-1 rounded text-[10px] font-bold border ${badgeColor}">${t.status}</span></td>
+                            <td class="p-3 text-[10px] max-w-[150px]">
+                                <div class="font-bold uppercase text-gray-700">${prov}</div>
+                                <div class="truncate text-textMuted" title="${t.sn || '-'}">${t.sn || '-'}</div>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            } catch(e) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-red-500">Gagal memuat transaksi jaringan.</td></tr>';
+            }
         }
+
+        // --- FUNGSI BARU: EXPORT DATA TRANSAKSI KE EXCEL ---
+        function exportTransactionsExcel() {
+            if (!window.adminTransactionsData || window.adminTransactionsData.length === 0) {
+                return alert('Tidak ada data transaksi untuk diexport.');
+            }
+            
+            // Mapping data json agar judul kolom rapi di excel
+            const dataToExport = window.adminTransactionsData.map(t => ({
+                'Waktu Transaksi': new Date(t.created_at).toLocaleString('id-ID'),
+                'Order ID': t.order_id,
+                'Tujuan / Email': t.target_id,
+                'Nama Produk': t.product_name,
+                'Kategori': t.is_digital ? 'Produk Digital' : 'PPOB/Game',
+                'Harga Beli (Rp)': t.amount,
+                'Status': t.status,
+                'Provider': t.is_digital ? 'TLIBRARY' : (t.provider ? t.provider.toUpperCase() : '-'),
+                'SN / Keterangan': t.sn || '-'
+            }));
+
+            const ws = XLSX.utils.json_to_sheet(dataToExport);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Laporan_Transaksi");
+            
+            // Bikin lebar kolom di excel lebih proper (nggak sempit)
+            const wscols = [
+                {wch: 20}, {wch: 25}, {wch: 20}, {wch: 35}, {wch: 15}, {wch: 15}, {wch: 12}, {wch: 15}, {wch: 50}
+            ];
+            ws['!cols'] = wscols;
+
+            XLSX.writeFile(wb, `Laporan_Transaksi_TLIBRARY_${new Date().getTime()}.xlsx`);
+        }
+        // --- END FUNGSI BARU ---
+
+        async function addNewDigitalProduct() {
+            const category = document.getElementById('newCat').value;
+            const name = document.getElementById('newName').value.trim();
+            const price = document.getElementById('newPrice').value.trim();
+            const downloadUrl = document.getElementById('newUrl').value.trim();
+            const image = document.getElementById('newImage').value.trim();
+            const description = document.getElementById('newDesc').value.trim();
+
+            if(!name || !price || !downloadUrl) {
+                alert('Nama, Harga, dan Link Download wajib diisi!');
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/admin/products', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ category, name, price, downloadUrl, image, description })
+                });
+                const data = await res.json();
+                if(data.success) {
+                    alert(data.message);
+                    document.getElementById('newName').value = '';
+                    document.getElementById('newPrice').value = '';
+                    document.getElementById('newUrl').value = '';
+                    document.getElementById('newImage').value = '';
+                    document.getElementById('newDesc').value = '';
+                    fetchDigitalProducts().then(loadAdminProducts);
+                } else { alert(data.message); }
+            } catch(e) { alert('Gagal menyimpan produk.'); }
+        }
+
+        function openEditDigitalModal(id) {
+            const prod = allDigitalProducts.find(p => p.id === id);
+            if(!prod) return;
+            
+            document.getElementById('editProdId').value = prod.id;
+            document.getElementById('editProdCat').value = prod.category;
+            document.getElementById('editProdName').value = prod.name;
+            document.getElementById('editProdPrice').value = prod.price;
+            document.getElementById('editProdImage').value = prod.image;
+            document.getElementById('editProdUrl').value = prod.downloadUrl;
+            document.getElementById('editProdDesc').value = prod.description;
+
+            document.getElementById('editDigitalModal').classList.remove('hidden');
+        }
+
+        function closeEditDigitalModal() {
+            document.getElementById('editDigitalModal').classList.add('hidden');
+        }
+
+        async function updateDigitalProduct() {
+            const id = document.getElementById('editProdId').value;
+            const category = document.getElementById('editProdCat').value;
+            const name = document.getElementById('editProdName').value.trim();
+            const price = document.getElementById('editProdPrice').value.trim();
+            const downloadUrl = document.getElementById('editProdUrl').value.trim();
+            const image = document.getElementById('editProdImage').value.trim();
+            const description = document.getElementById('editProdDesc').value.trim();
+
+            if(!name || !price || !downloadUrl) {
+                alert('Nama, Harga, dan Link Download wajib diisi!');
+                return;
+            }
+
+            try {
+                const res = await fetch(`/api/admin/products/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ category, name, price, downloadUrl, image, description })
+                });
+                const data = await res.json();
+                if(data.success) {
+                    closeEditDigitalModal();
+                    alert(data.message);
+                    fetchDigitalProducts().then(loadAdminProducts);
+                } else { alert(data.message); }
+            } catch(e) { alert('Gagal memperbarui produk.'); }
+        }
+
+        function exportBackup() {
+            fetch('/api/digital-products')
+                .then(res => res.json())
+                .then(json => {
+                    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(json.data, null, 2));
+                    let dlAnchor = document.createElement('a');
+                    dlAnchor.setAttribute("href", dataStr);
+                    dlAnchor.setAttribute("download", `tlibrary_backup_${Date.now()}.json`);
+                    document.body.appendChild(dlAnchor);
+                    dlAnchor.click();
+                    dlAnchor.remove();
+                });
+        }
+
+        function downloadExcelTemplate() {
+            const templateData = [
+                { category: "ebook", name: "Contoh Judul Ebook", price: 50000, description: "Buku sejarah tentang kerajaan masa lalu", downloadUrl: "https://drive.google.com/...", image: "https://image.url/cover.jpg" },
+                { category: "ecourse", name: "Contoh Judul Ecourse", price: 150000, description: "Deskripsi singkat ecourse", downloadUrl: "https://drive.google.com/...", image: "https://image.url/cover.jpg" }
+            ];
+            const worksheet = XLSX.utils.json_to_sheet(templateData);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Template Produk");
+            XLSX.writeFile(workbook, "Template_Produk_TLIBRARY.xlsx");
+        }
+
+        function uploadBulkProducts() {
+            const fileInput = document.getElementById('bulkFile');
+            if(fileInput.files.length === 0) { alert('Pilih file Excel (.xlsx) atau JSON terlebih dahulu!'); return; }
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            const btn = event.currentTarget;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+
+            if (file.name.endsWith('.json')) {
+                reader.onload = async function(e) {
+                    try {
+                        const products = JSON.parse(e.target.result);
+                        await sendBulkToServer({ products });
+                        btn.innerHTML = '<i class="fas fa-upload"></i> Proses Upload Masal';
+                    } catch(err) { 
+                        alert('Format file JSON tidak valid!');
+                        btn.innerHTML = '<i class="fas fa-upload"></i> Proses Upload Masal';
+                    }
+                };
+                reader.readAsText(file);
+            } else {
+                reader.onload = async function(e) {
+                    try {
+                        const base64Data = e.target.result.split(',')[1];
+                        await sendBulkToServer({ fileData: base64Data });
+                        btn.innerHTML = '<i class="fas fa-upload"></i> Proses Upload Masal';
+                    } catch(err) { 
+                        alert('Gagal membaca file Excel!');
+                        btn.innerHTML = '<i class="fas fa-upload"></i> Proses Upload Masal';
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        async function sendBulkToServer(payload) {
+            try {
+                const res = await fetch('/api/admin/products/bulk', {
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if(data.success) {
+                    alert(data.message);
+                    fetchDigitalProducts().then(() => { 
+                        loadAdminProducts(); 
+                        if(['ebook','ecourse','template','aplikasi'].includes(currentCategory)) renderDigitalCards(currentCategory); 
+                    });
+                } else { alert(data.message); }
+            } catch(err) { alert('Gagal mengunggah data masal!'); }
+        }
+
+        async function deleteDigitalProduct(id) {
+            if(!confirm('Yakin ingin menghapus produk ini?')) return;
+            try {
+                const res = await fetch(`/api/admin/products/${id}`, { method: 'DELETE' });
+                const data = await res.json();
+                if(data.success) {
+                    const cartIndex = digitalCart.findIndex(c => c.id === id);
+                    if(cartIndex > -1) digitalCart.splice(cartIndex, 1);
+                    updateFloatingCartBtn();
+                    
+                    fetchDigitalProducts().then(() => { loadAdminProducts(); if(['ebook','ecourse','template','aplikasi'].includes(currentCategory)) renderDigitalCards(currentCategory); });
+                }
+            } catch(e) { alert('Gagal menghapus produk.'); }
+        }
+
+        document.getElementById('btnPay').addEventListener('click', async () => {
+            const targetId = document.getElementById('targetId').value.trim();
+            const serverId = document.getElementById('serverId').value.trim();
+
+            if (!targetId) { alert('Masukkan Nomor / ID tujuan terlebih dahulu!'); document.getElementById('targetId').focus(); return; }
+            if (activeItem.hasServer && !serverId) { alert('Masukkan Server ID!'); document.getElementById('serverId').focus(); return; }
+            
+            if (!selectedProduct) { 
+                if (activeItem.isPasca) {
+                    alert('Silakan Cek Tagihan terlebih dahulu sebelum membayar!');
+                } else {
+                    alert('Pilih nominal produk terlebih dahulu!'); 
+                }
+                return; 
+            }
+
+            const btn = document.getElementById('btnPay');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('/api/checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        targetId,
+                        serverId,
+                        price: selectedProduct.price,
+                        productName: `${activeItem.name} - ${selectedProduct.product_name}`,
+                        productCode: selectedProduct.buyer_sku_code,
+                        isPasca: selectedProduct.isPasca
+                    })
+                });
+                const data = await res.json();
+                btn.innerHTML = '<i class="fas fa-wallet"></i> Bayar Sekarang &rarr;';
+                btn.disabled = false;
+
+                if (data.token) {
+                    window.snap.pay(data.token, {
+                        onSuccess: function(result){ 
+                            alert('Pembayaran Berhasil! Sistem memproses transaksi otomatis.'); 
+                            document.getElementById('searchOrderId').value = data.orderId;
+                            navigate('riwayat');
+                            searchTransaction();
+                        },
+                        onPending: function(result){ 
+                            alert('Silakan selesaikan pembayaran QRIS Anda.'); 
+                            document.getElementById('searchOrderId').value = data.orderId;
+                            navigate('riwayat');
+                            searchTransaction();
+                        },
+                        onError: function(result){ alert('Pembayaran Gagal.'); },
+                        onClose: function(){ 
+                            document.getElementById('searchOrderId').value = data.orderId;
+                            navigate('riwayat');
+                            searchTransaction();
+                        }
+                    });
+                } else {
+                    alert('Gagal membuat transaksi: ' + (data.error || 'Kesalahan server.'));
+                }
+            } catch (e) {
+                alert('Kesalahan jaringan.');
+                btn.innerHTML = '<i class="fas fa-wallet"></i> Bayar Sekarang &rarr;';
+                btn.disabled = false;
+            }
+        });
 
         initApp();
     </script>

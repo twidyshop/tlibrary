@@ -301,7 +301,7 @@ function calculateMargin(hargaAsli) {
     return Math.max(200, Math.min(500, persentase)); 
 }
 
-// --- INTEGRASI H2H HYBRID (DIGIFLAZZ + HAYBI DENGAN FALLBACK) ---
+// --- INTEGRASI H2H (PEMISAHAN GARIS KERAS HAYBI & DIGIFLAZZ TANPA FALLBACK) ---
 app.get('/api/products', async (req, res) => {
   try {
     const now = Date.now();
@@ -312,7 +312,7 @@ app.get('/api/products', async (req, res) => {
       const hbUser = process.env.HAYBI_USERNAME;
       const hbKey = process.env.HAYBI_API_KEY;
 
-      // 1. FETCH DARI HAYBI DULU (PLN, E-Money, & Game Migrasi)
+      // 1. FETCH KHUSUS DARI HAYBI (Hanya E-Money, PLN, ML, dan FF)
       let haybiProducts = [];
       if (hbUser && hbKey) {
           try {
@@ -328,63 +328,32 @@ app.get('/api/products', async (req, res) => {
               const rawH = hRes.data?.data || hRes.data;
               if (Array.isArray(rawH)) {
                   haybiProducts = rawH.map(produk => {
-                      let hargaDasar = parseInt(produk.harga || produk.price || produk.hargadasar || 0);
-                      if (hargaDasar === 0) {
-                          for (const k in produk) {
-                              const val = parseInt(produk[k]);
-                              if (!isNaN(val) && val > 500) { hargaDasar = val; break; }
-                          }
-                      }
+                      // PERBAIKAN FATAL: Harga diambil langsung dan pasti dari properti yang benar, dilarang melooping!
+                      let hargaDasar = parseInt(produk.price || produk.harga || 0);
 
-                      const skuCode = String(produk.kode_produk || produk.kode || produk.buyer_sku_code || '').toUpperCase();
-                      const prodName = String(produk.nama_produk || produk.nama || produk.product_name || '').toUpperCase();
-                      
-                      // PERBAIKAN HAYBI: Ambil semua kemungkinan field identifier game dari Haybi
+                      const skuCode = String(produk.kode || produk.kode_produk || produk.buyer_sku_code || '').toUpperCase();
+                      const prodName = String(produk.nama || produk.nama_produk || produk.product_name || '').toUpperCase();
                       const rawBrand = String(produk.brand || produk.provider || produk.operator || produk.kategori || produk.tipe || '').toUpperCase();
                       
-                      // GABUNGKAN semuanya menjadi 1 kalimat raksasa untuk dipindai
                       let textCheck = (skuCode + " " + prodName + " " + rawBrand);
 
-                      // Deteksi Kategori Haybi
+                      // Deteksi Target Haybi
                       let detectedCategory = 'Umum';
                       let detectedBrand = rawBrand || 'Umum';
                       let isTarget = false;
 
-                      if (textCheck.includes('DANA') || textCheck.includes('OVO') || textCheck.includes('GOPAY') || textCheck.includes('SHOPEE') || textCheck.includes('LINKAJA') || textCheck.includes('E-MONEY')) {
-                          detectedCategory = 'E-Money';
-                          isTarget = true;
-                          if (textCheck.includes('DANA')) detectedBrand = 'DANA';
-                          else if (textCheck.includes('OVO')) detectedBrand = 'OVO';
-                          else if (textCheck.includes('GOPAY') || textCheck.includes('GO PAY')) detectedBrand = 'GO PAY';
-                          else if (textCheck.includes('SHOPEE')) detectedBrand = 'SHOPEE PAY';
-                          else if (textCheck.includes('LINKAJA')) detectedBrand = 'LINKAJA';
-                      } else if (textCheck.includes('PLN') || (textCheck.includes('TOKEN') && textCheck.includes('LISTRIK'))) {
-                          detectedCategory = 'PLN';
-                          detectedBrand = 'PLN';
-                          isTarget = true;
-                      } 
-                      // FILTER PENDETEKSI GAME SUPER LUAS
-                      else if (textCheck.includes('MOBILE LEGEND') || textCheck.includes('MLBB')) {
-                          detectedCategory = 'Games';
-                          detectedBrand = 'Mobile Legends';
-                          isTarget = true;
-                      } else if (textCheck.includes('FREE FIRE') || textCheck.includes('FREEFIRE') || textCheck.includes(' FF')) {
-                          detectedCategory = 'Games';
-                          detectedBrand = 'Free Fire';
-                          isTarget = true;
-                      } else if (textCheck.includes('PUBG')) {
-                          detectedCategory = 'Games';
-                          detectedBrand = 'PUBG Mobile';
-                          isTarget = true;
-                      } else if (textCheck.includes('ROBLOX')) {
-                          detectedCategory = 'Games';
-                          detectedBrand = 'Roblox';
-                          isTarget = true;
-                      }
+                      if (textCheck.includes('DANA')) { detectedCategory = 'E-Money'; detectedBrand = 'DANA'; isTarget = true; }
+                      else if (textCheck.includes('OVO')) { detectedCategory = 'E-Money'; detectedBrand = 'OVO'; isTarget = true; }
+                      else if (textCheck.includes('GOPAY') || textCheck.includes('GO PAY')) { detectedCategory = 'E-Money'; detectedBrand = 'GO PAY'; isTarget = true; }
+                      else if (textCheck.includes('SHOPEE')) { detectedCategory = 'E-Money'; detectedBrand = 'SHOPEE PAY'; isTarget = true; }
+                      else if (textCheck.includes('LINKAJA')) { detectedCategory = 'E-Money'; detectedBrand = 'LINKAJA'; isTarget = true; }
+                      else if (textCheck.includes('PLN') || (textCheck.includes('TOKEN') && textCheck.includes('LISTRIK'))) { detectedCategory = 'PLN'; detectedBrand = 'PLN'; isTarget = true; }
+                      else if (textCheck.includes('MOBILE LEGEND') || textCheck.includes('MLBB')) { detectedCategory = 'Games'; detectedBrand = 'Mobile Legends'; isTarget = true; }
+                      else if (textCheck.includes('FREE FIRE') || textCheck.includes('FREEFIRE') || textCheck.includes(' FF')) { detectedCategory = 'Games'; detectedBrand = 'Free Fire'; isTarget = true; }
 
                       return {
-                          buyer_sku_code: produk.kode_produk || produk.kode || produk.buyer_sku_code,
-                          product_name: produk.nama_produk || produk.nama || produk.product_name,
+                          buyer_sku_code: produk.kode || produk.kode_produk || produk.buyer_sku_code,
+                          product_name: produk.nama || produk.nama_produk || produk.product_name,
                           category: detectedCategory,
                           price: hargaDasar + calculateMargin(hargaDasar),
                           buyer_product_status: true,
@@ -401,22 +370,7 @@ app.get('/api/products', async (req, res) => {
           }
       }
 
-      // SAFEGUARD ANTI-ZONK: Hitung jumlah produk per game di Haybi
-      const haybiGameCounts = {};
-      haybiProducts.forEach(p => {
-          if (p.category === 'Games') {
-              const b = (p.brand || '').toUpperCase();
-              haybiGameCounts[b] = (haybiGameCounts[b] || 0) + 1;
-          }
-      });
-      
-      // FALLBACK SYARAT: Haybi HANYA akan mematikan Digiflazz JIKA jumlah produk gamenya lebih dari 2.
-      // Ini mencegah bug jika Haybi tiba-tiba cuma memunculkan 1 produk (misal cuma "Cek Username")
-      const haybiGameBrands = new Set(
-          Object.keys(haybiGameCounts).filter(b => haybiGameCounts[b] >= 3)
-      );
-
-      // 2. FETCH DARI DIGIFLAZZ (Semua kecuali E-Money, PLN, & Game yang sukses ditarik Haybi dg aman)
+      // 2. FETCH KHUSUS DARI DIGIFLAZZ (Selain target Haybi)
       let digiflazzProducts = [];
       if (dfUser && dfKey) {
           try {
@@ -442,15 +396,10 @@ app.get('/api/products', async (req, res) => {
                       const cat = (p.category || '').toLowerCase();
                       const brand = (p.brand || '').toUpperCase();
                       
-                      // Exclude mutlak untuk E-Money & PLN (Sudah 100% di Haybi)
-                      const isEmoneyOrPLN = ['e-money', 'pln'].includes(p.category) || cat.includes('token listrik');
-                      if (isEmoneyOrPLN) return false;
-
-                      // FALLBACK SYSTEM: Hanya hilangkan dari Digiflazz JIKA di Haybi aman (produk >= 3)
-                      if ((brand.includes('MOBILE LEGEND') || brand.includes('MLBB')) && haybiGameBrands.has('MOBILE LEGENDS')) return false;
-                      if ((brand.includes('FREE FIRE') || brand === 'FF') && haybiGameBrands.has('FREE FIRE')) return false;
-                      if (brand.includes('PUBG') && haybiGameBrands.has('PUBG MOBILE')) return false;
-                      if (brand.includes('ROBLOX') && haybiGameBrands.has('ROBLOX')) return false;
+                      // PEMISAHAN GARIS KERAS: Digiflazz dilarang keras menampilkan produk yang sudah ditugaskan ke Haybi
+                      if (['e-money', 'pln'].includes(p.category) || cat.includes('token listrik')) return false;
+                      if (brand.includes('MOBILE LEGEND') || brand.includes('MLBB')) return false;
+                      if (brand.includes('FREE FIRE') || brand === 'FF') return false;
 
                       return true;
                   }); 

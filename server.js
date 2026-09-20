@@ -295,8 +295,8 @@ app.get('/api/products', async (req, res) => {
 
         let combinedProducts = [];
         
-        // Brand yang menjadi tanggung jawab Haybi
-        const haybiTargetBrands = ['PLN', 'GO PAY', 'OVO', 'DANA', 'SHOPEE PAY', 'LINKAJA', 'FREE FIRE', 'PUBG MOBILE', 'ROBLOX'];
+        // Brand yang menjadi tanggung jawab Haybi (Mobile Legends ditambahkan)
+        const haybiTargetBrands = ['PLN', 'GO PAY', 'OVO', 'DANA', 'SHOPEE PAY', 'LINKAJA', 'FREE FIRE', 'PUBG MOBILE', 'ROBLOX', 'MOBILE LEGENDS'];
 
         // 1. Tarik dari Digiflazz
         const digiUser = process.env.DIGIFLAZZ_USERNAME;
@@ -379,6 +379,8 @@ app.get('/api/products', async (req, res) => {
                 else if (textCheck.includes('FREE FIRE') || textCheck.includes('FF')) { detectedBrand = 'Free Fire'; isTarget = true; }
                 else if (textCheck.includes('PUBG')) { detectedBrand = 'PUBG Mobile'; isTarget = true; }
                 else if (textCheck.includes('ROBLOX')) { detectedBrand = 'Roblox'; isTarget = true; }
+                // Penambahan filter dinamis khusus Mobile Legends
+                else if (textCheck.includes('MOBILE LEGENDS') || textCheck.includes('MLBB') || (textCheck.includes('ML') && textCheck.includes('DIAMOND'))) { detectedBrand = 'Mobile Legends'; isTarget = true; }
 
                 return {
                     buyer_sku_code: skuCode || '',
@@ -512,6 +514,7 @@ app.post('/api/checkout', async (req, res) => {
     if (!targetId) return res.status(400).json({ message: 'Data kurang lengkap' });
 
     const orderId = `TLIB-${Date.now()}`;
+    // Penggabungan ID dan Server khusus Mobile Legends (dan game lainnya)
     const fullTarget = serverId ? `${targetId}${serverId}` : targetId;
     
     let amount = 0;
@@ -611,7 +614,7 @@ app.post('/api/webhook', async (req, res) => {
                     ref_id: order_id,
                     sign: signHaybi,
                     produk: trx.product_code,
-                    no_tujuan: trx.target_id
+                    no_tujuan: trx.target_id // Haybi MLBB butuh format UserIDServerID, sudah diformat di atas
                 });
 
                 const result = haybiRes.data || {};

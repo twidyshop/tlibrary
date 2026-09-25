@@ -21,14 +21,14 @@
             theme: {
                 extend: {
                     colors: {
-                        bgMain: '#F8FAFC',    // slate-50 (Background utama terang)
-                        bgCard: '#FFFFFF',    // white (Background card)
-                        bgInput: '#F1F5F9',   // slate-100 (Background input/abu-abu terang)
-                        primary: '#2563EB',   // blue-600 (Warna utama TLIBRARY)
-                        primaryHover: '#1D4ED8', // blue-700
-                        textMain: '#0F172A',  // slate-900 (Teks utama)
-                        textMuted: '#64748B', // slate-500 (Teks sekunder)
-                        borderDim: '#E2E8F0'  // slate-200 (Border tipis)
+                        bgMain: '#F8FAFC',    
+                        bgCard: '#FFFFFF',    
+                        bgInput: '#F1F5F9',   
+                        primary: '#2563EB',   
+                        primaryHover: '#1D4ED8', 
+                        textMain: '#0F172A',  
+                        textMuted: '#64748B', 
+                        borderDim: '#E2E8F0'  
                     },
                     fontFamily: { sans: ['Inter', 'sans-serif'] }
                 }
@@ -61,9 +61,9 @@
 </head>
 <body class="min-h-screen flex flex-col relative pb-20 lg:pb-0">
 
-    <!-- DESKTOP HEADER (Marketplace Style) -->
+    <!-- DESKTOP & MOBILE HEADER -->
     <nav class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-borderDim shadow-sm transition-all">
-        <!-- Top bar (Info kecil) -->
+        <!-- Top bar (Desktop Only) -->
         <div class="hidden lg:flex justify-between items-center px-8 py-1.5 bg-slate-50 border-b border-borderDim text-[11px] text-textMuted">
             <div class="flex gap-4">
                 <span class="flex items-center gap-1.5"><i class="fas fa-shield-check text-green-500"></i> 100% Aman & Terpercaya</span>
@@ -76,19 +76,19 @@
         </div>
 
         <!-- Main Navbar -->
-        <div class="flex justify-between items-center px-4 md:px-8 py-3 md:py-4 gap-4 md:gap-8">
+        <div class="flex items-center justify-between px-3 md:px-8 py-2 md:py-4 gap-2 md:gap-8">
             
-            <!-- Mobile Menu Toggle -->
-            <button onclick="toggleMobileMenu()" class="lg:hidden text-textMain text-xl p-1 focus:outline-none">
-                <i class="fas fa-bars"></i>
-            </button>
-
-            <!-- LOGO TLIBRARY LIGHT THEME -->
-            <div class="flex items-center gap-2 cursor-pointer group shrink-0" onclick="navigate('home')">
-                <img src="logo.png" alt="TLIBRARY Logo" class="w-8 h-8 md:w-10 md:h-10 rounded-lg shadow-sm border border-borderDim group-hover:shadow-md transition-all object-cover" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'40\'><rect width=\'100%\' height=\'100%\' fill=\'%232563eb\' rx=\'8\'/><text x=\'50%\' y=\'50%\' fill=\'white\' font-family=\'sans-serif\' font-size=\'20\' font-weight=\'bold\' dominant-baseline=\'middle\' text-anchor=\'middle\'>T</text></svg>'">
-                <div class="flex flex-col justify-center">
-                    <span class="font-black text-lg md:text-xl tracking-tight text-textMain group-hover:text-primary transition-colors">T<span class="text-primary">LIBRARY</span></span>
-                    <span class="hidden md:block text-[9px] text-textMuted font-medium tracking-wide uppercase mt-0.5">Topup & Digital Store</span>
+            <!-- Left Group: Hamburger + Logo -->
+            <div class="flex items-center gap-2 md:gap-4 shrink-0">
+                <button onclick="toggleMobileMenu()" class="lg:hidden text-textMain text-xl p-1.5 focus:outline-none">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="flex items-center gap-2 cursor-pointer group" onclick="navigate('home')">
+                    <img src="logo.png" alt="TLIBRARY Logo" class="w-7 h-7 md:w-10 md:h-10 rounded-lg shadow-sm border border-borderDim group-hover:shadow-md transition-all object-cover" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'40\'><rect width=\'100%\' height=\'100%\' fill=\'%232563eb\' rx=\'8\'/><text x=\'50%\' y=\'50%\' fill=\'white\' font-family=\'sans-serif\' font-size=\'20\' font-weight=\'bold\' dominant-baseline=\'middle\' text-anchor=\'middle\'>T</text></svg>'">
+                    <div class="flex flex-col justify-center">
+                        <span class="font-black text-[15px] md:text-xl tracking-tight text-textMain group-hover:text-primary transition-colors leading-none">T<span class="text-primary">LIBRARY</span></span>
+                        <span class="hidden md:block text-[9px] text-textMuted font-medium tracking-wide uppercase mt-0.5">Topup & Digital Store</span>
+                    </div>
                 </div>
             </div>
             
@@ -100,18 +100,24 @@
                 <a href="#promo" onclick="navigate('promo')" id="nav-promo" class="hover:text-primary transition flex items-center gap-1"><i class="fas fa-tag text-red-500"></i> Promo</a>
             </div>
 
-            <!-- Global Search (Visual Jump) - Desktop Only -->
+            <!-- Global Search (Desktop) -->
             <div class="hidden lg:flex flex-1 max-w-xl relative">
                 <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-textMuted"></i>
                 <input type="text" placeholder="Cari produk, game, e-wallet, atau lainnya..." class="w-full bg-bgInput text-sm text-textMain border border-borderDim pl-10 pr-4 py-2.5 rounded-full outline-none focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10 transition" oninput="document.getElementById('gameSearch').value=this.value; document.getElementById('digitalSearchInput').value=this.value; if(typeof filterSidebarItems === 'function') filterSidebarItems(); if(typeof renderDigitalCards === 'function') renderDigitalCards(currentCategory);" />
             </div>
 
+            <!-- Global Search (Mobile - Compact in Header) -->
+            <div class="flex-1 lg:hidden relative">
+                <i class="fas fa-search absolute left-2.5 top-1/2 -translate-y-1/2 text-textMuted text-[10px]"></i>
+                <input type="text" placeholder="Cari..." class="w-full bg-bgInput text-[11px] text-textMain border border-borderDim pl-7 pr-3 py-1.5 rounded-full outline-none focus:border-primary focus:bg-white transition shadow-inner" oninput="document.getElementById('gameSearch').value=this.value; document.getElementById('digitalSearchInput').value=this.value; if(typeof filterSidebarItems === 'function') filterSidebarItems(); if(typeof renderDigitalCards === 'function') renderDigitalCards(currentCategory);" />
+            </div>
+
             <!-- Right Icons -->
-            <div class="flex items-center gap-3 md:gap-5 shrink-0">
+            <div class="flex items-center gap-1 md:gap-5 shrink-0">
                 <!-- Cart Icon Desktop & Mobile -->
-                <button onclick="openDigitalCart()" class="relative text-textMuted hover:text-primary transition p-2 flex items-center gap-2 group">
-                    <i class="fas fa-shopping-cart text-lg md:text-xl"></i>
-                    <span id="floatingCartCount" class="absolute top-0 right-0 md:top-0.5 md:-right-1 bg-red-500 text-white text-[10px] font-bold w-4 h-4 md:w-5 md:h-5 flex items-center justify-center rounded-full border border-white scale-0 transition-transform">0</span>
+                <button onclick="openDigitalCart()" class="relative text-textMuted hover:text-primary transition p-1.5 md:p-2 flex items-center gap-2 group">
+                    <i class="fas fa-shopping-cart text-base md:text-xl"></i>
+                    <span id="floatingCartCount" class="absolute -top-0.5 right-0 md:top-0.5 md:-right-1 bg-red-500 text-white text-[9px] font-bold w-3.5 h-3.5 md:w-5 md:h-5 flex items-center justify-center rounded-full border border-white scale-0 transition-transform">0</span>
                     <span class="hidden lg:block text-sm font-semibold text-textMain group-hover:text-primary">Keranjang</span>
                 </button>
 
@@ -119,14 +125,6 @@
                     <div class="w-8 h-8 rounded-full bg-bgInput border border-borderDim flex items-center justify-center text-textMuted"><i class="fas fa-user"></i></div>
                     Akun / Admin
                 </a>
-            </div>
-        </div>
-        
-        <!-- MOBILE SEARCH BAR (Dibawah Header) -->
-        <div class="lg:hidden px-4 pb-3">
-            <div class="relative w-full">
-                <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-textMuted text-sm"></i>
-                <input type="text" placeholder="Cari produk, game, atau lainnya..." class="w-full bg-bgInput text-sm text-textMain border border-borderDim pl-9 pr-4 py-2.5 rounded-full outline-none focus:border-primary focus:bg-white transition" oninput="document.getElementById('gameSearch').value=this.value; document.getElementById('digitalSearchInput').value=this.value; if(typeof filterSidebarItems === 'function') filterSidebarItems(); if(typeof renderDigitalCards === 'function') renderDigitalCards(currentCategory);" />
             </div>
         </div>
     </nav>
@@ -144,7 +142,7 @@
     <main class="flex-grow max-w-[1280px] w-full mx-auto px-4 md:px-6 lg:px-8 space-y-6 md:space-y-8 py-6">
         
         <!-- VIEW 1: HOME / TOPUP & PPOB / DIGITAL -->
-        <div id="view-topup" class="space-y-8 relative">
+        <div id="view-topup" class="space-y-6 md:space-y-8 relative">
             
             <!-- HERO BANNER -->
             <div id="home" class="relative rounded-2xl md:rounded-[24px] overflow-hidden shadow-sm bg-bgInput group border border-borderDim">
@@ -152,79 +150,59 @@
                 <img src="banner-hero.png" alt="Promo TLIBRARY" class="w-full h-auto object-cover group-hover:scale-[1.02] transition-transform duration-700 origin-center" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'1200\' height=\'400\'><rect width=\'100%\' height=\'100%\' fill=\'%23F1F5F9\'/><text x=\'50%\' y=\'50%\' fill=\'%2364748B\' font-family=\'sans-serif\' font-size=\'24\' dominant-baseline=\'middle\' text-anchor=\'middle\'>BANNER HERO KOSONG</text></svg>'">
             </div>
 
-            <!-- CATEGORY SHORTCUT (MARKETPLACE STYLE) -->
-            <div class="space-y-4">
-                <div class="flex items-center justify-between">
-                    <h2 class="text-lg md:text-xl font-bold text-textMain">Jelajahi Kategori</h2>
-                </div>
+            <!-- CATEGORY SHORTCUT (Gepeng Menyamping / Horizontal Pills) -->
+            <div class="space-y-3">
+                <h2 class="text-sm md:text-xl font-bold text-textMain px-1">Kategori Layanan</h2>
                 
-                <div class="flex overflow-x-auto gap-3 md:gap-4 pb-2 hide-scrollbar scroll-smooth">
-                    <!-- Produk Digital -->
-                    <button onclick="switchCategory('ebook')" id="btnCatEbook" class="flex flex-col items-center justify-center p-3 md:p-4 rounded-xl border border-borderDim bg-white text-textMuted hover:text-primary hover:border-primary transition gap-2 min-w-[75px] md:min-w-[90px] flex-shrink-0 shadow-sm">
-                        <i class="fas fa-book text-xl md:text-2xl mb-1 text-purple-500"></i>
-                        <span class="text-[10px] md:text-xs font-bold">Ebook</span>
-                    </button>
-                    <button onclick="switchCategory('ecourse')" id="btnCatEcourse" class="flex flex-col items-center justify-center p-3 md:p-4 rounded-xl border border-borderDim bg-white text-textMuted hover:text-primary hover:border-primary transition gap-2 min-w-[75px] md:min-w-[90px] flex-shrink-0 shadow-sm">
-                        <i class="fas fa-graduation-cap text-xl md:text-2xl mb-1 text-blue-500"></i>
-                        <span class="text-[10px] md:text-xs font-bold">Ecourse</span>
-                    </button>
-                    <button onclick="switchCategory('template')" id="btnCatTemplate" class="flex flex-col items-center justify-center p-3 md:p-4 rounded-xl border border-borderDim bg-white text-textMuted hover:text-primary hover:border-primary transition gap-2 min-w-[75px] md:min-w-[90px] flex-shrink-0 shadow-sm">
-                        <i class="fas fa-file-alt text-xl md:text-2xl mb-1 text-orange-500"></i>
-                        <span class="text-[10px] md:text-xs font-bold">Template</span>
-                    </button>
-                    <button onclick="switchCategory('aplikasi')" id="btnCatAplikasi" class="flex flex-col items-center justify-center p-3 md:p-4 rounded-xl border border-borderDim bg-white text-textMuted hover:text-primary hover:border-primary transition gap-2 min-w-[75px] md:min-w-[90px] flex-shrink-0 shadow-sm">
-                        <i class="fas fa-mobile-alt text-xl md:text-2xl mb-1 text-pink-500"></i>
-                        <span class="text-[10px] md:text-xs font-bold">Aplikasi</span>
-                    </button>
-                    
-                    <div class="w-px h-12 bg-borderDim mx-1 hidden md:block"></div>
-                    
-                    <!-- PPOB & Topup -->
-                    <button onclick="switchCategory('pulsa')" id="btnCatPulsa" class="flex flex-col items-center justify-center p-3 md:p-4 rounded-xl border border-borderDim bg-white text-textMuted hover:text-primary hover:border-primary transition gap-2 min-w-[75px] md:min-w-[90px] flex-shrink-0 shadow-sm">
-                        <i class="fas fa-mobile text-xl md:text-2xl mb-1 text-sky-500"></i>
-                        <span class="text-[10px] md:text-xs font-bold">Pulsa</span>
-                    </button>
-                    <button onclick="switchCategory('game')" id="btnCatGame" class="flex flex-col items-center justify-center p-3 md:p-4 rounded-xl border-2 border-primary bg-blue-50 text-primary transition gap-2 min-w-[75px] md:min-w-[90px] flex-shrink-0 shadow-sm">
-                        <i class="fas fa-gamepad text-xl md:text-2xl mb-1"></i>
-                        <span class="text-[10px] md:text-xs font-bold">Game</span>
-                    </button>
-                    <button onclick="switchCategory('emoney')" id="btnCatEmoney" class="flex flex-col items-center justify-center p-3 md:p-4 rounded-xl border border-borderDim bg-white text-textMuted hover:text-primary hover:border-primary transition gap-2 min-w-[75px] md:min-w-[90px] flex-shrink-0 shadow-sm">
-                        <i class="fas fa-wallet text-xl md:text-2xl mb-1 text-emerald-500"></i>
-                        <span class="text-[10px] md:text-xs font-bold">E-Money</span>
-                    </button>
-                    <button onclick="switchCategory('pln')" id="btnCatPln" class="flex flex-col items-center justify-center p-3 md:p-4 rounded-xl border border-borderDim bg-white text-textMuted hover:text-primary hover:border-primary transition gap-2 min-w-[75px] md:min-w-[90px] flex-shrink-0 shadow-sm">
-                        <i class="fas fa-bolt text-xl md:text-2xl mb-1 text-yellow-500"></i>
-                        <span class="text-[10px] md:text-xs font-bold">Token PLN</span>
-                    </button>
-                    <button onclick="switchCategory('tagihan')" id="btnCatTagihan" class="flex flex-col items-center justify-center p-3 md:p-4 rounded-xl border border-borderDim bg-white text-textMuted hover:text-primary hover:border-primary transition gap-2 min-w-[75px] md:min-w-[90px] flex-shrink-0 shadow-sm">
-                        <i class="fas fa-file-invoice-dollar text-xl md:text-2xl mb-1 text-indigo-500"></i>
-                        <span class="text-[10px] md:text-xs font-bold">Tagihan</span>
-                    </button>
-                </div>
-            </div>
+                <div class="space-y-2.5">
+                    <!-- Baris Atas: PPOB & Top Up (Terlihat di muka) -->
+                    <div class="flex overflow-x-auto gap-2 md:gap-3 pb-1 hide-scrollbar">
+                        <button onclick="switchCategory('game')" id="btnCatGame" class="flex items-center px-3 md:px-4 py-2 md:py-2.5 rounded-full border-2 border-primary bg-blue-50 text-primary transition gap-2 shrink-0 shadow-sm">
+                            <i class="fas fa-gamepad text-sm md:text-base"></i>
+                            <span class="text-[11px] md:text-sm font-bold">Game</span>
+                        </button>
+                        <button onclick="switchCategory('pulsa')" id="btnCatPulsa" class="flex items-center px-3 md:px-4 py-2 md:py-2.5 rounded-full border border-borderDim bg-white text-textMuted hover:text-primary hover:border-primary transition gap-2 shrink-0 shadow-sm">
+                            <i class="fas fa-mobile-alt text-sm md:text-base text-sky-500"></i>
+                            <span class="text-[11px] md:text-sm font-bold">Pulsa</span>
+                        </button>
+                        <button onclick="switchCategory('emoney')" id="btnCatEmoney" class="flex items-center px-3 md:px-4 py-2 md:py-2.5 rounded-full border border-borderDim bg-white text-textMuted hover:text-primary hover:border-primary transition gap-2 shrink-0 shadow-sm">
+                            <i class="fas fa-wallet text-sm md:text-base text-emerald-500"></i>
+                            <span class="text-[11px] md:text-sm font-bold">E-Money</span>
+                        </button>
+                        <button onclick="switchCategory('pln')" id="btnCatPln" class="flex items-center px-3 md:px-4 py-2 md:py-2.5 rounded-full border border-borderDim bg-white text-textMuted hover:text-primary hover:border-primary transition gap-2 shrink-0 shadow-sm">
+                            <i class="fas fa-bolt text-sm md:text-base text-yellow-500"></i>
+                            <span class="text-[11px] md:text-sm font-bold">Token PLN</span>
+                        </button>
+                        <button onclick="switchCategory('tagihan')" id="btnCatTagihan" class="flex items-center px-3 md:px-4 py-2 md:py-2.5 rounded-full border border-borderDim bg-white text-textMuted hover:text-primary hover:border-primary transition gap-2 shrink-0 shadow-sm">
+                            <i class="fas fa-file-invoice-dollar text-sm md:text-base text-indigo-500"></i>
+                            <span class="text-[11px] md:text-sm font-bold">Tagihan</span>
+                        </button>
+                    </div>
 
-            <!-- TRUST / SERVICE INFO -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 py-2">
-                <div class="bg-white p-3 md:p-4 rounded-xl border border-borderDim flex items-center gap-3 shadow-sm">
-                    <div class="w-10 h-10 rounded-full bg-blue-50 text-primary flex items-center justify-center text-lg shrink-0"><i class="fas fa-bolt"></i></div>
-                    <div><h4 class="text-xs md:text-sm font-bold text-textMain mb-0.5">Proses Cepat</h4><p class="text-[10px] text-textMuted">Hitungan detik</p></div>
-                </div>
-                <div class="bg-white p-3 md:p-4 rounded-xl border border-borderDim flex items-center gap-3 shadow-sm">
-                    <div class="w-10 h-10 rounded-full bg-green-50 text-green-500 flex items-center justify-center text-lg shrink-0"><i class="fas fa-shield-check"></i></div>
-                    <div><h4 class="text-xs md:text-sm font-bold text-textMain mb-0.5">100% Aman</h4><p class="text-[10px] text-textMuted">Transaksi terlindungi</p></div>
-                </div>
-                <div class="bg-white p-3 md:p-4 rounded-xl border border-borderDim flex items-center gap-3 shadow-sm">
-                    <div class="w-10 h-10 rounded-full bg-orange-50 text-orange-500 flex items-center justify-center text-lg shrink-0"><i class="fas fa-tag"></i></div>
-                    <div><h4 class="text-xs md:text-sm font-bold text-textMain mb-0.5">Harga Terbaik</h4><p class="text-[10px] text-textMuted">Selalu hemat</p></div>
-                </div>
-                <div class="bg-white p-3 md:p-4 rounded-xl border border-borderDim flex items-center gap-3 shadow-sm">
-                    <div class="w-10 h-10 rounded-full bg-purple-50 text-purple-500 flex items-center justify-center text-lg shrink-0"><i class="fas fa-headset"></i></div>
-                    <div><h4 class="text-xs md:text-sm font-bold text-textMain mb-0.5">Customer Support</h4><p class="text-[10px] text-textMuted">Siap membantu</p></div>
+                    <!-- Baris Bawah: Produk Digital -->
+                    <div class="flex overflow-x-auto gap-2 md:gap-3 pb-1 hide-scrollbar">
+                        <button onclick="switchCategory('ebook')" id="btnCatEbook" class="flex items-center px-3 md:px-4 py-2 md:py-2.5 rounded-full border border-borderDim bg-white text-textMuted hover:text-primary hover:border-primary transition gap-2 shrink-0 shadow-sm">
+                            <i class="fas fa-book text-sm md:text-base text-purple-500"></i>
+                            <span class="text-[11px] md:text-sm font-bold">Ebook</span>
+                        </button>
+                        <button onclick="switchCategory('ecourse')" id="btnCatEcourse" class="flex items-center px-3 md:px-4 py-2 md:py-2.5 rounded-full border border-borderDim bg-white text-textMuted hover:text-primary hover:border-primary transition gap-2 shrink-0 shadow-sm">
+                            <i class="fas fa-graduation-cap text-sm md:text-base text-blue-500"></i>
+                            <span class="text-[11px] md:text-sm font-bold">Ecourse</span>
+                        </button>
+                        <button onclick="switchCategory('template')" id="btnCatTemplate" class="flex items-center px-3 md:px-4 py-2 md:py-2.5 rounded-full border border-borderDim bg-white text-textMuted hover:text-primary hover:border-primary transition gap-2 shrink-0 shadow-sm">
+                            <i class="fas fa-file-alt text-sm md:text-base text-orange-500"></i>
+                            <span class="text-[11px] md:text-sm font-bold">Template</span>
+                        </button>
+                        <button onclick="switchCategory('aplikasi')" id="btnCatAplikasi" class="flex items-center px-3 md:px-4 py-2 md:py-2.5 rounded-full border border-borderDim bg-white text-textMuted hover:text-primary hover:border-primary transition gap-2 shrink-0 shadow-sm">
+                            <i class="fas fa-mobile-alt text-sm md:text-base text-pink-500"></i>
+                            <span class="text-[11px] md:text-sm font-bold">Aplikasi</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
             <!-- LAYOUT PPOB & GAME -->
-            <div id="ppobLayout" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            <div id="ppobLayout" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start pt-2">
                 
                 <!-- Sidebar Produk -->
                 <div class="lg:col-span-3 bg-white rounded-2xl p-4 md:p-5 border border-borderDim shadow-sm h-max">
@@ -247,7 +225,7 @@
                         </div>
                     </a>
 
-                    <div class="relative mb-4">
+                    <div class="relative mb-4 hidden lg:block">
                         <i class="fas fa-search absolute left-3.5 top-3 text-textMuted text-sm"></i>
                         <input type="text" id="gameSearch" placeholder="Cari layanan..." oninput="filterSidebarItems()" class="w-full bg-bgInput text-sm pl-9 pr-4 py-2.5 rounded-xl border border-borderDim focus:outline-none focus:border-primary focus:bg-white text-textMain transition" />
                     </div>
@@ -310,7 +288,7 @@
 
                 <!-- Checkout Summary -->
                 <div class="lg:col-span-3 space-y-6">
-                    <div class="bg-white rounded-2xl p-5 border border-borderDim shadow-sm h-max sticky top-[100px]">
+                    <div class="bg-white rounded-2xl p-5 border border-borderDim shadow-sm h-max sticky top-[80px]">
                         <h3 class="font-bold text-sm mb-4 pb-3 border-b border-borderDim flex items-center gap-2 text-textMain">
                             <i class="fas fa-file-invoice text-primary"></i> Detail Pesanan
                         </h3>
@@ -341,33 +319,47 @@
             </div>
 
             <!-- LAYOUT PRODUK DIGITAL -->
-            <div id="digitalLayout" class="hidden space-y-6">
+            <div id="digitalLayout" class="hidden space-y-6 pt-2">
                 
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-5 md:p-6 rounded-2xl border border-borderDim shadow-sm">
                     <div>
-                        <h2 id="digitalCategoryTitle" class="text-xl font-bold text-textMain flex items-center gap-2"><i class="fas fa-fire text-orange-500"></i> Produk Digital Populer</h2>
-                        <div class="text-sm text-textMuted mt-1">Eksplorasi koleksi produk digital terbaik kami.</div>
+                        <h2 id="digitalCategoryTitle" class="text-lg md:text-xl font-bold text-textMain flex items-center gap-2"><i class="fas fa-fire text-orange-500"></i> Produk Digital</h2>
+                        <div class="text-xs md:text-sm text-textMuted mt-1">Eksplorasi koleksi produk digital terbaik kami.</div>
                     </div>
                     
                     <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
                         <!-- Dropdown Kategori -->
-                        <select id="ebookSubCatFilter" onchange="renderDigitalCards(currentCategory)" class="hidden bg-white text-sm text-textMain border border-borderDim pl-3 pr-8 py-2.5 rounded-xl outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition shadow-sm cursor-pointer">
+                        <select id="ebookSubCatFilter" onchange="renderDigitalCards(currentCategory)" class="hidden w-full md:w-auto bg-white text-sm text-textMain border border-borderDim pl-3 pr-8 py-2.5 rounded-xl outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition shadow-sm cursor-pointer">
                             <option value="">Semua Sub-Kategori</option>
                             <option value="Novel & Fiksi">Novel & Fiksi</option>
                             <option value="Buku Anak">Buku Anak</option>
                             <option value="Remaja">Remaja</option>
-                            <!-- ... opsi lainnya ... -->
+                            <option value="Agama & Spiritual">Agama & Spiritual</option>
+                            <option value="Sejarah & Budaya">Sejarah & Budaya</option>
+                            <option value="Pengembangan Diri">Pengembangan Diri</option>
+                            <option value="Psikologi">Psikologi</option>
                             <option value="Bisnis & Keuangan">Bisnis & Keuangan</option>
                             <option value="Pendidikan">Pendidikan</option>
+                            <option value="Teknologi">Teknologi</option>
+                            <option value="Kesehatan & Kebugaran">Kesehatan & Kebugaran</option>
+                            <option value="Resep & Masakan">Resep & Masakan</option>
+                            <option value="Seni & Desain">Seni & Desain</option>
+                            <option value="Hobi & Keterampilan">Hobi & Keterampilan</option>
+                            <option value="Biografi & Memoar">Biografi & Memoar</option>
+                            <option value="Politik & Sosial">Politik & Sosial</option>
+                            <option value="Sastra & Puisi">Sastra & Puisi</option>
+                            <option value="Komik">Komik</option>
+                            <option value="Travel & Wisata">Travel & Wisata</option>
+                            <option value="Referensi">Referensi</option>
                             <option value="Lainnya">Lainnya</option>
                         </select>
-                        <div class="relative flex-1 md:w-64">
+                        <div class="relative flex-1 w-full md:w-64 hidden lg:block">
                             <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-textMuted text-sm"></i>
                             <input type="text" id="digitalSearchInput" oninput="renderDigitalCards(currentCategory)" placeholder="Cari judul produk..." class="w-full bg-white text-sm text-textMain border border-borderDim pl-9 pr-4 py-2.5 rounded-xl outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition shadow-sm" />
                         </div>
                     </div>
                 </div>
-                <div id="digitalCardsContainer" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5"></div>
+                <div id="digitalCardsContainer" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5"></div>
             </div>
         </div>
 
@@ -441,7 +433,6 @@
                                     <p class="text-xs text-textMuted leading-relaxed">Pilih kategori game, pulsa, atau produk digital yang ingin kamu beli dari halaman utama.</p>
                                 </div>
                             </div>
-                            <!-- ... steps lainnya tetap sama secara struktur, diubah class bg & text nya ... -->
                             <div class="bg-white p-5 rounded-xl border border-borderDim flex gap-4 items-start shadow-sm">
                                 <div class="w-8 h-8 rounded-full bg-blue-50 text-primary border border-blue-100 flex items-center justify-center font-bold flex-shrink-0">2</div>
                                 <div>
@@ -969,13 +960,12 @@
         function switchCategory(cat) {
             currentCategory = cat;
             
-            // Update button styles in JS template (Light theme active/inactive classes)
             ['game', 'pulsa', 'emoney', 'pln', 'tagihan', 'ebook', 'ecourse', 'template', 'aplikasi'].forEach(c => {
                 const btn = document.getElementById('btnCat' + c.charAt(0).toUpperCase() + c.slice(1));
                 if(btn) {
                     btn.className = (c === cat) ? 
-                        "flex flex-col items-center justify-center p-3 md:p-4 rounded-xl border-2 border-primary bg-blue-50 text-primary transition gap-2 min-w-[75px] md:min-w-[90px] flex-shrink-0 shadow-sm" : 
-                        "flex flex-col items-center justify-center p-3 md:p-4 rounded-xl border border-borderDim bg-white text-textMuted hover:text-primary hover:border-primary transition gap-2 min-w-[75px] md:min-w-[90px] flex-shrink-0 shadow-sm";
+                        "flex items-center px-3 md:px-4 py-2 md:py-2.5 rounded-full border-2 border-primary bg-blue-50 text-primary transition gap-2 shrink-0 shadow-sm" : 
+                        "flex items-center px-3 md:px-4 py-2 md:py-2.5 rounded-full border border-borderDim bg-white text-textMuted hover:text-primary hover:border-primary transition gap-2 shrink-0 shadow-sm";
                 }
             });
 
@@ -1027,7 +1017,6 @@
                 return;
             }
 
-            // Template String HTML JS untuk Product Card dengan Light Theme
             container.innerHTML = items.map(item => {
                 const inCart = digitalCart.find(c => c.id === item.id);
                 const btnText = inCart ? '<i class="fas fa-check"></i> Ditambahkan' : '<i class="fas fa-cart-plus"></i> Beli';
@@ -1115,7 +1104,6 @@
             if(digitalCart.length > 0 && isDigitalView) {
                 btn.classList.replace('scale-0', 'scale-100');
                 count.innerText = digitalCart.length;
-                // Update header desktop cart count as well
                 const deskCount = document.querySelector('nav #floatingCartCount');
                 if (deskCount) {
                     deskCount.classList.replace('scale-0', 'scale-100');
@@ -1157,7 +1145,6 @@
             }
 
             let total = 0;
-            // Template String Modal Cart Light Theme
             container.innerHTML = digitalCart.map((item, index) => {
                 total += item.price;
                 return `
@@ -1268,7 +1255,6 @@
             if(!items) return;
             let htmlDesktop = '', htmlMobile = '';
 
-            // Template String JS Sidebar Light Theme
             items.forEach(item => {
                 if (filter && !item.name.toLowerCase().includes(filter.toLowerCase())) return;
                 const isActive = activeItem && activeItem.id === item.id;
@@ -1447,7 +1433,6 @@
                 return;
             }
 
-            // Template String HTML JS PPOB Nominal Light Theme
             container.innerHTML = activeNominals.map(item => `
                 <label class="cursor-pointer block relative h-full">
                     <input type="radio" name="nominal" class="peer sr-only nominal-radio" value="${item.buyer_sku_code}" onchange="selectNominalSku('${item.buyer_sku_code}')">
@@ -1532,7 +1517,6 @@
                     return;
                 }
 
-                // Template String HTML Riwayat Light Theme
                 tbody.innerHTML = filtered.map(t => {
                     let badgeColor = 'bg-yellow-50 text-yellow-600 border border-yellow-200';
                     if(t.status === 'SUKSES') badgeColor = 'bg-green-50 text-green-600 border border-green-200';
@@ -1641,7 +1625,6 @@
                     return;
                 }
 
-                // Template String Admin Product Light Theme
                 container.innerHTML = list.map(p => `
                     <div class="bg-white p-3 md:p-4 rounded-xl border border-borderDim flex justify-between items-center text-sm gap-4 shadow-sm mb-3">
                         <img src="${p.image}" class="w-12 h-12 rounded-lg object-cover border border-borderDim shadow-sm" onerror="...">
@@ -1672,7 +1655,6 @@
                     return;
                 }
                 
-                // Template String Admin Transaksi Light Theme
                 tbody.innerHTML = db.map(t => {
                     let badgeColor = 'bg-yellow-50 text-yellow-600 border border-yellow-200';
                     if(t.status === 'SUKSES') badgeColor = 'bg-green-50 text-green-600 border border-green-200';
@@ -1726,7 +1708,6 @@
 
             XLSX.writeFile(wb, `Laporan_Transaksi_TLIBRARY_${new Date().getTime()}.xlsx`);
         }
-        // --- END FUNGSI ADMIN TRANSAKSI ---
 
         async function addNewDigitalProduct() {
             const category = document.getElementById('newCat').value;
@@ -1822,7 +1803,6 @@
                 });
         }
 
-        // --- UPLOAD EXCEL (DARI TLIBRARY) ---
         function downloadExcelTemplate() {
             const templateData = [
                 { category: "ebook", name: "Contoh Judul Ebook", price: 50000, description: "Buku sejarah tentang kerajaan masa lalu", downloadUrl: "https://drive.google.com/...", image: "https://image.url/cover.jpg" },
@@ -1903,7 +1883,6 @@
             } catch(e) { alert('Gagal menghapus produk.'); }
         }
 
-        // --- PENANGANAN CHECKOUT MIDTRANS (AUTO-POLLING DARI TWIDYSHOP) ---
         document.getElementById('btnPay').addEventListener('click', async () => {
             const targetId = document.getElementById('targetId').value.trim();
             const serverId = document.getElementById('serverId').value.trim();

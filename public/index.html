@@ -70,7 +70,7 @@
                 <span class="flex items-center gap-1.5"><i class="fas fa-bolt text-yellow-500"></i> Instan & Otomatis 24 Jam</span>
             </div>
             <div class="flex gap-4">
-                <a href="tlibrary.apk" download class="hover:text-primary transition"><i class="fab fa-android text-green-500"></i> Download APK</a>
+                <button onclick="installPWA()" class="hover:text-primary transition flex items-center gap-1.5"><i class="fab fa-android text-green-500"></i> Install Aplikasi</button>
                 <a href="#panduan" onclick="navigate('panduan')" class="hover:text-primary transition">Pusat Bantuan</a>
             </div>
         </div>
@@ -101,15 +101,17 @@
             </div>
 
             <!-- Global Search (Desktop) -->
-            <div class="hidden lg:flex flex-1 max-w-xl relative">
+            <div class="hidden lg:flex flex-1 max-w-xl relative search-wrapper">
                 <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-textMuted"></i>
-                <input type="text" placeholder="Cari produk, game, e-wallet, atau lainnya..." class="w-full bg-bgInput text-sm text-textMain border border-borderDim pl-10 pr-4 py-2.5 rounded-full outline-none focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10 transition" oninput="document.getElementById('gameSearch').value=this.value; document.getElementById('digitalSearchInput').value=this.value; if(typeof filterSidebarItems === 'function') filterSidebarItems(); if(typeof renderDigitalCards === 'function') renderDigitalCards(currentCategory);" />
+                <input type="text" placeholder="Cari produk, game, ebook, e-wallet..." class="global-search-input w-full bg-bgInput text-sm text-textMain border border-borderDim pl-10 pr-4 py-2.5 rounded-full outline-none focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10 transition" oninput="handleGlobalSearch(this.value, 'desktop-search-results')" autocomplete="off" />
+                <div id="desktop-search-results" class="search-results-container hidden absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg border border-borderDim z-50 overflow-hidden max-h-[400px] overflow-y-auto divide-y divide-borderDim"></div>
             </div>
 
             <!-- Global Search (Mobile - Compact in Header) -->
-            <div class="flex-1 lg:hidden relative">
+            <div class="flex-1 lg:hidden relative search-wrapper">
                 <i class="fas fa-search absolute left-2.5 top-1/2 -translate-y-1/2 text-textMuted text-[10px]"></i>
-                <input type="text" placeholder="Cari..." class="w-full bg-bgInput text-[11px] text-textMain border border-borderDim pl-7 pr-3 py-1.5 rounded-full outline-none focus:border-primary focus:bg-white transition shadow-inner" oninput="document.getElementById('gameSearch').value=this.value; document.getElementById('digitalSearchInput').value=this.value; if(typeof filterSidebarItems === 'function') filterSidebarItems(); if(typeof renderDigitalCards === 'function') renderDigitalCards(currentCategory);" />
+                <input type="text" placeholder="Cari..." class="global-search-input w-full bg-bgInput text-[11px] text-textMain border border-borderDim pl-7 pr-3 py-1.5 rounded-full outline-none focus:border-primary focus:bg-white transition shadow-inner" oninput="handleGlobalSearch(this.value, 'mobile-search-results')" autocomplete="off" />
+                <div id="mobile-search-results" class="search-results-container hidden absolute top-full left-0 right-[-40px] mt-2 bg-white rounded-xl shadow-lg border border-borderDim z-50 overflow-hidden max-h-[300px] overflow-y-auto divide-y divide-borderDim w-[calc(100vw-32px)]"></div>
             </div>
 
             <!-- Right Icons -->
@@ -146,12 +148,11 @@
             
             <!-- HERO BANNER -->
             <div id="home" class="relative rounded-2xl md:rounded-[24px] overflow-hidden shadow-sm bg-bgInput group border border-borderDim">
-                <!-- Tidak ada text overlay, search bar, atau elemen tambahan di dalam banner -->
                 <img src="banner-hero.png" alt="Promo TLIBRARY" class="w-full h-auto object-cover group-hover:scale-[1.02] transition-transform duration-700 origin-center" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'1200\' height=\'400\'><rect width=\'100%\' height=\'100%\' fill=\'%23F1F5F9\'/><text x=\'50%\' y=\'50%\' fill=\'%2364748B\' font-family=\'sans-serif\' font-size=\'24\' dominant-baseline=\'middle\' text-anchor=\'middle\'>BANNER HERO KOSONG</text></svg>'">
             </div>
 
             <!-- CATEGORY SHORTCUT (Gepeng Menyamping / Horizontal Pills) -->
-            <div class="space-y-3">
+            <div id="kategori-section" class="space-y-3 scroll-mt-24">
                 <h2 class="text-sm md:text-xl font-bold text-textMain px-1">Kategori Layanan</h2>
                 
                 <div class="space-y-2.5">
@@ -206,7 +207,7 @@
                 
                 <!-- Sidebar Produk -->
                 <div class="lg:col-span-3 bg-white rounded-2xl p-4 md:p-5 border border-borderDim shadow-sm h-max">
-                    <a href="tlibrary.apk" download class="block mb-4 bg-gradient-to-r from-blue-50 to-white border border-blue-200 rounded-xl p-3 hover:border-primary transition-all shadow-sm relative overflow-hidden group">
+                    <button onclick="installPWA()" class="w-full text-left block mb-4 bg-gradient-to-r from-blue-50 to-white border border-blue-200 rounded-xl p-3 hover:border-primary transition-all shadow-sm relative overflow-hidden group cursor-pointer">
                         <div class="flex items-center justify-between relative z-10">
                             <div class="flex items-center gap-3">
                                 <div class="w-10 h-10 shrink-0 relative">
@@ -216,18 +217,18 @@
                                 </div>
                                 <div>
                                     <div class="text-[11px] md:text-xs font-extrabold text-textMain mb-0.5">Lebih Praktis!</div>
-                                    <div class="text-[10px] text-primary">Download App (10MB)</div>
+                                    <div class="text-[10px] text-primary">Install App (PWA)</div>
                                 </div>
                             </div>
                             <div class="bg-primary group-hover:bg-primaryHover text-white text-[10px] font-bold px-3 py-2 rounded-lg flex items-center gap-1.5 transition shadow-sm">
                                 <i class="fas fa-download"></i>
                             </div>
                         </div>
-                    </a>
+                    </button>
 
                     <div class="relative mb-4 hidden lg:block">
                         <i class="fas fa-search absolute left-3.5 top-3 text-textMuted text-sm"></i>
-                        <input type="text" id="gameSearch" placeholder="Cari layanan..." oninput="filterSidebarItems()" class="w-full bg-bgInput text-sm pl-9 pr-4 py-2.5 rounded-xl border border-borderDim focus:outline-none focus:border-primary focus:bg-white text-textMain transition" />
+                        <input type="text" id="gameSearch" placeholder="Cari layanan (Lokal)..." oninput="filterSidebarItems()" class="w-full bg-bgInput text-sm pl-9 pr-4 py-2.5 rounded-xl border border-borderDim focus:outline-none focus:border-primary focus:bg-white text-textMain transition" />
                     </div>
                     
                     <div id="sidebarListContainer" class="max-h-[500px] overflow-y-auto pr-1 hide-scrollbar">
@@ -323,7 +324,7 @@
                 
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-5 md:p-6 rounded-2xl border border-borderDim shadow-sm">
                     <div>
-                        <h2 id="digitalCategoryTitle" class="text-lg md:text-xl font-bold text-textMain flex items-center gap-2"><i class="fas fa-fire text-orange-500"></i> Produk Digital</h2>
+                        <h2 id="digitalCategoryTitle" class="text-lg md:text-xl font-bold text-textMain flex items-center gap-2 scroll-mt-24"><i class="fas fa-fire text-orange-500"></i> Produk Digital</h2>
                         <div class="text-xs md:text-sm text-textMuted mt-1">Eksplorasi koleksi produk digital terbaik kami.</div>
                     </div>
                     
@@ -355,7 +356,7 @@
                         </select>
                         <div class="relative flex-1 w-full md:w-64 hidden lg:block">
                             <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-textMuted text-sm"></i>
-                            <input type="text" id="digitalSearchInput" oninput="renderDigitalCards(currentCategory)" placeholder="Cari judul produk..." class="w-full bg-white text-sm text-textMain border border-borderDim pl-9 pr-4 py-2.5 rounded-xl outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition shadow-sm" />
+                            <input type="text" id="digitalSearchInput" oninput="renderDigitalCards(currentCategory)" placeholder="Cari (Lokal Kategori)..." class="w-full bg-white text-sm text-textMain border border-borderDim pl-9 pr-4 py-2.5 rounded-xl outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition shadow-sm" />
                         </div>
                     </div>
                 </div>
@@ -595,7 +596,8 @@
                 <i class="fas fa-home text-lg mb-1"></i>
                 <span class="text-[9px] font-semibold">Beranda</span>
             </a>
-            <a href="#topup" onclick="navigate('topup')" class="flex flex-col items-center justify-center p-2 text-textMuted hover:text-primary transition min-w-[64px]">
+            <!-- Perbaikan Link Navigasi Bawah Kategori -->
+            <a href="#kategori-section" onclick="scrollToCategories(event)" class="flex flex-col items-center justify-center p-2 text-textMuted hover:text-primary transition min-w-[64px]">
                 <i class="fas fa-shapes text-lg mb-1"></i>
                 <span class="text-[9px] font-semibold">Kategori</span>
             </a>
@@ -732,7 +734,7 @@
                     <div class="text-[11px]">Marketplace Produk Digital & Top Up</div>
                 </div>
             </div>
-            <div class="text-[11px] font-medium text-textMuted text-center md:text-right">&copy; 2026 TLIBRARY. Hak Cipta Dilindungi.</div>
+            <div class="text-[11px] font-medium text-textMuted text-center md:text-right">&copy; 2026 TLIBRARY. All rights reserved.</div>
         </div>
     </footer>
 
@@ -763,7 +765,7 @@
         </div>
     </div>
 
-    <!-- LOGIC JAVASCRIPT LAMA (DIPERTAHANKAN 100%) -->
+    <!-- LOGIC JAVASCRIPT LAMA DIPERTAHANKAN + FITUR GLOBAL SEARCH & PWA DITAMBAHKAN -->
     <script>
         const categoriesData = {
             game: [
@@ -833,6 +835,114 @@
 
             fetchProductsWithTimeout(8000);
             loadMidtransConfig();
+        }
+
+        // --- FITUR BARU: INSTALL PWA ---
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+        });
+
+        async function installPWA() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    console.log('User menginstal aplikasi PWA');
+                }
+                deferredPrompt = null;
+            } else {
+                alert('Aplikasi sudah terinstal, atau peramban (browser) Anda tidak mendukung fitur instalasi PWA.');
+            }
+        }
+
+        // --- FITUR BARU: GLOBAL SEARCH (DROPDOWN) ---
+        function handleGlobalSearch(query, resultContainerId) {
+            const container = document.getElementById(resultContainerId);
+            if (!query || query.trim() === '') {
+                container.classList.add('hidden');
+                return;
+            }
+            const q = query.toLowerCase();
+            let results = [];
+            
+            // Pencarian menyeluruh dari semua kategori
+            for (const cat in categoriesData) {
+                if (['game', 'pulsa', 'emoney', 'pln', 'tagihan'].includes(cat)) {
+                    categoriesData[cat].forEach(item => {
+                        if (item.name.toLowerCase().includes(q)) {
+                            results.push({ type: 'ppob', cat: cat, id: item.id, name: item.name, img: item.img, desc: item.desc });
+                        }
+                    });
+                } else if (['ebook', 'ecourse', 'template', 'aplikasi'].includes(cat)) {
+                    categoriesData[cat].forEach(item => {
+                        if (item.name.toLowerCase().includes(q) || (item.desc && item.desc.toLowerCase().includes(q))) {
+                            results.push({ type: 'digital', cat: cat, id: item.id, name: item.name, img: item.img, desc: item.desc });
+                        }
+                    });
+                }
+            }
+
+            // Render Hasil Dropdown
+            if (results.length > 0) {
+                container.innerHTML = results.slice(0, 8).map(r => `
+                    <div onclick="jumpToProduct('${r.type}', '${r.cat}', '${r.id}')" class="flex items-center gap-3 p-3 hover:bg-slate-50 cursor-pointer transition">
+                        <img src="${r.img}" class="w-10 h-10 rounded-lg object-cover border border-borderDim shadow-sm bg-bgInput" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'40\\' height=\\'40\\'><rect width=\\'100%\\' height=\\'100%\\' fill=\\'%23F1F5F9\\'/><text x=\\'50%\\' y=\\'50%\\' fill=\\'%2364748B\\' font-family=\\'sans-serif\\' font-size=\\'10\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\'>Img</text></svg>'">
+                        <div class="flex-1 min-w-0">
+                            <div class="text-xs font-bold text-textMain truncate">${r.name}</div>
+                            <div class="text-[9px] font-black text-primary uppercase mt-0.5">${r.cat}</div>
+                        </div>
+                    </div>
+                `).join('');
+                container.classList.remove('hidden');
+            } else {
+                container.innerHTML = '<div class="p-4 text-center text-xs text-textMuted font-semibold">Produk tidak ditemukan.</div>';
+                container.classList.remove('hidden');
+            }
+        }
+
+        // Eksekusi klik hasil pencarian global
+        function jumpToProduct(type, cat, id) {
+            document.querySelectorAll('.search-results-container').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.global-search-input').forEach(el => el.value = '');
+
+            navigate('home');
+            switchCategory(cat);
+
+            if (type === 'ppob') {
+                selectItem(cat, id, true);
+            } else {
+                // Beri sedikit jeda agar DOM produk digital selesai render sebelum buka modal
+                setTimeout(() => openProductModal(cat, id, false), 100);
+                setTimeout(() => {
+                    const digitalSection = document.getElementById('digitalCategoryTitle');
+                    if (digitalSection) {
+                        const y = digitalSection.getBoundingClientRect().top + window.scrollY - 100;
+                        window.scrollTo({ top: y, behavior: 'smooth' });
+                    }
+                }, 300);
+            }
+        }
+
+        // Tutup hasil pencarian jika klik diluar area
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.search-wrapper')) {
+                document.querySelectorAll('.search-results-container').forEach(el => el.classList.add('hidden'));
+            }
+        });
+
+        // --- FUNGSI NAVIGASI BAWAH KATEGORI SCROLL ---
+        function scrollToCategories(e) {
+            e.preventDefault();
+            navigate('home');
+            setTimeout(() => {
+                const catSection = document.getElementById('kategori-section');
+                if (catSection) {
+                    const y = catSection.getBoundingClientRect().top + window.scrollY - 100;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
+                }
+            }, 100);
         }
 
         function generateSlug(text) {
@@ -1311,7 +1421,7 @@
                 } else {
                     serverContainer.innerHTML = `
                         <label class="block text-xs font-semibold text-textMuted mb-1.5">Server ID</label>
-                        <input type="text" id="serverId" placeholder="Contoh: 1234" class="w-full bg-bgInput p-3 rounded-xl border border-borderDim text-sm focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10 outline-none text-textMain transition" />
+                        <input type="text" id="serverId" placeholder="Contoh: 1234 (opsional)" class="w-full bg-bgInput p-3 rounded-xl border border-borderDim text-sm focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10 outline-none text-textMain transition" />
                     `;
                 }
             } else {

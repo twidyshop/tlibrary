@@ -198,6 +198,14 @@
                             <i class="fas fa-mobile-alt text-sm md:text-base text-pink-500"></i>
                             <span class="text-[11px] md:text-sm font-bold">Aplikasi</span>
                         </button>
+                        <button onclick="switchCategory('film')" id="btnCatFilm" class="flex items-center px-3 md:px-4 py-2 md:py-2.5 rounded-full border border-borderDim bg-white text-textMuted hover:text-primary hover:border-primary transition gap-2 shrink-0 shadow-sm">
+                            <i class="fas fa-film text-sm md:text-base text-red-500"></i>
+                            <span class="text-[11px] md:text-sm font-bold">Film</span>
+                        </button>
+                        <button onclick="switchCategory('lainnya')" id="btnCatLainnya" class="flex items-center px-3 md:px-4 py-2 md:py-2.5 rounded-full border border-borderDim bg-white text-textMuted hover:text-primary hover:border-primary transition gap-2 shrink-0 shadow-sm">
+                            <i class="fas fa-box-open text-sm md:text-base text-slate-500"></i>
+                            <span class="text-[11px] md:text-sm font-bold">Lainnya</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -511,6 +519,8 @@
                                     <option value="ecourse">Ecourse</option>
                                     <option value="template">Template</option>
                                     <option value="aplikasi">Aplikasi</option>
+                                    <option value="film">Film</option>
+                                    <option value="lainnya">Lainnya</option>
                                 </select>
                             </div>
                             <div>
@@ -616,11 +626,6 @@
         </div>
     </div>
 
-    <!-- FLOATING CART BUTTON (Desktop/Mobile overlay) -->
-    <button id="floatingCartBtn" onclick="openDigitalCart()" class="fixed bottom-24 lg:bottom-8 right-6 lg:right-8 bg-primary hover:bg-primaryHover text-white p-4 rounded-full shadow-xl z-40 transition transform scale-0 flex items-center justify-center gap-2 border-4 border-white">
-        <i class="fas fa-shopping-cart text-xl"></i>
-    </button>
-
     <!-- MODAL KERANJANG DIGITAL -->
     <div id="cartModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-white border border-borderDim rounded-2xl max-w-md w-full max-h-[90vh] flex flex-col relative shadow-2xl">
@@ -697,6 +702,8 @@
                         <option value="ecourse">Ecourse</option>
                         <option value="template">Template</option>
                         <option value="aplikasi">Aplikasi</option>
+                        <option value="film">Film</option>
+                        <option value="lainnya">Lainnya</option>
                     </select>
                 </div>
                 <div>
@@ -765,7 +772,7 @@
         </div>
     </div>
 
-    <!-- LOGIC JAVASCRIPT LAMA DIPERTAHANKAN + FITUR GLOBAL SEARCH & PWA DITAMBAHKAN -->
+    <!-- LOGIC JAVASCRIPT -->
     <script>
         const categoriesData = {
             game: [
@@ -810,7 +817,9 @@
             ebook: [],
             ecourse: [],
             template: [],
-            aplikasi: []
+            aplikasi: [],
+            film: [],
+            lainnya: []
         };
 
         let currentCategory = 'game';
@@ -875,7 +884,7 @@
                             results.push({ type: 'ppob', cat: cat, id: item.id, name: item.name, img: item.img, desc: item.desc });
                         }
                     });
-                } else if (['ebook', 'ecourse', 'template', 'aplikasi'].includes(cat)) {
+                } else if (['ebook', 'ecourse', 'template', 'aplikasi', 'film', 'lainnya'].includes(cat)) {
                     categoriesData[cat].forEach(item => {
                         if (item.name.toLowerCase().includes(q) || (item.desc && item.desc.toLowerCase().includes(q))) {
                             results.push({ type: 'digital', cat: cat, id: item.id, name: item.name, img: item.img, desc: item.desc });
@@ -961,7 +970,7 @@
                 const json = await res.json();
                 allDigitalProducts = json.data || [];
 
-                ['ebook', 'ecourse', 'template', 'aplikasi'].forEach(cat => {
+                ['ebook', 'ecourse', 'template', 'aplikasi', 'film', 'lainnya'].forEach(cat => {
                     const filtered = allDigitalProducts.filter(p => p.category === cat);
                     categoriesData[cat] = filtered.map(p => ({
                         id: p.id,
@@ -977,7 +986,7 @@
                     }));
                 });
 
-                if(['ebook', 'ecourse', 'template', 'aplikasi'].includes(currentCategory)) {
+                if(['ebook', 'ecourse', 'template', 'aplikasi', 'film', 'lainnya'].includes(currentCategory)) {
                     renderDigitalCards(currentCategory);
                 }
             } catch(e) { console.error('Fetch digital timeout/error', e); }
@@ -988,7 +997,7 @@
             if (pathSegments.length > 0) {
                 const targetSlug = pathSegments[pathSegments.length - 1];
                 
-                for (let cat of ['ebook', 'ecourse', 'template', 'aplikasi']) {
+                for (let cat of ['ebook', 'ecourse', 'template', 'aplikasi', 'film', 'lainnya']) {
                     const found = categoriesData[cat].find(p => p.slug === targetSlug);
                     if (found) {
                         switchCategory(cat);
@@ -1070,7 +1079,7 @@
         function switchCategory(cat) {
             currentCategory = cat;
             
-            ['game', 'pulsa', 'emoney', 'pln', 'tagihan', 'ebook', 'ecourse', 'template', 'aplikasi'].forEach(c => {
+            ['game', 'pulsa', 'emoney', 'pln', 'tagihan', 'ebook', 'ecourse', 'template', 'aplikasi', 'film', 'lainnya'].forEach(c => {
                 const btn = document.getElementById('btnCat' + c.charAt(0).toUpperCase() + c.slice(1));
                 if(btn) {
                     btn.className = (c === cat) ? 
@@ -1079,7 +1088,7 @@
                 }
             });
 
-            const isDigital = ['ebook', 'ecourse', 'template', 'aplikasi'].includes(cat);
+            const isDigital = ['ebook', 'ecourse', 'template', 'aplikasi', 'film', 'lainnya'].includes(cat);
             if(isDigital) {
                 document.getElementById('ppobLayout').classList.add('hidden');
                 document.getElementById('digitalLayout').classList.remove('hidden');
@@ -1102,7 +1111,6 @@
                 renderSidebar();
                 const firstItem = categoriesData[cat][0];
                 if(firstItem) selectItem(cat, firstItem.id, false); 
-                document.getElementById('floatingCartBtn').classList.replace('scale-100', 'scale-0');
             }
         }
 
@@ -1207,22 +1215,16 @@
         }
 
         function updateFloatingCartBtn() {
-            const btn = document.getElementById('floatingCartBtn');
             const count = document.getElementById('floatingCartCount');
-            const isDigitalView = ['ebook', 'ecourse', 'template', 'aplikasi'].includes(currentCategory);
+            const isDigitalView = ['ebook', 'ecourse', 'template', 'aplikasi', 'film', 'lainnya'].includes(currentCategory);
             
             if(digitalCart.length > 0 && isDigitalView) {
-                btn.classList.replace('scale-0', 'scale-100');
-                count.innerText = digitalCart.length;
-                const deskCount = document.querySelector('nav #floatingCartCount');
-                if (deskCount) {
-                    deskCount.classList.replace('scale-0', 'scale-100');
-                    deskCount.innerText = digitalCart.length;
+                if (count) {
+                    count.classList.replace('scale-0', 'scale-100');
+                    count.innerText = digitalCart.length;
                 }
             } else {
-                btn.classList.replace('scale-100', 'scale-0');
-                const deskCount = document.querySelector('nav #floatingCartCount');
-                if (deskCount) deskCount.classList.replace('scale-100', 'scale-0');
+                if (count) count.classList.replace('scale-100', 'scale-0');
             }
         }
 
@@ -1239,7 +1241,7 @@
             digitalCart.splice(index, 1);
             renderCartModal();
             updateFloatingCartBtn();
-            if(['ebook', 'ecourse', 'template', 'aplikasi'].includes(currentCategory)) {
+            if(['ebook', 'ecourse', 'template', 'aplikasi', 'film', 'lainnya'].includes(currentCategory)) {
                 renderDigitalCards(currentCategory);
             }
         }
@@ -1972,7 +1974,7 @@
                     alert(data.message);
                     fetchDigitalProducts().then(() => { 
                         loadAdminProducts(); 
-                        if(['ebook','ecourse','template','aplikasi'].includes(currentCategory)) renderDigitalCards(currentCategory); 
+                        if(['ebook','ecourse','template','aplikasi','film','lainnya'].includes(currentCategory)) renderDigitalCards(currentCategory); 
                     });
                 } else { alert(data.message); }
             } catch(err) { alert('Gagal mengunggah data masal!'); }
@@ -1988,7 +1990,7 @@
                     if(cartIndex > -1) digitalCart.splice(cartIndex, 1);
                     updateFloatingCartBtn();
                     
-                    fetchDigitalProducts().then(() => { loadAdminProducts(); if(['ebook','ecourse','template','aplikasi'].includes(currentCategory)) renderDigitalCards(currentCategory); });
+                    fetchDigitalProducts().then(() => { loadAdminProducts(); if(['ebook','ecourse','template','aplikasi','film','lainnya'].includes(currentCategory)) renderDigitalCards(currentCategory); });
                 }
             } catch(e) { alert('Gagal menghapus produk.'); }
         }

@@ -137,7 +137,8 @@
         <a href="#topup" onclick="navigate('topup'); toggleMobileMenu();" class="block py-2.5 text-textMain hover:text-primary border-b border-borderDim/50"><i class="fas fa-gamepad w-6 text-textMuted"></i> Top Up & PPOB</a>
         <a href="#riwayat" onclick="navigate('riwayat'); toggleMobileMenu();" class="block py-2.5 text-textMain hover:text-primary border-b border-borderDim/50"><i class="fas fa-search w-6 text-textMuted"></i> Cek Riwayat</a>
         <a href="#promo" onclick="navigate('promo'); toggleMobileMenu();" class="block py-2.5 text-textMain hover:text-primary border-b border-borderDim/50"><i class="fas fa-tag w-6 text-red-500"></i> Promo</a>
-        <a href="#panduan" onclick="navigate('panduan'); toggleMobileMenu();" class="block py-2.5 text-textMain hover:text-primary"><i class="fas fa-headset w-6 text-textMuted"></i> Panduan & Bantuan</a>
+        <a href="#panduan" onclick="navigate('panduan'); toggleMobileMenu();" class="block py-2.5 text-textMain hover:text-primary border-b border-borderDim/50"><i class="fas fa-headset w-6 text-textMuted"></i> Panduan & Bantuan</a>
+        <a href="#admin" onclick="navigate('admin'); toggleMobileMenu();" class="block py-2.5 text-textMain hover:text-primary"><i class="fas fa-user w-6 text-textMuted"></i> Akun / Admin</a>
     </div>
 
     <!-- CONTENT VIEWS -->
@@ -597,31 +598,40 @@
             </div>
         </div>
 
+        <!-- VIEW 6: NONTON DRAMA -->
+        <div id="view-drama" class="hidden min-h-[80vh] w-full bg-white rounded-2xl border border-borderDim overflow-hidden shadow-sm">
+            <iframe src="https://www.tplay.my.id/" class="w-full h-[80vh] md:h-[85vh] border-0" allowfullscreen></iframe>
+        </div>
+
+        <!-- VIEW 7: BACA KOMIK -->
+        <div id="view-komik" class="hidden min-h-[80vh] w-full bg-white rounded-2xl border border-borderDim overflow-hidden shadow-sm">
+            <iframe src="https://komiktlib.vercel.app/" class="w-full h-[80vh] md:h-[85vh] border-0" allowfullscreen></iframe>
+        </div>
+
     </main>
 
     <!-- MOBILE BOTTOM NAVIGATION -->
     <div class="fixed bottom-0 w-full bg-white border-t border-borderDim shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-40 lg:hidden pb-safe">
         <div class="flex justify-around items-center py-1.5">
-            <a href="#home" onclick="navigate('home')" class="flex flex-col items-center justify-center p-2 text-textMuted hover:text-primary transition min-w-[64px]">
+            <a href="#home" onclick="navigate('home')" class="flex flex-col items-center justify-center p-2 text-textMuted hover:text-primary transition min-w-[60px]">
                 <i class="fas fa-home text-lg mb-1"></i>
                 <span class="text-[9px] font-semibold">Beranda</span>
             </a>
-            <!-- Perbaikan Link Navigasi Bawah Kategori -->
-            <a href="#kategori-section" onclick="scrollToCategories(event)" class="flex flex-col items-center justify-center p-2 text-textMuted hover:text-primary transition min-w-[64px]">
-                <i class="fas fa-shapes text-lg mb-1"></i>
-                <span class="text-[9px] font-semibold">Kategori</span>
+            <a href="#drama" onclick="navigate('drama')" class="flex flex-col items-center justify-center p-2 text-textMuted hover:text-primary transition min-w-[60px]">
+                <i class="fas fa-clapperboard text-lg mb-1"></i>
+                <span class="text-[9px] font-semibold">NontonDrama</span>
             </a>
-            <a href="#riwayat" onclick="navigate('riwayat')" class="flex flex-col items-center justify-center p-2 text-textMuted hover:text-primary transition min-w-[64px]">
+            <a href="#riwayat" onclick="navigate('riwayat')" class="flex flex-col items-center justify-center p-2 text-textMuted hover:text-primary transition min-w-[60px] text-center">
                 <i class="fas fa-receipt text-lg mb-1"></i>
-                <span class="text-[9px] font-semibold">Transaksi</span>
+                <span class="text-[9px] font-semibold leading-tight">Riwayat<br>(Transaksi)</span>
             </a>
-            <a href="#panduan" onclick="navigate('panduan')" class="flex flex-col items-center justify-center p-2 text-textMuted hover:text-primary transition min-w-[64px]">
+            <a href="#komik" onclick="navigate('komik')" class="flex flex-col items-center justify-center p-2 text-textMuted hover:text-primary transition min-w-[60px]">
+                <i class="fas fa-book-open text-lg mb-1"></i>
+                <span class="text-[9px] font-semibold">BacaKomik</span>
+            </a>
+            <a href="#panduan" onclick="navigate('panduan')" class="flex flex-col items-center justify-center p-2 text-textMuted hover:text-primary transition min-w-[60px]">
                 <i class="fas fa-bell text-lg mb-1"></i>
                 <span class="text-[9px] font-semibold">Info</span>
-            </a>
-            <a href="#admin" onclick="navigate('admin')" class="flex flex-col items-center justify-center p-2 text-textMuted hover:text-primary transition min-w-[64px]">
-                <i class="fas fa-user text-lg mb-1"></i>
-                <span class="text-[9px] font-semibold">Akun</span>
             </a>
         </div>
     </div>
@@ -1013,7 +1023,7 @@
         }
 
         function navigate(viewName) {
-            ['topup', 'riwayat', 'promo', 'panduan', 'admin'].forEach(v => {
+            ['topup', 'riwayat', 'promo', 'panduan', 'admin', 'drama', 'komik'].forEach(v => {
                 const el = document.getElementById('view-' + v);
                 if(el) el.classList.add('hidden');
             });

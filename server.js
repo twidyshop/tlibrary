@@ -16,8 +16,8 @@ const dbFile = path.join(__dirname, 'transactions.json');
 const digitalDbFile = path.join(__dirname, 'digital_products.json');
 
 // KREDENSIAL & ENDPOINT HAYBI
-const HAYBI_USER = process.env.HAYBI_USERNAME || 'AGN90501C';
-const HAYBI_KEY = process.env.HAYBI_API_KEY || 'zp5yqScvYqtwwavknURzoP8IoUcS1I48';
+const HAYBI_USER = process.env.HAYBI_USERNAME || 'AGN9541DC';
+const HAYBI_KEY = process.env.HAYBI_API_KEY || 'zp5yqScvYqtwwavknURzoP8IoUc';
 const HAYBI_BASE_URL = 'https://haybi.id/api/h2h';
 
 const readDB = () => {
